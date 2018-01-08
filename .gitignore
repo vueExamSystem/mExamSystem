@@ -4,4 +4,4 @@ npm-debug.log
 .editorconfig
 dist/
 .idea
-package-lok.json
+package-lock.json
