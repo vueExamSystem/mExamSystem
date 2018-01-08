@@ -1,0 +1,40 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	-webkit-touch-callout:none;  /*系统默认菜单被禁用*/
+    -webkit-user-select:none; /*webkit浏览器*/
+    -khtml-user-select:none; /*早期浏览器*/
+    -moz-user-select:none;/*火狐*/
+    -ms-user-select:none; /*IE10*/
+    user-select:none;
+}
+ul,li{
+	list-style: none;
+}
+a{
+	color: #8684BC;
+	text-decoration: none;
+}
+a:active, a:hover, a:focus{
+	opacity: 0.8;
+}
+body{
+	color: #4a4a4a;
+	background-color: #f0f0f0;
+	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+}
+.clearfix:after {
+   content: " ";
+   display: block;
+   clear: both;
+   height: 0;
+}
+.clearfix {
+   zoom: 1;
+}
+input{
+	outline: none;
+}
