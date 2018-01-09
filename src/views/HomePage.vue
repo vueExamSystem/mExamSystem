@@ -73,10 +73,10 @@
 <style lang="scss">
 	@import '~scss_vars';
 	.mint-tabbar{
-		background: rgba(250,250,250,0.90);
+		background: #fff;
 		box-shadow: 0 -1px 4px 0 #B5B5CD;
 		.mint-tab-item{
-			padding: 5px 0 2px 0;
+			padding: 6px 0 4px 0;
 			color: #929292;
 			letter-spacing: 0.11px;
 			.mint-tab-item-icon{
@@ -86,7 +86,7 @@
 				}
 			}
 			&.is-selected{
-				background: rgba(250,250,250,0.90);
+				background: #fff;
 				color: #8684BC;
 			}
 		}

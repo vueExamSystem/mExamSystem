@@ -1,5 +1,6 @@
 import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
+import Search from './views/common/Search.vue'
 /*主页*/
 import HomePage from './views/HomePage.vue'
 /*考试*/
@@ -18,6 +19,12 @@ let routes = [
         path: '/login',
         component: Login,
         name: '登录',
+        hidden: true
+    },
+    {
+        path: '/search',
+        component: Search,
+        name: '搜索',
         hidden: true
     },
     {

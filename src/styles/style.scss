@@ -8,48 +8,6 @@
 .text-danger{
 	color: $-color-danger!important;
 }
-.el-aside{
-	background: #fff;
-}
-.el-button{
-	letter-spacing:1px;
-}
-.el-button--primary.el-button-shadow{
-	box-shadow: 0 2px 4px 0 $-color-primary;
-}
-.el-button--success.el-button-shadow{
-	box-shadow: 0 2px 4px 0 $-color-success;
-}
-.el-button--danger.el-button-shadow{
-	box-shadow: 0 2px 4px 0 $-color-danger;
-}
-.el-checkbox{
-	.el-checkbox__input .el-checkbox__inner:after{
-		left: 8px;
-		top: 0;
-	}
-	.el-checkbox__input.is-checked .el-checkbox__inner:after{
-		transform: rotate(45deg) scale(1.8);
-	}
-}
-.el-radio{
-	.el-radio__input .el-radio__inner:after{
-		width: 8px;
-		height: 8px;
-	}
-	.el-radio__input.is-checked .el-radio__inner:after{
-		background: #4990e2;
-	}
-}
-.el-select {
-	.el-input--suffix {
-		.el-input__inner{
-			height: 36px;
-			background: #F2F0E2;
-			border-color: #F2F0E2;
-		}
-	}
-}
 .icon-remove-circle:before {
 	font-size: 28px;
 	color: #D06D69;
@@ -57,217 +15,6 @@
 .icon-add-circle:before {
 	font-size: 28px;
 	color: #87BFBC;
-}
-form{
-	.el-input{
-		width: 240px;
-	}
-	.el-form-item__label{
-		color: #000;
-	    text-align: left;
-	}
-	.el-form-item{
-		margin-bottom: 12px;
-	}
-}
-
-.el-table {
-	&:not(.el-table-expand) .el-table__body{
-		tr:nth-child(odd){
-			background: #f0f0f0;
-		}
-	}
-	&.el-table-expand{
-		.el-row-odd{
-			background: #f0f0f0;
-		}
-		.el-inner-table{
-			.el-table__body{
-				tr:nth-child(odd){
-					background: #E7E7F0;
-				}
-				tr:nth-child(even){
-					background: #DCDCF0;
-				}
-			}
-			.el-radio{
-				.el-radio__label{
-					font-size: 0;
-				}
-			}
-		}
-	}
-}
-.el-tabs--border-card {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	border-width: 0;
-	box-shadow: none;
-	&>.el-tabs__header{
-		background-color: $-color-primary; 
-		.el-tabs__item{
-			margin-top:2px;
-			line-height: 36px;
-			color: #fff;
-			font-size: 16px;
-			padding: 0 16px;
-			&:hover{
-				color:#fff;
-			}
-		}
-		.el-tabs__item.is-active{
-			color:#3C5398;
-			&:hover{
-				color:#3C5398;
-			}
-		}
-	} 
-	&>.el-tabs__content{
-		flex: 1;
-		padding: 20px 10px;
-		overflow: auto;
-	}
-}
-.el-collapse{
-	.el-collapse-item .el-collapse-item__header .el-collapse-item__arrow{
-		    transform: rotate(90deg);
-	}
-	.el-collapse-item.is-active .el-collapse-item__header .el-collapse-item__arrow{
-		    transform: rotate(-90deg);
-	}
-	.el-collapse-item__header{
-		letter-spacing: 1px;
-		padding-left: 10px;
-		@include gradientTop(#FFFFFF, #B5B5CD);
-	}
-	.el-collapse-item__content{
-		padding: 16px 10px 50px;
-	}
-}
-#content{
-	.el-main{
-		margin-left: 10px;
-		background: #fff;
-		padding: 0;
-		overflow-x: hidden;
-	}
-}
-/* left nav */
-.el-aside{
-  &>a{
-    display: block;
-    padding: 8px 12px 8px 0;
-    margin-left: 12px;
-    color: $color-primary;
-    line-height: 22px;
-    border-bottom: 1px solid $color-primary;
-    letter-spacing: 1px;
-    font-size: 16px;
-    .iconfont{
-    	font-size: 14px;
-    }
-  }
-  &>a.router-link-exact-active.router-link-active{
-  	background: $-color-primary;
-  	color:#fff;
-  	margin-left:0;
-  	padding-left:12px;
-  }
-}
-/* 通用对panel */
-.panel{
-    -webkit-border-radius: $radius-size;
-    -moz-border-radius: $radius-size;
-  	border-radius: $radius-size;
-  	overflow: hidden;
-  	.title{
-	    height: 50px;
-	    background-color: $base-background;
-	    line-height: 50px;
-	    box-sizing: border-box;
-	    box-shadow: 0 4px 4px 0 rgba(181,181,205,0.50);
-	    padding: 0 10px;
-
-
-	    &>span:first-child{
-	      	font-size: 18px;
-	      	color: #3C5398;
-	      	letter-spacing: 1.12px;
-	    }
-		.el-input{
-			width: 280px;
-			margin: 12px 30px 0 8px;
-
-			input{
-				border-bottom-left-radius: $radius-size;
-				border-top-left-radius: $radius-size;
-			}
-			.el-input-group__append{
-				background-color: $color-primary;
-				color: #ffffff;
-				text-align: center;
-				border-bottom-right-radius: $radius-size;
-				border-top-right-radius: $radius-size;
-			}
-
-		}
-		.pageArea{
-			float: right;
-			margin-top: 13px;
-		}
-		&.home{
-			height: 45px;
-			line-height: 43px;
-			.el-input{
-				float: right;
-				margin-top: 9px;
-			}
-			.pageArea{
-				float: right;
-				margin-top: 10px;
-			}
-		}
-  	}
-	.content{
-	    min-height: 50px;
-	    border: 1px solid $base-border;
-	    border-top: 0;
-	    border-bottom-left-radius: $radius-size;
-	    border-bottom-right-radius: $radius-size;
-
-		&>form{
-			min-width:600px;
-	    	padding:20px 10px;
-	    	letter-spacing:0.87px;
-			.el-form-item__label{
-				text-align: right;
-			}
-			.form-item-unit{
-				display: inline-block;
-				vertical-align: top;
-				width: 180px;
-				.el-input{
-					width: 80px;
-					margin: 0 10px;
-				}
-			}
-			.inline{
-				display: inline-block;
-			}
-			.hidden{
-				visibility: hidden;
-			}
-			.tip{
-				color: $color-primary;
-			}
-			.icon-remove-circle,
-			.icon-add-circle{
-				position: relative;
-				top: 1px;
-			}
-		}
-	 }
 }
 .el-label{
     display: inline-block;
@@ -305,51 +52,32 @@ form{
 	    border-color: #8684BC;
 	}
 }
-.paper-progress{
-	margin: 0 -1px;
-	table{
-		width: 100%;
-		border-collapse: collapse;
-		tr{
-			td{
-				height: 40px;
-				padding: 6px 12px;
-				border: 1px solid $base-border;
-				&:nth-child(odd){
-					width: 20%;
-					background: #E7E7F0;
-				}
-				&:nth-child(even){
-					width: 30%;
-				}
-			}
-		}
-	}
-}
-.el-progress.el-progress--line{
-	.el-progress-bar__outer{
-		border-radius: 3px;
-		.el-progress-bar__inner{
-			border-radius: 0;
-		}
-	}
-	.el-progress__text{
-		font-size: 14px!important;
-		margin-left: 16px;
-	}
-}
 
 /* 覆盖mint-ui的primary颜色，改为微信UI的绿色 */
 $color-primary: #8684BC;
 
 .mint-header {
-  background-color: $color-primary;
+  	background-color: #fff;
+	box-shadow: 0 2px 4px 0 #B5B5CD;
+	font-size: 18px;
+	color: #4A4A4A;
+	.mint-button-icon{
+		.mintui{
+			font-size:20px;
+			color: $color-primary;
+		}
+	}
 }
 .mint-button:not(.is-disabled):active::after {
     opacity: .2 /* .6 */
 }
 .mint-button--primary {
+	height: 28px;
     background-color: $color-primary;
+    background-image: linear-gradient(-90deg, #AA84BC 0%, #8684BC 100%);
+	box-shadow: 0 4px 6px 0 #B5B5CD;
+	border-radius: 14px;
+	font-size: 14px;
 }
 .mint-button--primary.is-plain {
     border: 1px solid $color-primary;
@@ -394,4 +122,54 @@ $color-primary: #8684BC;
 }
 .mint-datetime-action {
   color: $color-primary;
+}
+/*考试列表*/
+.section-list{
+	&>li{
+		position: relative;
+		background: #FFFFFF;
+		padding: 12px 10px 20px;
+		box-shadow: 0 2px 6px 0 rgba(181,181,205,0.60);
+		border-radius: 3px;
+		margin-bottom: 10px;
+		&>p{
+			font-size: 16px;
+			color: #4A4A4A;
+			margin-bottom: 10px;
+		}
+		.time-down{
+			display:inline-block;
+			margin-top:2px;
+			background: #E7E7F0;
+			border-radius: 3px;
+			font-size: 14px;
+			padding: 0 10px;
+			color: #8684BC;
+			line-height: 24px;
+			&>img{
+				position:relative;
+				top:2px;
+				margin-right: 4px;
+			}
+			&>.time{
+				color: #00233E;
+				margin-left: 4px;
+			}
+		}
+		&>.flag{
+			position: absolute;
+			top:0;
+			right:10px;
+			background: url('/static/images/saw.png') left bottom repeat-x;
+			&>span{
+				display: block;
+				border-radius: 4px 4px 0 0;
+				font-size: 12px;
+				padding: 4px;
+				color: #FFF;
+				background: #87BFBC;
+				margin-bottom:5px;
+			}
+		}
+	}
 }
