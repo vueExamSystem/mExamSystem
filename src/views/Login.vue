@@ -54,7 +54,7 @@
                 this.alertError(msg);
               } else {
                 sessionStorage.setItem('user', JSON.stringify(data));
-                this.$router.push({ path: '/index' });
+                this.$router.push({ path: '/' });
               }
             });
           } else {

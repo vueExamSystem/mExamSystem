@@ -1,9 +1,17 @@
 import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
-/*首页*/
+/*主页*/
 import HomePage from './views/HomePage.vue'
-
-import testApi from './views/demo/Test.vue'
+/*考试*/
+import ExamHome from './views/exam/Home.vue'
+/*测验*/
+import TestHome from './views/test/Home.vue'
+/*预习*/
+import PreviewHome from './views/preview/Home.vue'
+/*成绩*/
+import ScoreHome from './views/score/Home.vue'
+/*设置*/
+import SettingHome from './views/setting/Home.vue'
 
 let routes = [
     {
@@ -13,10 +21,31 @@ let routes = [
         hidden: true
     },
     {
-        path: '/index',
+        path: '/',
         component: HomePage,
         name: '主页',
-        hidden: true
+        // children:[{
+        //         path: '/exam',
+        //         component: ExamHome,
+        //         name: '考试'
+        //     },{
+        //         path: '/test',
+        //         component: TestHome,
+        //         name: '测验'
+        //     },{
+        //         path: '/preview',
+        //         component: PreviewHome,
+        //         name: '预习'
+        //     },{
+        //         path: '/score',
+        //         component: ScoreHome,
+        //         name: '成绩'
+        //     },{
+        //         path: '/setting',
+        //         component: SettingHome,
+        //         name: '设置'
+        //     }
+        // ]
     },
     {
         path: '/404',

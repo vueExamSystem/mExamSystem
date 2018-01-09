@@ -2,19 +2,19 @@
 	<div>
       	<mt-tab-container class="page-tabbar-container" v-model="selected">  
         	<mt-tab-container-item id="examTab">  
-          考试
+          		<page-exam></page-exam>
         	</mt-tab-container-item>  
         	<mt-tab-container-item id="testTab">  
-          测验
+          		<page-test></page-test>
         	</mt-tab-container-item>  
         	<mt-tab-container-item id="previewTab">  
-          预习
+          		<page-preview></page-preview>
         	</mt-tab-container-item>  
         	<mt-tab-container-item id="scoreTab">  
-          成绩
+          		<page-score></page-score>
         	</mt-tab-container-item>  
         	<mt-tab-container-item id="settingTab">  
-          设置
+          		<page-setting></page-setting>
         	</mt-tab-container-item>  
       	</mt-tab-container>  
   
@@ -44,13 +44,23 @@
 </template>
 
 <script>
+	import ExamHome from './exam/Home.vue'
+	import TestHome from './test/Home.vue'
+	import PreviewHome from './preview/Home.vue'
+	import ScoreHome from './score/Home.vue'
+	import SettingHome from './setting/Home.vue'
 	export default {
 		data() {
 			return {
 				selected: 'examTab'
 			}
 		},
-        components: {
+		components:{
+			pageExam:ExamHome,
+			pageTest:TestHome,
+			pagePreview:PreviewHome,
+			pageScore:ScoreHome,
+			pageSetting:SettingHome
 		},
 		methods: {
 		},
