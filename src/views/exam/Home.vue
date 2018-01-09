@@ -15,7 +15,7 @@
 									<div class="time-down">
 										<img src="/static/images/clock.png" width="15">
 										<span>倒计时：</span>
-										<span class="time">{{exam.time}}</span>
+										<span class="time">{{exam.time | remainTime}}</span>
 									</div>
 									<mt-button v-show="isShouldExam(exam.time)" class="pull-right" type="primary" @click="toExam(exam.id)">进入考试</mt-button>
 								</div>
@@ -74,6 +74,11 @@
 		computed:{
 			now(){
 				return this.getDateObj(this.nowDate);
+			}
+		},
+		filters:{
+			remainTime(dateString){
+				return '1'
 			}
 		},
 		methods:{
