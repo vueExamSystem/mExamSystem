@@ -54,20 +54,21 @@
 		data(){
 			return {
 				nowDate: new Date(),
+				timeClock: '',
 				examList:[{
 					id: '1',
 					name: '大一物理（上）期中考试',
-					time: '2018/01/09 23:32'
+					time: '2018/01/10 09:35'
 				},{
 					id: '2',
 					name: '大一高等数学（上）期中考试',
-					time: '2018/01/09 23:40'
+					time: '2018/01/10 09:40'
 				},{
 					id: '3',
 					name: '大一大学英语（上）期中考试',
-					time: '2018/01/09 23:50'
+					time: '2018/01/10 10:00'
 				},{
-					id: '3',
+					id: '4',
 					name: '大一计算机（上）期中考试',
 					time: '2018/01/11 15:00'
 				}],
@@ -125,7 +126,8 @@
 				return isShouldExam;
 			},
 			toExam(id){//进入考试页面
-
+				this.clearClock();
+				this.$router.push({ path: `/wait/${id}`});
 			},
 			isValid(dateString){//是否没有过期
 				var isInvalid = true;
@@ -174,9 +176,14 @@
 				this.isSearchVisible = false;
 			},
 			timeClockRun(){
-				setInterval(()=>{
+				this.timeClock = setInterval(()=>{
 					this.nowDate = new Date();
 				},1000);
+			},
+			clearClock(){
+				if(this.timeClock){
+					clearInterval(this.timeClock);
+				}
 			}
 		},
 		mounted() {

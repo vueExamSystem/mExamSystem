@@ -5,6 +5,7 @@ import Search from './views/common/Search.vue'
 import HomePage from './views/HomePage.vue'
 /*考试*/
 import ExamHome from './views/exam/Home.vue'
+import ExamWait from './views/exam/Wait.vue'
 /*测验*/
 import TestHome from './views/test/Home.vue'
 /*预习*/
@@ -26,6 +27,12 @@ let routes = [
         component: Search,
         name: '搜索',
         hidden: true
+    },
+    {
+        path: '/wait/:id',
+        component: ExamWait,
+        name: '等待考试',
+        props: true
     },
     {
         path: '/',
