@@ -48,3 +48,5 @@ export const getDepartmentList = params => { return axios.get(`${base}/departmen
 export const getPaperList = params => { return axios.post(`${base}/paper/list`, params ); };
 //试卷详情
 export const getPaperDetail = params => { return axios.post(`${base}/paper/detail`, params ); };
+//获取试卷题目列表
+export const getPaperProblemList = params => { return axios.post(`${base}/paper/problem/list`, params ); };

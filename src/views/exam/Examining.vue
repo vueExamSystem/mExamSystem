@@ -4,10 +4,23 @@
 			<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
 			<span @click="submitPaper" slot="right">交卷</span>
 		</mt-header>
+		<div class="main">
+			<div class="title"><span>单选题（<a>2</a>/5）</span></div>
+			<div class="content">
+				<div class="el-question">
+					<div class="el-question-title">
+						<span>{{current+1}}. {{problem.title}}</span>
+					</div>
+					<div class="el-question-options">
+						
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </template>
 <script>
-import { getPaperProblemList } from '../../api/api'
+	import { getPaperProblemList } from '../../api/api';
 	export default{
 		props:{
 			id:{
@@ -17,9 +30,21 @@ import { getPaperProblemList } from '../../api/api'
 		data(){
 			return {
 				timeClock: '',
+				current: 0,
 				endTime: '2018/01/10 23:59',
 				nowDate: new Date(),
 				problemList:[]
+			}
+		},
+		computed:{
+			problem(){
+				if(this.problemList[this.current]){
+					console.log('this.problemList[this.current]',this.problemList[this.current].title)
+					return this.problemList[this.current];
+				}else{
+					return {};
+				}
+				
 			}
 		},
 		methods:{
@@ -28,7 +53,7 @@ import { getPaperProblemList } from '../../api/api'
 					id: this.id
 				}
 				getPaperProblemList(params).then( res =>{
-					this.problemList = res.data;
+					this.problemList = res.data;console.log('problemList[0]',this.problemList[0])
 				});
 			},
 			submitPaper(){
@@ -85,9 +110,23 @@ import { getPaperProblemList } from '../../api/api'
 		},
 		mounted(){
 			this.timeClockRun();
+			this.getProblemList();
 		}
 	}
 </script>
 <style lang="scss" scoped>
-	@import '~scss_vars'
+	@import '~scss_vars';
+	.main{
+		margin-top: 40px;
+		.title{
+			font-size: 12px;
+			line-height: 28px;
+			padding: 0 10px;
+			color: $color-primary;
+			background: #E7E7F0;
+		}
+		.content{
+			padding: 10px;
+		}
+	}
 </style>
