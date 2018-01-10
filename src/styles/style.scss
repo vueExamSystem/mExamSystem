@@ -68,7 +68,7 @@ $color-primary: #8684BC;
 		}
 	}
 	.mint-header-button{
-		&.is-right{
+		&.is-left,&.is-right{
 			font-size: 16px;
 			color: #3C5398;
 		}

@@ -56,6 +56,9 @@
 			dateParse(dateString){
 				return new Date(dateString);
 			},
+			toExam(){
+				this.$router.push({ path: `/examining/${this.id}`});
+			},
 			remainTime(dateString){//倒计时
 				var hourStr = '0';
 				var minuteStr = '0';
@@ -69,6 +72,7 @@
 				var remainSeconds = Math.floor(totalSeconds % hourSeconds % minuteSeconds / 1000);//对应剩余秒
 				if(totalSeconds<=0){
 					this.clearClock();//关闭倒计时
+					this.toExam();
 					return '准备考试...';
 				}else{
 					if(remainHours < 10){//剩余小时小于10小时

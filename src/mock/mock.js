@@ -14,7 +14,7 @@ import {
 } from './data/question';
 import {
     PaperList,
-    PaperDetail
+    ProblemList
 } from './data/paper';
 
 let _Users = Users;
@@ -208,11 +208,11 @@ export default {
         mock.onPost(`/paper/list`).reply(config => {
             return u.getMockList(config, PaperList);
         });
-        //获取试卷详情
-        mock.onPost(`/paper/detail`).reply(config => {
+        //获取试卷题目列表
+        mock.onPost(`paper/problem/list`).reply(config => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    resolve([200, PaperDetail]);
+                    resolve([200, ProblemList]);
                 }, 1000);
             });
         });

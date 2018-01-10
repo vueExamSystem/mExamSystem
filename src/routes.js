@@ -6,6 +6,7 @@ import HomePage from './views/HomePage.vue'
 /*考试*/
 import ExamHome from './views/exam/Home.vue'
 import ExamWait from './views/exam/Wait.vue'
+import Examining from './views/exam/Examining.vue'
 /*测验*/
 import TestHome from './views/test/Home.vue'
 /*预习*/
@@ -35,27 +36,33 @@ let routes = [
         props: true
     },
     {
+        path: '/examining/:id',
+        component: Examining,
+        name: 'examining',
+        props: true
+    },
+    {
         path: '/',
         component: HomePage,
         name: '主页',
         // children:[{
-        //         path: '/exam',
+        //         path: 'exam',
         //         component: ExamHome,
         //         name: '考试'
         //     },{
-        //         path: '/test',
+        //         path: 'test',
         //         component: TestHome,
         //         name: '测验'
         //     },{
-        //         path: '/preview',
+        //         path: 'preview',
         //         component: PreviewHome,
         //         name: '预习'
         //     },{
-        //         path: '/score',
+        //         path: 'score',
         //         component: ScoreHome,
         //         name: '成绩'
         //     },{
-        //         path: '/setting',
+        //         path: 'setting',
         //         component: SettingHome,
         //         name: '设置'
         //     }

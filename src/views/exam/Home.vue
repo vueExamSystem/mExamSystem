@@ -17,7 +17,7 @@
 										<span>倒计时：</span>
 										<span class="time">{{remainTime(exam.time)}}</span>
 									</div>
-									<mt-button v-show="isShouldExam(exam.time)" class="pull-right" type="primary" @click="toExam(exam.id)">进入考试</mt-button>
+									<mt-button v-show="isShouldExam(exam.time)" class="pull-right" type="primary" @click="toWaitExam(exam.id)">进入考试</mt-button>
 								</div>
 								<div class="flag">
 									<span>今日</span>
@@ -125,7 +125,7 @@
 				}
 				return isShouldExam;
 			},
-			toExam(id){//进入考试页面
+			toWaitExam(id){//进入考试页面
 				this.clearClock();
 				this.$router.push({ path: `/wait/${id}`});
 			},
