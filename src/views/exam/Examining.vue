@@ -5,14 +5,27 @@
 			<span @click="submitPaper" slot="right">交卷</span>
 		</mt-header>
 		<div class="main">
-			<div class="title"><span>单选题（<a>2</a>/5）</span></div>
+			<div class="title clearfix">
+				<div class="pull-left">
+					<span>单选题</span>
+					<span class="order">（<a class="larger">2</a>/5）</span>
+				</div>
+				<div class="pull-right">
+					<mt-button type="primary" @click="questionCard" class="plane">题卡</mt-button>
+				</div>
+			</div>
 			<div class="content">
 				<div class="el-question">
 					<div class="el-question-title">
 						<span>{{current+1}}. {{problem.title}}</span>
 					</div>
 					<div class="el-question-options">
-						
+						<template v-if="problem.type == 'check'">
+							<mt-checklist v-model="value" :options="['选项A', '选项B', '选项C']"></mt-checklist>
+						</template>
+						<template v-else>
+							<mt-radio v-model="value" :options="['选项A', '选项B', '选项C']"></mt-radio>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -29,6 +42,7 @@
 		},
 		data(){
 			return {
+				value: '',
 				timeClock: '',
 				current: 0,
 				endTime: '2018/01/10 23:59',
@@ -59,6 +73,7 @@
 			submitPaper(){
 
 			},
+			questionCard(){},
 			dateParse(dateString){
 				return new Date(dateString);
 			},
@@ -122,8 +137,17 @@
 			font-size: 12px;
 			line-height: 28px;
 			padding: 0 10px;
-			color: $color-primary;
 			background: #E7E7F0;
+			.order{
+				letter-spacing: 1px;
+			}
+			.larger{
+				font-size: 14px;
+				color: $color-primary;
+			}
+			.plane{
+				margin-right: -10px;
+			}
 		}
 		.content{
 			padding: 10px;
