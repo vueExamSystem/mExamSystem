@@ -17,14 +17,19 @@
 			<div class="content">
 				<div class="el-question">
 					<div class="el-question-title">
-						<span>{{current+1}}. {{problem.title}}</span>
+						<span class="current">{{current+1}}.</span>
+						<span class="text">{{problem.title}}</span>
 					</div>
 					<div class="el-question-options">
 						<template v-if="problem.type == 'check'">
-							<mt-checklist v-model="value" :options="['选项A', '选项B', '选项C']"></mt-checklist>
+							<el-checkbox-group v-model="problem.myAnswer">
+								<el-checkbox v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-checkbox>
+							</el-checkbox-group>
 						</template>
 						<template v-else>
-							<mt-radio v-model="value" :options="['选项A', '选项B', '选项C']"></mt-radio>
+							<el-radio-group v-model="problem.myAnswer">
+								<el-radio v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-radio>
+							</el-radio-group>
 						</template>
 					</div>
 				</div>
@@ -44,7 +49,7 @@
 			return {
 				value: '',
 				timeClock: '',
-				current: 0,
+				current: 1,
 				endTime: '2018/01/10 23:59',
 				nowDate: new Date(),
 				problemList:[]
@@ -53,8 +58,15 @@
 		computed:{
 			problem(){
 				if(this.problemList[this.current]){
-					console.log('this.problemList[this.current]',this.problemList[this.current].title)
-					return this.problemList[this.current];
+					var currentP = this.problemList[this.current];
+					if(!currentP.myAnswer){
+						if(currentP.type == "check"){
+							this.$set(currentP,'myAnswer',[]);
+						}else{
+							this.$set(currentP,'myAnswer','');
+						}
+					}
+					return currentP;
 				}else{
 					return {};
 				}
