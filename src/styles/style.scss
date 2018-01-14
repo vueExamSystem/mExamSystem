@@ -122,6 +122,7 @@
 	border-right-color: #87BFBC;
 }
 .el-radio .el-radio__label, .el-checkbox .el-checkbox__label{
+	display: inline-block;
 	width: calc(100% - 40px);
 	white-space: normal;
 	line-height: 20px;
