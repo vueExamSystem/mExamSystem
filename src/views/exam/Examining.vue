@@ -7,8 +7,8 @@
 		<div class="main">
 			<div class="title clearfix">
 				<div class="pull-left">
-					<span>单选题</span>
-					<span class="order">（<a class="larger">2</a>/5）</span>
+					<span>{{typeName}}</span>
+					<span class="order">（<a class="larger">{{currentTypeNum}}</a>/{{currentTypeTotal}}）</span>
 				</div>
 				<div class="pull-right">
 					<mt-button type="primary" @click="questionCard" class="plane">题卡</mt-button>
@@ -17,7 +17,7 @@
 			<div class="content">
 				<div class="el-question">
 					<div class="el-question-title">
-						<span class="current">{{current+1}}.</span>
+						<span class="current">{{currentTypeNum}}.</span>
 						<span class="text">{{problem.title}}</span>
 					</div>
 					<div class="el-question-options">
@@ -37,8 +37,8 @@
 		</div>
 		<div class="footer-indicator fixed">
 			<el-row>
-				<el-col :span="12"><el-button class="plane" @click="prevProblem">上一题</el-button></el-col>
-				<el-col :span="12"><el-button class="plane" @click="nextProblem">下一题</el-button></el-col>
+				<el-col :span="12"><el-button class="plane" @click="prevProblem" :disabled="current === 0">上一题</el-button></el-col>
+				<el-col :span="12"><el-button class="plane" @click="nextProblem" :disabled="current === problemList.length - 1">下一题</el-button></el-col>
 			</el-row>
 		</div>
 	</section>
@@ -58,7 +58,13 @@
 				current: 1,
 				endTime: '2018/01/10 23:59',
 				nowDate: new Date(),
-				problemList:[]
+				problemList:[],
+				count:{
+					radio: 0, //单选
+					check: 0, //多选
+					judge: 0, //判断
+					option: 0 //选做
+				}
 			}
 		},
 		computed:{
@@ -77,6 +83,52 @@
 					return {};
 				}
 				
+			},
+			typeName(){//当前类型
+				var name = '';
+				if(this.problem && typeof this.problem.isNecessary != 'undefined'){
+					if(this.problem.isNecessary === true){
+						switch(this.problem.type){
+							case 'radio': name = '单选题';break;
+							case 'check': name = '多选题';break;
+							case 'judge': name = '判断题';break;
+							default: break;
+						}
+					}else{
+						name = '选做题';
+					}
+				}else{
+					name = '题目';
+				}
+				return name;
+			},
+			currentTypeNum(){//当前类型题数
+				var num = 1;
+				if(this.problem.isNecessary === true){
+					switch(this.problem.type){
+						case 'radio': num = this.current + 1;break;
+						case 'check': num = this.current + 1 - this.count.radio;break;
+						case 'judge': num = this.current + 1 - (this.count.radio + this.count.check);break;
+						default: break;
+					}
+				}else{
+					num = this.current + 1 - (this.count.radio + this.count.check + this.count.judge);
+				}
+				return num;
+			},
+			currentTypeTotal(){//当前类型题数
+				var total = 0;
+				if(this.problem.isNecessary === true){
+					switch(this.problem.type){
+						case 'radio': total = this.count.radio;break;
+						case 'check': total = this.count.check;break;
+						case 'judge': total = this.count.judge;break;
+						default: break;
+					}
+				}else{
+					total = this.count.option;
+				}
+				return total;
 			}
 		},
 		methods:{
@@ -85,7 +137,20 @@
 					id: this.id
 				}
 				getPaperProblemList(params).then( res =>{
-					this.problemList = res.data;console.log('problemList[0]',this.problemList[0])
+					this.problemList = res.data;
+					for(var i=0;i<this.problemList.length;i++){
+						var item = this.problemList[i];
+						if(item.isNecessary === true){
+							switch(item.type){
+								case 'radio': ++this.count.radio;break;
+								case 'check': ++this.count.check;break;
+								case 'judge': ++this.count.judge;break;
+								default: break;
+							}
+						}else{
+							++this.count.option;
+						}
+					}
 				});
 			},
 			submitPaper(){

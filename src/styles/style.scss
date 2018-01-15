@@ -325,6 +325,9 @@ $color-primary: #8684BC;
 			font-size: 16px;
 			color: #8684BC;
 			letter-spacing: 1px;
+			&.is-disabled{
+				color: #c0c4cc;
+			}
 		}
 		& + .el-col{
 			.el-button.plane{
