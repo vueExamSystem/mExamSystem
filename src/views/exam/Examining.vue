@@ -35,6 +35,12 @@
 				</div>
 			</div>
 		</div>
+		<div class="indicator fixed">
+			<el-row>
+				<el-col :span="12"><el-button class="plane" @click="prevProblem">上一题</el-button></el-col>
+				<el-col :span="12"><el-button class="plane" @click="nextProblem">下一题</el-button></el-col>
+			</el-row>
+		</div>
 	</section>
 </template>
 <script>
@@ -85,7 +91,36 @@
 			submitPaper(){
 
 			},
-			questionCard(){},
+			questionCard(){//题卡
+
+			},
+			prevProblem(){//上一题
+				if(this.current<=0){
+					this.$toast({
+			          	message: '这已经是第一题。',
+			          	position: 'middle',
+			          	duration: 1000
+			        });
+				}else{
+					--this.current;
+				}
+			},
+			nextProblem(){//下一题
+				if(this.current < this.problemList.length-1){
+					++this.current;
+				}else{
+					this.$toast({
+			          	message: '这已经是最后一题。',
+			          	position: 'middle',
+			          	duration: 1000
+			        });
+				}
+			},
+			jumpProblem(index){//跳转到某一题
+				if(index>=0 && index<=this.problemList.length){
+					this.current = index;
+				}
+			},
 			dateParse(dateString){
 				return new Date(dateString);
 			},
