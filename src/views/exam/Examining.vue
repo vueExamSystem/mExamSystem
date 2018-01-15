@@ -1,56 +1,63 @@
 <template>
-	<section>
-		<mt-header title="考试中" fixed>
-			<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
-			<span @click="submitPaper" slot="right">交卷</span>
-		</mt-header>
-		<div class="main">
-			<div class="title clearfix">
-				<div class="pull-left">
-					<span>{{typeName}}</span>
-					<span class="order">（<a class="larger">{{currentTypeNum}}</a>/{{currentTypeTotal}}）</span>
-				</div>
-				<div class="pull-right">
-					<mt-button type="primary" @click="questionCard" class="plane">题卡</mt-button>
-				</div>
-			</div>
-			<div class="content">
-				<div class="el-question">
-					<div class="el-question-title">
-						<span class="current">{{currentTypeNum}}.</span>
-						<span class="text">{{problem.title}}</span>
+	<div>
+		<section v-show="!isCardVisible">
+			<mt-header title="考试中" fixed>
+				<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
+				<span @click="submitPaper" slot="right">交卷</span>
+			</mt-header>
+			<div class="main">
+				<div class="title clearfix">
+					<div class="pull-left">
+						<span>{{typeName}}</span>
+						<span class="order">（<a class="larger">{{currentTypeNum}}</a>/{{currentTypeTotal}}）</span>
 					</div>
-					<div class="el-question-options">
-						<template v-if="problem.type == 'check'">
-							<el-checkbox-group v-model="problem.myAnswer">
-								<el-checkbox v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-checkbox>
-							</el-checkbox-group>
-						</template>
-						<template v-else>
-							<el-radio-group v-model="problem.myAnswer">
-								<el-radio v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-radio>
-							</el-radio-group>
-						</template>
+					<div class="pull-right">
+						<mt-button type="primary" @click="showQuestionCard" class="plane">题卡</mt-button>
 					</div>
 				</div>
+				<div class="content">
+					<div class="el-question">
+						<div class="el-question-title">
+							<span class="current">{{currentTypeNum}}.</span>
+							<span class="text">{{problem.title}}</span>
+						</div>
+						<div class="el-question-options">
+							<template v-if="problem.type == 'check'">
+								<el-checkbox-group v-model="problem.myAnswer">
+									<el-checkbox v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-checkbox>
+								</el-checkbox-group>
+							</template>
+							<template v-else>
+								<el-radio-group v-model="problem.myAnswer">
+									<el-radio v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-radio>
+								</el-radio-group>
+							</template>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="footer-indicator fixed">
-			<el-row>
-				<el-col :span="12"><el-button class="plane" @click="prevProblem" :disabled="current === 0">上一题</el-button></el-col>
-				<el-col :span="12"><el-button class="plane" @click="nextProblem" :disabled="current === problemList.length - 1">下一题</el-button></el-col>
-			</el-row>
-		</div>
-	</section>
+			<div class="footer-indicator fixed">
+				<el-row>
+					<el-col :span="12"><el-button class="plane" @click="prevProblem" :disabled="current === 0">上一题</el-button></el-col>
+					<el-col :span="12"><el-button class="plane" @click="nextProblem" :disabled="current === problemList.length - 1">下一题</el-button></el-col>
+				</el-row>
+			</div>
+		</section>
+		<question-card v-show="isCardVisible" @close="hideQuestionCard"></question-card>
+	</div>
 </template>
 <script>
 	// 注意题目数据需要按“单选”、“多选”、“判断”、“选做”顺序，否则需要前端重改！！
 	import { getPaperProblemList } from '../../api/api';
+	import Card from './Card.vue'
 	export default{
 		props:{
 			id:{
 				required: true
 			}
+		},
+		components:{
+			questionCard: Card
 		},
 		data(){
 			return {
@@ -65,7 +72,8 @@
 					check: 0, //多选
 					judge: 0, //判断
 					option: 0 //选做
-				}
+				},
+				isCardVisible: false
 			}
 		},
 		computed:{
@@ -158,8 +166,11 @@
 			submitPaper(){
 
 			},
-			questionCard(){//题卡
-
+			showQuestionCard(){//显示题卡
+				this.isCardVisible = true;
+			},
+			hideQuestionCard(){//隐藏题卡
+				this.isCardVisible = false;
 			},
 			prevProblem(){//上一题
 				if(this.current<=0){
