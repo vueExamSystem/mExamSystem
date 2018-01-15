@@ -44,6 +44,7 @@
 	</section>
 </template>
 <script>
+	// 注意题目数据需要按“单选”、“多选”、“判断”、“选做”顺序，否则需要前端重改！！
 	import { getPaperProblemList } from '../../api/api';
 	export default{
 		props:{
@@ -133,6 +134,7 @@
 		},
 		methods:{
 			getProblemList(){
+				//to do
 				var params = {
 					id: this.id
 				}
