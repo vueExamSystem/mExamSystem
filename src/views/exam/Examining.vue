@@ -35,7 +35,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="indicator fixed">
+		<div class="footer-indicator fixed">
 			<el-row>
 				<el-col :span="12"><el-button class="plane" @click="prevProblem">上一题</el-button></el-col>
 				<el-col :span="12"><el-button class="plane" @click="nextProblem">下一题</el-button></el-col>
@@ -180,6 +180,7 @@
 	@import '~scss_vars';
 	.main{
 		margin-top: 40px;
+		margin-bottom: 40px;
 		.title{
 			font-size: 12px;
 			line-height: 28px;
