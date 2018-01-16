@@ -12,10 +12,10 @@
 						<span class="order">（<a class="larger">{{currentTypeNum}}</a>/{{currentTypeTotal}}）</span>
 					</div>
 					<div class="pull-right">
-						<mt-button type="primary" @click="showQuestionCard" class="plane">题卡</mt-button>
+						<mt-button type="primary" @click="showQuestionCard" class="plane" :disabled="!isLoaded">题卡</mt-button>
 					</div>
 				</div>
-				<div class="content">
+				<div class="content" style="min-height: 300px;" v-loading="!isLoaded">
 					<div class="el-question">
 						<div class="el-question-title">
 							<span class="current">{{currentTypeNum}}.</span>
@@ -43,7 +43,7 @@
 				</el-row>
 			</div>
 		</section>
-		<question-card v-show="isCardVisible" @close="hideQuestionCard"></question-card>
+		<question-card :list="problemList" v-if="isLoaded" v-show="isCardVisible" @close="hideQuestionCard" @jump="jumpProblem"></question-card>
 	</div>
 </template>
 <script>
@@ -63,7 +63,7 @@
 			return {
 				value: '',
 				timeClock: '',
-				current: 1,
+				current: 0,
 				endTime: '2018/01/10 23:59',
 				nowDate: new Date(),
 				problemList:[],
@@ -73,6 +73,7 @@
 					judge: 0, //判断
 					option: 0 //选做
 				},
+				isLoaded: false,
 				isCardVisible: false
 			}
 		},
@@ -161,6 +162,7 @@
 							++this.count.option;
 						}
 					}
+					this.isLoaded = true;
 				});
 			},
 			submitPaper(){
@@ -195,6 +197,7 @@
 				}
 			},
 			jumpProblem(index){//跳转到某一题
+				this.hideQuestionCard();
 				if(index>=0 && index<=this.problemList.length){
 					this.current = index;
 				}
