@@ -3,7 +3,7 @@
 		<section v-show="!isCardVisible">
 			<mt-header title="考试中" fixed>
 				<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
-				<span @click="submitPaper" slot="right">交卷</span>
+				<span @click="finishedPaper" slot="right" v-if="isLoaded">交卷</span>
 			</mt-header>
 			<div class="main">
 				<div class="title clearfix">
@@ -165,8 +165,81 @@
 					this.isLoaded = true;
 				});
 			},
-			submitPaper(){
-
+			finishedPaper(){//检测并交卷
+				if(this.checkPaper()){//回答完毕
+					this.$messageBox({
+					  	title: '',
+					  	message: '确定交卷吗？',
+					  	confirmButtonText: '继续答题',
+					  	showCancelButton: true,
+					  	cancelButtonText: '我要交卷'
+					}).then(res=>{
+						if(res == 'cancel'){//我要交卷
+							this.submitPaper();
+						}
+					});
+				}else{
+					this.$messageBox({
+					  	title: '',
+					  	message: '您的题还未答完！',
+					  	confirmButtonText: '继续答题',
+					  	showCancelButton: true,
+					  	cancelButtonText: '我要交卷'
+					}).then(res=>{
+						if(res == 'cancel'){//我要交卷
+							this.submitPaper();
+						}
+					});
+				}
+			},
+			submitPaper(){//直接交卷
+				console.log('submitted!')
+			},
+			checkPaper(){//检测是否答完
+				var isFinished = true;
+				var unNecessaryCount = this.count.option;
+				var necessaryCount = this.problemList.length - unNecessaryCount;
+				//必做题检测
+				for(var i=0;i<necessaryCount;i++){
+					var item = this.problemList[i];
+					if(typeof item.myAnswer === 'undefined'){
+						isFinished = false;
+						break;
+					}else{
+						if(item.type === 'check'){
+							if(item.myAnswer.length == 0){
+								isFinished = false;
+								break;
+							}
+						}else{
+							if(item.myAnswer == ''){
+								isFinished = false;
+								break;
+							}
+						}
+					}
+				}
+				if(isFinished){
+					//选做题
+					var isOptionNeededCount = 3;//选做题必做个数
+					var isOptionFinishedCount = 0;//选做题答题个数
+					for(var i=necessaryCount;i<this.problemList.length;i++){
+						var item = this.problemList[i];
+						if(item.type === 'check'){
+							if(item.myAnswer.length != 0){
+								++isOptionFinishedCount;
+							}
+						}else{
+							if(item.myAnswer != ''){
+								++isOptionFinishedCount;
+							}
+						}
+					}
+					if(isOptionFinishedCount<isOptionNeededCount){
+						isFinished = false;
+					}
+				}
+				return isFinished;
 			},
 			showQuestionCard(){//显示题卡
 				this.isCardVisible = true;

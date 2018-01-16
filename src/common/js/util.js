@@ -8,13 +8,14 @@ function padding(s, len) {
 };
 
 import axios from 'axios';
-import { Toast } from 'mint-ui';
+import { Toast, MessageBox } from 'mint-ui';
 
 export default {
     install(Vue,options){
 
         /**弹出错误提示*/
         Vue.prototype.$toast = Toast;
+        Vue.prototype.$messageBox = MessageBox;
 
         /*封装post*/
         Vue.prototype.systemPost = function(url,params,resolve,reject,fail){
