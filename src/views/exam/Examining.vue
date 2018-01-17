@@ -194,6 +194,7 @@
 			},
 			submitPaper(){//直接交卷
 				console.log('submitted!')
+				this.$router.push('/feedback');
 			},
 			checkPaper(){//检测是否答完
 				var isFinished = true;

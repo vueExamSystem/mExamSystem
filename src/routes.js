@@ -1,6 +1,7 @@
 import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Search from './views/common/Search.vue'
+import Feedback from './views/common/Feedback.vue'
 /*主页*/
 import HomePage from './views/HomePage.vue'
 /*考试*/
@@ -27,6 +28,12 @@ let routes = [
         path: '/search',
         component: Search,
         name: '搜索',
+        hidden: true
+    },
+    {
+        path: '/feedback',
+        component: Feedback,
+        name: '反馈提示',
         hidden: true
     },
     {
