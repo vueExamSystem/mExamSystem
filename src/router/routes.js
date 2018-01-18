@@ -1,21 +1,21 @@
-import Login from './views/Login.vue'
-import NotFound from './views/404.vue'
-import Search from './views/common/Search.vue'
-import Feedback from './views/common/Feedback.vue'
+import Login from '../views/Login.vue'
+import NotFound from '../views/404.vue'
+import Search from '../views/common/Search.vue'
+import Feedback from '../views/common/Feedback.vue'
 /*主页*/
-import HomePage from './views/HomePage.vue'
+import HomePage from '../views/HomePage.vue'
 /*考试*/
-import ExamHome from './views/exam/Home.vue'
-import ExamWait from './views/exam/Wait.vue'
-import Examining from './views/exam/Examining.vue'
+import ExamHome from '../views/exam/Home.vue'
+import ExamWait from '../views/exam/Wait.vue'
+import Examining from '../views/exam/Examining.vue'
 /*测验*/
-import TestHome from './views/test/Home.vue'
+import TestHome from '../views/test/Home.vue'
 /*预习*/
-import PreviewHome from './views/preview/Home.vue'
+import PreviewHome from '../views/preview/Home.vue'
 /*成绩*/
-import ScoreHome from './views/score/Home.vue'
+import ScoreHome from '../views/score/Home.vue'
 /*设置*/
-import SettingHome from './views/setting/Home.vue'
+import SettingHome from '../views/setting/Home.vue'
 
 let routes = [
     {

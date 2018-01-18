@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios  from 'axios';
+import instance  from '../axios';
 import u from '../common/js/util';
 import MockAdapter from 'axios-mock-adapter';
 import {LoginUsers, Users} from './data/user';
@@ -24,10 +25,11 @@ export default {
      * mock bootstrap
      */
     bootstrap() {
-        let mock = new MockAdapter(axios);
+        let noTokenMock = new MockAdapter(axios);
+        let mock = new MockAdapter(instance);
 
         //登录
-        mock.onPost('/login').reply(config => {
+        noTokenMock.onPost('/login').reply(config => {
             let {username, password} = JSON.parse(config.data);
             return new Promise((resolve, reject) => {
                 let user = null;
@@ -41,7 +43,7 @@ export default {
                     });
 
                     if (hasUser) {
-                        resolve([200, {code: 200, msg: '请求成功', data:user}]);
+                        resolve([200, {code: 200, msg: '请求成功', data:{token: new Date().getTime()}}]);
                     } else {
                         resolve([200, {code: 500, msg: '账号或密码错误'}]);
                     }

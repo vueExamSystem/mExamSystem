@@ -1,7 +1,17 @@
 //test
-export const increment = ({commit}) => {
-    commit('INCREMENT')
-}
-export const decrement = ({commit}) => {
-    commit('DECREMENT')
-}
+const actions = {
+	increment({commit}){
+	    commit('INCREMENT')
+	},
+	decrement({commit}){
+	    commit('DECREMENT')
+	},
+	setToken({commit},payload){
+	    commit('SETTOKEN',payload)
+	},
+	logout({commit},payload){
+	    commit('LOGOUT',payload)
+	}
+} 
+
+export default actions;

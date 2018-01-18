@@ -53,9 +53,12 @@
               if (code !== 200) {
                 this.alertError(msg);
               } else {
-                sessionStorage.setItem('user', JSON.stringify(data));
-                this.$router.push({ path: '/' });
+                this.$store.dispatch('setToken', data.token);
+                let redirectUrl = decodeURIComponent(this.$route.query.redirect || '/');
+                this.$router.push({ path: redirectUrl });
               }
+            }).catch((error)=>{
+              console.log('error',error)
             });
           } else {
             return false;
