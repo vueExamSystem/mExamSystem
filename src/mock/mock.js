@@ -51,6 +51,24 @@ export default {
             });
         });
 
+
+
+        //获取用户列表
+        mock.onGet('/user/info').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 0,
+                        msg: '请求成功',
+                        data: {
+                            roles: ['admin']
+                        }
+                        
+                    }]);
+                }, 1000);
+            });
+        });
+
         //获取用户列表
         mock.onGet('/user/list').reply(config => {
             let {name} = config.params;

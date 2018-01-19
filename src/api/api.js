@@ -5,6 +5,8 @@ let base = '';
 
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 
+export const getUserInfo = params => { return axios.post(`${base}/user/info`, params).then(res => res.data); };
+
 export const getUserList = params => { return instance.get(`${base}/user/list`, { params: params }); };
 
 export const getUserListPage = params => { return instance.get(`${base}/user/listpage`, { params: params }); };

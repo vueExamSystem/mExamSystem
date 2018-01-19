@@ -17,63 +17,76 @@ import ScoreHome from '../views/score/Home.vue'
 /*设置*/
 import SettingHome from '../views/setting/Home.vue'
 
-let routes = [
+//所有权限通用路由表 
+//如登录页和一些不用权限的公用页面
+export const constantRouterMap = [//不需要权限的页面
     {
         path: '/login',
         component: Login,
-        name: '登录',
-        hidden: true
+        name: '登录'
     },
     {
         path: '/search',
         component: Search,
-        name: '搜索',
-        hidden: true
+        name: '搜索'
     },
     {
         path: '/feedback',
         component: Feedback,
-        name: '反馈提示',
-        hidden: true
-    },
+        name: '反馈提示'
+    }
+];
+
+//异步挂载的路由
+//动态需要根据权限加载的路由表 
+export const asyncRouterMap  = [
     {
         path: '/wait/:id',
         component: ExamWait,
         name: '等待考试',
-        props: true
+        props: true,
+        meta: { role: ['student'] }
     },
     {
         path: '/examining/:id',
         component: Examining,
         name: 'examining',
-        props: true
+        props: true,
+        meta: { role: ['student'] }
     },
     {
         path: '/',
         component: HomePage,
         name: '主页',
-        // children:[{
-        //         path: 'exam',
-        //         component: ExamHome,
-        //         name: '考试'
-        //     },{
-        //         path: 'test',
-        //         component: TestHome,
-        //         name: '测验'
-        //     },{
-        //         path: 'preview',
-        //         component: PreviewHome,
-        //         name: '预习'
-        //     },{
-        //         path: 'score',
-        //         component: ScoreHome,
-        //         name: '成绩'
-        //     },{
-        //         path: 'setting',
-        //         component: SettingHome,
-        //         name: '设置'
-        //     }
-        // ]
+        meta: { role: ['student'] },
+        redirect: '/exam',
+        children:[{
+                path: 'exam',
+                component: ExamHome,
+                name: '考试',
+                meta: { role: ['student'] }
+            },{
+                path: 'test',
+                component: TestHome,
+                name: '测验',
+                meta: { role: ['student'] }
+            },{
+                path: 'preview',
+                component: PreviewHome,
+                name: '预习',
+                meta: { role: ['student'] }
+            },{
+                path: 'score',
+                component: ScoreHome,
+                name: '成绩',
+                meta: { role: ['student'] }
+            },{
+                path: 'setting',
+                component: SettingHome,
+                name: '设置',
+                meta: { role: ['student'] }
+            }
+        ]
     },
     {
         path: '/404',
@@ -87,5 +100,3 @@ let routes = [
         redirect: { path: '/404' }
     }
 ];
-
-export default routes;
