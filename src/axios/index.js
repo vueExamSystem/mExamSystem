@@ -33,10 +33,10 @@ instance.interceptors.response.use(
         if(error.response){
             switch(error.response.status){
                 case 401:
-                    store.dispatch('UserLogout'); //可能是token过期，清除它
+                    store.dispatch('logout'); //可能是token过期，清除它
                     router.replace({ //跳转到登录页面
                         path: 'login',
-                        query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                        query: { redirect: router.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
                     });
             }
         }

@@ -6,9 +6,10 @@ import mutations from './mutations'
 Vue.use(Vuex)
 
 // 应用初始状态
+;
 const state = {
     count: 10,
-    token: ''
+    token: window.sessionStorage.getItem('token') || ''
 }
 
 // 创建 store 实例

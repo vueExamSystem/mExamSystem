@@ -7,9 +7,11 @@ const mutations = {
         state.count--
     },
     SETTOKEN(state,payload){
+        window.sessionStorage.setItem('token', payload.token);
     	state.token = payload.token;
     },
     LOGOUT(state){
+        window.sessionStorage.removeItem('token');
     	state.token = '';
     }
 }

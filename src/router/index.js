@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routers from './routes'
-//import NProgress from 'nprogress'
-//import 'nprogress/nprogress.css'
+import store from '../vuex/store'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
-//NProgress.configure({ showSpinner: false });
+NProgress.configure({ showSpinner: false });
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -13,21 +14,20 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // NProgress.start();
-  // if (to.path == '/login') {
-  //   sessionStorage.removeItem('user');
-  // }
-  // let user = JSON.parse(sessionStorage.getItem('user'));
-  // if (!user && to.path != '/login') {
-  //   next({ path: '/login' })
-  // } else {
-  //   next()
-  // }
-  next()
+    NProgress.start();
+    var token = store.state.token;
+    if (to.path == '/login') {
+      store.dispatch('logout');
+    }
+    if (!token && to.path != '/login') {
+      next({ path: '/login',query: { redirect: to.fullPath } })
+    } else {
+      next()
+    }
 });
 
-//router.afterEach(transition => {
-//NProgress.done();
-//});
+router.afterEach(transition => {
+  NProgress.done();
+});
 
 export default router;
