@@ -37,6 +37,9 @@ export const constantRouterMap = [//不需要权限的页面
     }
 ];
 
+//免登录白名单
+export const whiteList = [];
+
 //异步挂载的路由
 //动态需要根据权限加载的路由表 
 export const asyncRouterMap  = [
@@ -59,7 +62,7 @@ export const asyncRouterMap  = [
         component: HomePage,
         name: '主页',
         meta: { role: ['student'] },
-        redirect: '/exam',
+        // redirect: '/exam',
         children:[{
                 path: 'exam',
                 component: ExamHome,

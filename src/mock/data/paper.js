@@ -16,6 +16,7 @@ for (let i = 0; i < 10; i++) {
 }
 
 const ProblemList = [{
+    id: '1',
     isNecessary: true,//必做題
     type:'radio',//題目類型
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是（）',
@@ -33,6 +34,7 @@ const ProblemList = [{
         text:'曲线运动，加速度大小和方向均改变，是非匀变速曲线运动'
     }]
 },{
+    id: '2',
     isNecessary: true,//必做題
     type:'radio',//題目類型
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是（）',
@@ -50,6 +52,7 @@ const ProblemList = [{
         text:'曲线运动，加速度大小和方向均改变，是非匀变速曲线运动'
     }]
 },{
+    id: '3',
     isNecessary: true,
     type:'check',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是（）',
@@ -67,6 +70,7 @@ const ProblemList = [{
         text:'曲线运动，加速度大小和方向均改变，是非匀变速曲线运动'
     }]
 },{
+    id: '4',
     isNecessary: true,
     type:'check',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是（）',
@@ -84,6 +88,7 @@ const ProblemList = [{
         text:'曲线运动，加速度大小和方向均改变，是非匀变速曲线运动'
     }]
 },{
+    id: '5',
     isNecessary: true,
     type:'check',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是（）',
@@ -101,6 +106,7 @@ const ProblemList = [{
         text:'曲线运动，加速度大小和方向均改变，是非匀变速曲线运动'
     }]
 },{
+    id: '6',
     isNecessary: true,
     type:'judge',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是直线运动且是匀变速直线运动。',
@@ -112,6 +118,7 @@ const ProblemList = [{
         text:'错误'
     }]
 },{
+    id: '7',
     isNecessary: true,
     type:'judge',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是直线运动且是匀变速直线运动。',
@@ -123,6 +130,7 @@ const ProblemList = [{
         text:'错误'
     }]
 },{
+    id: '8',
     isNecessary: true,
     type:'judge',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是直线运动且是匀变速直线运动。',
@@ -134,6 +142,7 @@ const ProblemList = [{
         text:'错误'
     }]
 },{
+    id: '9',
     isNecessary: true,
     type:'judge',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是直线运动且是匀变速直线运动。',
@@ -145,6 +154,7 @@ const ProblemList = [{
         text:'错误'
     }]
 },{
+    id: '10',
     isNecessary: false,
     type:'radio',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是（）',
@@ -162,6 +172,7 @@ const ProblemList = [{
         text:'曲线运动，加速度大小和方向均改变，是非匀变速曲线运动'
     }]
 },{
+    id: '11',
     isNecessary: false,
     type:'radio',
     title: '某物体在一足够大的光滑平面上向西运动，当它受到一个向南的恒定外力作用时，物体运动将是（）',

@@ -54,7 +54,7 @@ export default {
 
 
         //获取用户列表
-        mock.onGet('/user/info').reply(config => {
+        mock.onPost('/user/info').reply(config => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve([200, {
