@@ -13,7 +13,7 @@
 			<i class="fa fa-exclamation-triangle"></i>
 			<span class="feedback-title">{{feedback.title}}</span>
 			<p class="feedback-msg">
-				<span v-if="feedback.time != ''">{{feedback.time}}秒后，</span>
+				<span v-if="time != ''">{{time}}秒后，</span>
 				{{feedback.msg}}
 			</p>
 			<el-button @click="toNext">{{feedback.buttonText}}</el-button>
@@ -36,7 +36,7 @@
 						type: 'success',
 						title: '提交成功！',
 						msg: '跳转到到首页',
-						time: 10,
+						time: 10000,
 						buttonText: '返回到首页',
 						nextLink: '/'
 					},
@@ -53,11 +53,14 @@
 		},
 		computed:{
 			feedback(){
+				var opt = {};
 				if(this.options && this.options.type && this.options.type === 'fail'){
-					return Object.assign({},this.defaults.fail,this.options);
+					opt = Object.assign({},this.defaults.fail,this.options);
 				}else{
-					return Object.assign({},this.defaults.success,this.options);
+					opt = Object.assign({},this.defaults.success,this.options);
 				}
+				this.time = opt.time;
+				return opt;
 			}
 		},
 		methods:{
@@ -67,15 +70,15 @@
 				}
 			},
 			timedown(){
-				this.timehandle = setInterval(()=>{console.log('this.$route.path',this.$route.path)
+				this.timehandle = setInterval(()=>{
 					if(this.$route.path !== '/feedback'){
 						clearInterval(this.timehandle);
 					}else{
-						if(this.feedback.time === 1){
+						if(this.time === 1){
 							clearInterval(this.timehandle);
 							this.toNext();
 						}else{
-							--this.feedback.time;
+							--this.time;
 						}									
 					}
 					
