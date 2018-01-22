@@ -51,7 +51,7 @@ const routes = [//不需要权限的页面
         path: '/',
         component: HomePage,
         name: '主页',
-        // redirect: '/exam',
+        redirect: '/exam',
         children:[{
                 path: 'exam',
                 component: ExamHome,
