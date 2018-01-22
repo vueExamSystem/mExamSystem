@@ -6,18 +6,18 @@
 			</mt-header>
 			<div class="main">
 				<p class="title">本周考试</p>
-				<div class="content">
+				<div class="content" v-loading="listenLoading">
 					<ul class="section-list">
-						<li v-for="exam in examList">
-							<template v-if="isTodayExam(exam.time) && isValid(exam.time)">
+						<li v-for="(exam,index) in examList">
+							<template v-if="isTodayExam(exam.startTime) && isValid(exam.startTime)">
 								<p>{{exam.name}}</p>
 								<div>
 									<div class="time-down">
 										<img src="/static/images/clock.png" width="15">
 										<span>倒计时：</span>
-										<span class="time">{{remainTime(exam.time)}}</span>
+										<span class="time">{{remainTime(exam.startTime)}}</span>
 									</div>
-									<mt-button v-show="isShouldExam(exam.time)" class="pull-right" type="primary" @click="toWaitExam(exam.id)">进入考试</mt-button>
+									<mt-button v-show="isShouldExam(exam.startTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
 								</div>
 								<div class="flag">
 									<span>今日</span>
@@ -28,10 +28,10 @@
 								<div>
 									<div class="time-down">
 										<img src="/static/images/clock.png" width="15">
-										<span>{{exam.time}}</span>
+										<span>{{exam.startTime}}</span>
 									</div>
 								</div>
-								<div class="flag" v-if="isTodayExam(exam.time)">
+								<div class="flag" v-if="isTodayExam(exam.startTime)">
 									<span>今日</span>
 								</div>
 							</template>
@@ -46,6 +46,7 @@
 	</section>
 </template>
 <script>
+	import { getExamList } from '../../api/api'
 	import Search from '../common/Search.vue'
 	export default {
 		components:{
@@ -53,25 +54,11 @@
 		},
 		data(){
 			return {
+				fullPath: '',
 				nowDate: new Date(),
 				timeClock: '',
-				examList:[{
-					id: '1',
-					name: '大一物理（上）期中考试',
-					time: '2018/01/10 09:35'
-				},{
-					id: '2',
-					name: '大一高等数学（上）期中考试',
-					time: '2018/01/10 09:40'
-				},{
-					id: '3',
-					name: '大一大学英语（上）期中考试',
-					time: '2018/01/10 10:00'
-				},{
-					id: '4',
-					name: '大一计算机（上）期中考试',
-					time: '2018/01/11 15:00'
-				}],
+				examList:[],
+				listenLoading: true,
 				isSearchVisible: false
 			}
 		},
@@ -81,6 +68,14 @@
 			}
 		},
 		methods:{
+			init(){
+				this.fullPath = this.$route.fullPath;
+				getExamList().then(res => {
+					this.examList = res.data;
+					this.timeClockRun();
+					this.listenLoading = false;
+				});
+			},
 			/**string转换为date
 			*dateString:2018/01/09 18:00
 			*/
@@ -125,8 +120,10 @@
 				}
 				return isShouldExam;
 			},
-			toWaitExam(id){//进入考试页面
+			toWaitExam(id,index){//进入考试页面
 				this.clearClock();
+				var item = this.examList[index];
+				window.localStorage.setItem('examItem',JSON.stringify(item));
 				this.$router.push({ path: `/wait/${id}`});
 			},
 			isValid(dateString){//是否没有过期
@@ -177,7 +174,12 @@
 			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{
-					this.nowDate = new Date();
+					if(this.$route.fullPath != this.fullPath){
+						this.clearClock();
+					}else{
+						this.nowDate = new Date();
+					}
+					
 				},1000);
 			},
 			clearClock(){
@@ -187,7 +189,7 @@
 			}
 		},
 		mounted() {
-			this.timeClockRun();
+			this.init();
 		}
 	}
 </script>
@@ -204,6 +206,7 @@
 		}
 		.content{
 			padding: 10px;
+			min-height: 200px;
 		}
 	}
 	

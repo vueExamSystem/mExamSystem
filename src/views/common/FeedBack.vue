@@ -13,7 +13,7 @@
 			<i class="fa fa-exclamation-triangle"></i>
 			<span class="feedback-title">{{feedback.title}}</span>
 			<p class="feedback-msg">
-				<span v-if="time != ''">{{time}}秒后，</span>
+				<span v-if="feedback.time != ''">{{feedback.time}}秒后，</span>
 				{{feedback.msg}}
 			</p>
 			<el-button @click="toNext">{{feedback.buttonText}}</el-button>
@@ -29,15 +29,15 @@
 		},
 		data(){
 			return {
-				time: 10,
 				timehandle: '',
 				defaults:{
 					success: {
 						type: 'success',
 						title: '提交成功！',
 						msg: '跳转到到首页',
-						time: 10000,
+						time: 10,
 						buttonText: '返回到首页',
+						withinPath: '/feedback',
 						nextLink: '/'
 					},
 					fail: {
@@ -46,24 +46,26 @@
 						msg: '跳转到到首页',
 						time: 10,
 						buttonText: '返回到首页',
+						withinPath: '/feedback',
 						nextLink: '/'
 					}
-				}
+				},
+				feedback:{}
 			}
 		},
-		computed:{
-			feedback(){
+		methods:{
+			init(){
 				var opt = {};
 				if(this.options && this.options.type && this.options.type === 'fail'){
 					opt = Object.assign({},this.defaults.fail,this.options);
 				}else{
 					opt = Object.assign({},this.defaults.success,this.options);
 				}
-				this.time = opt.time;
-				return opt;
-			}
-		},
-		methods:{
+				this.feedback = opt;
+				if(this.feedback.time != ''){
+					this.timedown();
+				}
+			},
 			toNext(){
 				if(this.feedback.nextLink !== ''){
 					this.$router.push(this.feedback.nextLink);
@@ -71,14 +73,14 @@
 			},
 			timedown(){
 				this.timehandle = setInterval(()=>{
-					if(this.$route.path !== '/feedback'){
+					if(this.$route.fullPath !== this.feedback.withinPath){
 						clearInterval(this.timehandle);
 					}else{
-						if(this.time === 1){
+						if(this.feedback.time === 1){
 							clearInterval(this.timehandle);
 							this.toNext();
 						}else{
-							--this.time;
+							--this.feedback.time;
 						}									
 					}
 					
@@ -87,9 +89,7 @@
 			}
 		},
 		mounted(){
-			if(this.feedback.time != ''){
-				this.timedown();
-			}
+			this.init();
 		}
 	}
 </script>

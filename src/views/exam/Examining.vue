@@ -1,53 +1,61 @@
 <template>
 	<div>
-		<section v-show="!isCardVisible">
-			<mt-header title="考试中" fixed>
-				<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
-				<span @click="finishedPaper" slot="right" v-if="isLoaded">交卷</span>
-			</mt-header>
-			<div class="main">
-				<div class="title clearfix">
-					<div class="pull-left">
-						<span>{{typeName}}</span>
-						<span class="order">（<a class="larger">{{currentTypeNum}}</a>/{{currentTypeTotal}}）</span>
-					</div>
-					<div class="pull-right">
-						<mt-button type="primary" @click="showQuestionCard" class="plane" :disabled="!isLoaded">题卡</mt-button>
-					</div>
-				</div>
-				<div class="content" style="min-height: 300px;" v-loading="!isLoaded">
-					<div class="el-question">
-						<div class="el-question-title">
-							<span class="current">{{currentTypeNum}}.</span>
-							<span class="text">{{problem.title}}</span>
+		<template v-if="isValidLink">
+			<section v-show="!isCardVisible">
+				<mt-header title="考试中" fixed>
+					<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
+					<span @click="finishedPaper" slot="right" v-if="isLoaded">交卷</span>
+				</mt-header>
+				<template >
+					<div class="main">
+						<div class="title clearfix">
+							<div class="pull-left">
+								<span>{{typeName}}</span>
+								<span class="order">（<a class="larger">{{currentTypeNum}}</a>/{{currentTypeTotal}}）</span>
+							</div>
+							<div class="pull-right">
+								<mt-button type="primary" @click="showQuestionCard" class="plane" :disabled="!isLoaded">题卡</mt-button>
+							</div>
 						</div>
-						<div class="el-question-options">
-							<template v-if="problem.type == 'check'">
-								<el-checkbox-group v-model="problem.myAnswer">
-									<el-checkbox v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-checkbox>
-								</el-checkbox-group>
-							</template>
-							<template v-else>
-								<el-radio-group v-model="problem.myAnswer">
-									<el-radio v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-radio>
-								</el-radio-group>
-							</template>
+						<div class="content" style="min-height: 300px;" v-loading="!isLoaded">
+							<div class="el-question">
+								<div class="el-question-title">
+									<span class="current">{{currentTypeNum}}.</span>
+									<span class="text">{{problem.title}}</span>
+								</div>
+								<div class="el-question-options">
+									<template v-if="problem.type == 'check'">
+										<el-checkbox-group v-model="problem.myAnswer">
+											<el-checkbox v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-checkbox>
+										</el-checkbox-group>
+									</template>
+									<template v-else>
+										<el-radio-group v-model="problem.myAnswer">
+											<el-radio v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-radio>
+										</el-radio-group>
+									</template>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="footer-indicator fixed">
-				<el-row>
-					<el-col :span="12"><el-button class="plane" @click="prevProblem" :disabled="current === 0">上一题</el-button></el-col>
-					<el-col :span="12"><el-button class="plane" @click="nextProblem" :disabled="current === problemList.length - 1">下一题</el-button></el-col>
-				</el-row>
-			</div>
-		</section>
-		<question-card :list="problemList" v-if="isLoaded" v-show="isCardVisible" @close="hideQuestionCard" @jump="jumpProblem"></question-card>
+					<div class="footer-indicator fixed">
+						<el-row>
+							<el-col :span="12"><el-button class="plane" @click="prevProblem" :disabled="current === 0">上一题</el-button></el-col>
+							<el-col :span="12"><el-button class="plane" @click="nextProblem" :disabled="current === problemList.length - 1">下一题</el-button></el-col>
+						</el-row>
+					</div>
+				</template>
+			</section>
+			<question-card :list="problemList" v-if="isLoaded" v-show="isCardVisible" @close="hideQuestionCard" @jump="jumpProblem"></question-card>
+		</template>
+		<template v-else>
+			<my-feedback :options="feedbackOptions"></my-feedback>
+		</template>
 	</div>
 </template>
 <script>
 	// 注意题目数据需要按“单选”、“多选”、“判断”、“选做”顺序，否则需要前端重改！！
+	import FeedBack from '../common/FeedBack'
 	import { getPaperProblemList } from '../../api/api';
 	import Card from './Card.vue'
 	export default{
@@ -57,14 +65,17 @@
 			}
 		},
 		components:{
-			questionCard: Card
+			questionCard: Card,
+			myFeedback:FeedBack
 		},
 		data(){
 			return {
-				value: '',
+				isValidLink: true,
+				fullPath: '',
 				timeClock: '',
 				current: 0,
-				endTime: '2018/01/10 23:59',
+				startTime: '',
+				endTime: '',
 				nowDate: new Date(),
 				problemList:[],
 				count:{
@@ -72,6 +83,14 @@
 					check: 0, //多选
 					judge: 0, //判断
 					option: 0 //选做
+				},
+				feedbackOptions:{
+					withinPath: '/examining',
+					type: 'fail',
+					title: '链接无效',
+					msg: '返回到首页',
+					nextLink: '/',
+					buttonText: '返回到首页'
 				},
 				isLoaded: false,
 				isCardVisible: false
@@ -142,6 +161,25 @@
 			}
 		},
 		methods:{
+			init(){
+				var item = JSON.parse(window.localStorage.getItem('examItem'));
+				this.fullPath = this.$route.fullPath;
+				if(item && item.id && item.id == this.id){
+					this.isValidLink = true;
+					this.startTime = item.startTime;
+					this.endTime = item.endTime;
+					if(this.getRemainSeconds(this.startTime)>0 || this.getRemainSeconds(this.endTime)<0){//无效链接
+						this.feedbackOptions.withinPath = this.fullPath;
+						this.isValidLink = false;
+					}else{//正常考试
+						this.timeClockRun();
+						this.getProblemList();
+					}
+				}else{//无效链接
+					this.feedbackOptions.withinPath = this.fullPath;
+					this.isValidLink = false;
+				}
+			},
 			getProblemList(){
 				//to do
 				var params = {
@@ -279,22 +317,26 @@
 			dateParse(dateString){
 				return new Date(dateString);
 			},
-			remainTime(dateString){//倒计时
-				var hourStr = '0';
-				var minuteStr = '0';
-				var secondStr = '0';
+			getRemainSeconds(dateString){//获取剩余总秒数
 				var thisD = this.dateParse(dateString);
-				var minuteSeconds = 1000 * 60;//一分钟毫秒数
-				var hourSeconds = minuteSeconds * 60;//一小时毫秒数
-				var totalSeconds = (thisD.getTime() - this.nowDate.getTime());//剩余总秒数
-				var remainHours = Math.floor(totalSeconds / hourSeconds);//对应剩余小时
-				var remainMinutes = Math.floor(totalSeconds % hourSeconds / minuteSeconds);//对应剩余分钟
-				var remainSeconds = Math.floor(totalSeconds % hourSeconds % minuteSeconds / 1000);//对应剩余秒
+				var totalSeconds = (thisD.getTime() - this.nowDate.getTime());
+				return totalSeconds;
+			},
+			remainTime(dateString){//倒计时
+				var totalSeconds = this.getRemainSeconds(dateString);//剩余总秒数
 				if(totalSeconds<=0){
 					this.clearClock();//关闭倒计时
 					this.submitPaper();
 					return '交卷中...';
 				}else{
+					var hourStr = '0';
+					var minuteStr = '0';
+					var secondStr = '0';
+					var minuteSeconds = 1000 * 60;//一分钟毫秒数
+					var hourSeconds = minuteSeconds * 60;//一小时毫秒数
+					var remainHours = Math.floor(totalSeconds / hourSeconds);//对应剩余小时
+					var remainMinutes = Math.floor(totalSeconds % hourSeconds / minuteSeconds);//对应剩余分钟
+					var remainSeconds = Math.floor(totalSeconds % hourSeconds % minuteSeconds / 1000);//对应剩余秒
 					if(remainHours < 10){//剩余小时小于10小时
 						hourStr += remainHours;
 					}else{
@@ -312,11 +354,14 @@
 					}
 					return hourStr + ':' + minuteStr + ':' + secondStr;
 				}
-				
 			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{
-					this.nowDate = new Date();
+					if(this.$route.fullPath != this.fullPath){
+						this.clearClock();
+					}else{
+						this.nowDate = new Date();
+					}
 				},1000);
 			},
 			clearClock(){
@@ -326,8 +371,7 @@
 			}
 		},
 		mounted(){
-			this.timeClockRun();
-			this.getProblemList();
+			this.init();
 		}
 	}
 </script>

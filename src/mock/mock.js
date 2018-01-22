@@ -70,16 +70,33 @@ export default {
         });
 
         //获取用户列表
-        mock.onGet('/user/list').reply(config => {
-            let {name} = config.params;
-            let mockUsers = _Users.filter(user => {
-                if (name && user.name.indexOf(name) == -1) return false;
-                return true;
-            });
+        mock.onPost('/exam/list').reply(config => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve([200, {
-                        users: mockUsers
+                        code: 0,
+                        msg: '请求成功',
+                        data: [{
+                            id: '1',
+                            name: '大一物理（上）期中考试1',
+                            startTime: '2018/01/22 17:00',
+                            endTime: '2018/01/22 18:00'
+                        },{
+                            id: '2',
+                            name: '大一高等数学（上）期中考试2',
+                            startTime: '2018/01/22 17:00',
+                            endTime: '2018/01/22 18:45'
+                        },{
+                            id: '3',
+                            name: '大一大学英语（上）期中考试3',
+                            startTime: '2018/01/22 16:40',
+                            endTime: '2018/01/22 14:45'
+                        },{
+                            id: '4',
+                            name: '大一计算机（上）期中考试4',
+                            startTime: '2018/01/23 14:00',
+                            endTime: '2018/01/22 14:45'
+                        }]
                     }]);
                 }, 1000);
             });

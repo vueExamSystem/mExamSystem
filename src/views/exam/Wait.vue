@@ -1,42 +1,55 @@
 <template>
-	<section>
-		<mt-header title="等待考试" fixed>
-			<span class="text-primary" @click="close" slot="right">关闭</span>
-		</mt-header>
-		<div class="main">
-			<div class="img-clock-down">
-				<img src="/static/images/logo.png">
-				<div class="time-down">
-					<span>{{remainTime(detail.startTime)}}</span>
+	<div>
+		<section v-if="isValidLink">
+			<mt-header title="等待考试" fixed>
+				<span class="text-primary" @click="close" slot="right">关闭</span>
+			</mt-header>
+			<div class="main">
+				<div class="img-clock-down">
+					<img src="/static/images/logo.png">
+					<div class="time-down">
+						<span>{{remainTime(detail.startTime)}}</span>
+					</div>
 				</div>
+				<div class="display-box">
+					<ul>
+						<li><span>{{detail.name}}</span></li>
+						<li>时间：<span>{{totalTime}}</span></li>
+						<li>总分：<span>100分</span></li>
+					</ul>
+				</div>
+				<p class="little-warning">您已进入等待区，到时间系统自动进入答题，请耐心等待！</p>
 			</div>
-			<div class="display-box">
-				<ul>
-					<li><span>{{detail.name}}</span></li>
-					<li>时间：<span>{{totalTime}}</span></li>
-					<li>总分：<span>100分</span></li>
-				</ul>
-			</div>
-			<p class="little-warning">您已进入等待区，到时间系统自动进入答题，请耐心等待！</p>
-		</div>
-	</section>
+		</section>
+		<template v-else>
+			<my-feedback :options="feedbackOptions"></my-feedback>
+		</template>
+	</div>
 </template>
 <script>
+	import FeedBack from '../common/FeedBack'
 	export default {
 		props:{
 			id:{
 				required: true
 			}
 		},
+		components:{myFeedback:FeedBack},
 		data(){
 			return {
+				fullPath: '',
 				timeClock: '',
 				nowDate: new Date(),
-				detail:{
-					name: '大学物理期中考试（上）',
-					startTime: '2018/01/10 13:30',
-					endTime: '2018/01/10 15:30',
-				}
+				detail:{},
+				feedbackOptions:{
+					withinPath: '/wait',
+					type: 'fail',
+					title: '链接无效',
+					msg: '返回到首页',
+					nextLink: '/',
+					buttonText: '返回到首页'
+				},
+				isValidLink: true
 			}
 		},
 		computed:{
@@ -50,8 +63,29 @@
 			}
 		},
 		methods:{
-			getPaperInfo(){
-
+			init(){
+				var item = JSON.parse(window.localStorage.getItem('examItem'));
+				this.fullPath = this.$route.fullPath;
+				if(item && item.id && item.id == this.id){
+					this.$set(this.detail,'name',item.name);
+					this.$set(this.detail,'startTime',item.startTime);
+					this.$set(this.detail,'endTime',item.endTime);
+					if(this.getRemainSeconds(this.detail.startTime)>0){//倒计时
+						this.isValidLink = true;
+						this.timeClockRun();
+					}else{
+						if(this.getRemainSeconds(this.detail.endTime)>0){//进入考试页面
+							this.isValidLink = true;
+							this.toExam();
+						}else{//无效链接
+							this.feedbackOptions.withinPath = this.fullPath;
+							this.isValidLink = false;
+						}
+					}
+				}else{//无效链接
+					this.feedbackOptions.withinPath = this.fullPath;
+					this.isValidLink = false;
+				}
 			},
 			dateParse(dateString){
 				return new Date(dateString);
@@ -59,22 +93,26 @@
 			toExam(){
 				this.$router.push({ path: `/examining/${this.id}`});
 			},
-			remainTime(dateString){//倒计时
-				var hourStr = '0';
-				var minuteStr = '0';
-				var secondStr = '0';
+			getRemainSeconds(dateString){//获取剩余总秒数
 				var thisD = this.dateParse(dateString);
-				var minuteSeconds = 1000 * 60;//一分钟毫秒数
-				var hourSeconds = minuteSeconds * 60;//一小时毫秒数
-				var totalSeconds = (thisD.getTime() - this.nowDate.getTime());//剩余总秒数
-				var remainHours = Math.floor(totalSeconds / hourSeconds);//对应剩余小时
-				var remainMinutes = Math.floor(totalSeconds % hourSeconds / minuteSeconds);//对应剩余分钟
-				var remainSeconds = Math.floor(totalSeconds % hourSeconds % minuteSeconds / 1000);//对应剩余秒
+				var totalSeconds = (thisD.getTime() - this.nowDate.getTime());
+				return totalSeconds;
+			},
+			remainTime(dateString){//倒计时
+				var totalSeconds = this.getRemainSeconds(dateString);//剩余总秒数
 				if(totalSeconds<=0){
 					this.clearClock();//关闭倒计时
 					this.toExam();
 					return '准备考试...';
 				}else{
+					var hourStr = '0';
+					var minuteStr = '0';
+					var secondStr = '0';
+					var minuteSeconds = 1000 * 60;//一分钟毫秒数
+					var hourSeconds = minuteSeconds * 60;//一小时毫秒数
+					var remainHours = Math.floor(totalSeconds / hourSeconds);//对应剩余小时
+					var remainMinutes = Math.floor(totalSeconds % hourSeconds / minuteSeconds);//对应剩余分钟
+					var remainSeconds = Math.floor(totalSeconds % hourSeconds % minuteSeconds / 1000);//对应剩余秒
 					if(remainHours < 10){//剩余小时小于10小时
 						hourStr += remainHours;
 					}else{
@@ -100,7 +138,12 @@
 			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{
-					this.nowDate = new Date();
+					if(this.$route.fullPath != this.fullPath){
+						this.clearClock();
+					}else{
+						this.nowDate = new Date();
+					}
+					
 				},1000);
 			},
 			clearClock(){
@@ -110,7 +153,7 @@
 			}
 		},
 		mounted(){
-			this.timeClockRun();
+			this.init();
 		}
 	}
 </script>

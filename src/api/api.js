@@ -7,7 +7,7 @@ export const requestLogin = params => { return axios.post(`${base}/login`, param
 
 export const getUserInfo = params => { return instance.post(`${base}/user/info`, params).then(res => res.data); };
 
-export const getUserList = params => { return instance.get(`${base}/user/list`, { params: params }); };
+export const getExamList = params => { return instance.post(`${base}/exam/list`, { params: params }).then(res => res.data); };
 
 export const getUserListPage = params => { return instance.get(`${base}/user/listpage`, { params: params }); };
 
