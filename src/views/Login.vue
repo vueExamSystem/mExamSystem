@@ -52,7 +52,7 @@
               let { msg, code, data } = res;
               if (code !== 200) {
                 this.alertError(msg);
-              } else {console.log('data.token',data.token)
+              } else {
                 this.$store.dispatch('SetToken', {token:data.token});
                 let redirectUrl = decodeURIComponent(this.$route.query.redirect || '/');
                 this.$router.push({ path: redirectUrl });
