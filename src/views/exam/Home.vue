@@ -1,65 +1,55 @@
 <template>
 	<section>
-		<div v-show="!isSearchVisible">
-			<mt-header title="考试" fixed>
-				<mt-button @click="showSearch" icon="search" slot="left"></mt-button>
-			</mt-header>
-			<div class="main">
-				<p class="title">本周考试</p>
-				<div class="content" v-loading="listenLoading">
-					<ul class="section-list">
-						<li v-for="(exam,index) in examList">
-							<template v-if="isTodayExam(exam.startTime) && isValid(exam.startTime)">
-								<p>{{exam.name}}</p>
-								<div>
-									<div class="time-down">
-										<img src="/static/images/clock.png" width="15">
-										<span>倒计时：</span>
-										<span class="time">{{remainTime(exam.startTime)}}</span>
-									</div>
-									<mt-button v-show="isShouldExam(exam.startTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
+		<mt-header title="考试" fixed>
+			<mt-button @click="toSearch" icon="search" slot="left"></mt-button>
+		</mt-header>
+		<div class="main">
+			<p class="title">本周考试</p>
+			<div class="content" v-loading="listenLoading">
+				<ul class="section-list">
+					<li v-for="(exam,index) in examList">
+						<template v-if="isTodayExam(exam.startTime) && isValid(exam.startTime)">
+							<p>{{exam.name}}</p>
+							<div>
+								<div class="time-down">
+									<img src="/static/images/clock.png" width="15">
+									<span>倒计时：</span>
+									<span class="time">{{remainTime(exam.startTime)}}</span>
 								</div>
-								<div class="flag">
-									<span>今日</span>
+								<mt-button v-show="isShouldExam(exam.startTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
+							</div>
+							<div class="flag">
+								<span>今日</span>
+							</div>
+						</template>
+						<template v-else>
+							<p>{{exam.name}}</p>
+							<div>
+								<div class="time-down">
+									<img src="/static/images/clock.png" width="15">
+									<span>{{exam.startTime}}</span>
 								</div>
-							</template>
-							<template v-else>
-								<p>{{exam.name}}</p>
-								<div>
-									<div class="time-down">
-										<img src="/static/images/clock.png" width="15">
-										<span>{{exam.startTime}}</span>
-									</div>
-								</div>
-								<div class="flag" v-if="isTodayExam(exam.startTime)">
-									<span>今日</span>
-								</div>
-							</template>
-						</li>
-					</ul>
-				</div>
+							</div>
+							<div class="flag" v-if="isTodayExam(exam.startTime)">
+								<span>今日</span>
+							</div>
+						</template>
+					</li>
+				</ul>
 			</div>
-		</div>
-		<div v-show="isSearchVisible">
-			<page-search></page-search>
 		</div>
 	</section>
 </template>
 <script>
 	import { getExamList } from '../../api/api'
-	import Search from '../common/Search.vue'
 	export default {
-		components:{
-			pageSearch:Search
-		},
 		data(){
 			return {
 				fullPath: '',
 				nowDate: new Date(),
 				timeClock: '',
 				examList:[],
-				listenLoading: true,
-				isSearchVisible: false
+				listenLoading: true
 			}
 		},
 		computed:{
@@ -166,11 +156,8 @@
  					string:year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second
  				};
  			},
-			showSearch(){//展示搜索页面
-				this.isSearchVisible = true;
-			},
-			hideSearch(){//展示搜索页面
-				this.isSearchVisible = false;
+			toSearch(){//展示搜索页面
+				this.$router.push({path:'/search',query:{history:this.$route.fullPath}});
 			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{

@@ -104,6 +104,31 @@ export default {
             });
         });
 
+        //搜索列表
+        mock.onPost('/search/list').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 0,
+                        msg: '请求成功',
+                        data: [ 
+                            {value: '111',text:'aaaaaaaaa'},
+                            {value: '222',text:'bbbbbbbbb'},
+                            {value: '333',text:'ccccccccc'},
+                            {value: '444',text:'ddddddddd'},
+                            {value: '555',text:'eeeeeeeee'},
+                            {value: '666',text:'fffffffff'},
+                            {value: '777',text:'ggggggggg'},
+                            {value: '888',text:'hhhhhhhhh'},
+                            {value: '999',text:'iiiiiiiii'},
+                            {value: '100',text:'jjjjjjjjj'},
+                            {value: '101',text:'kkkkkkkkk'}
+                        ]
+                    }]);
+                }, 1000);
+            });
+        });
+
         //考试交卷
         mock.onPost('/exam/submit').reply(config => {
             return new Promise((resolve, reject) => {

@@ -18,6 +18,9 @@ export const getPaperProblemList = params => { return instance.post(`${base}/pap
 //考试交卷
 export const submitExamPaper = params => { return instance.post(`${base}/exam/submit`, { params: params }).then(res => res.data); };
 
+//搜索列表
+export const searchList = params => { return instance.post(`${base}/search/list`, { params: params }).then(res => res.data); };
+
 export const getUserListPage = params => { return instance.get(`${base}/user/listpage`, { params: params }); };
 
 export const removeUser = params => { return instance.get(`${base}/user/remove`, { params: params }); };
