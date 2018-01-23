@@ -247,7 +247,6 @@
 					myAnswers
 				};
 				submitExamPaper(params).then(()=>{
-					this.maskLoading = false;
 					this.$router.push('/feedback');
 				}).catch((error)=>{
 					this.maskLoading = false;

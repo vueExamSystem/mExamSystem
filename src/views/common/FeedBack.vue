@@ -1,22 +1,26 @@
 <template>
-	<section class="feedback">
-		<div v-if="feedback.type == 'fail'">
-			<i class="fa fa-exclamation-circle"></i>
-			<span class="feedback-title">{{feedback.title}}</span>
+	<section class="feedback-wrap">
+		<div v-if="feedback.type == 'fail'" class="feedback fail">
+			<div class="feedback-title">
+				<i class="fa fa-exclamation-circle"></i>
+				<span>{{feedback.title}}</span>
+			</div>
 			<p class="feedback-msg">
-				<span v-if="feedback.time != ''">{{feedback.time}}秒后，</span>
+				<span class="time-down" v-if="feedback.time != ''">{{feedback.time}}秒后，</span>
 				{{feedback.msg}}
 			</p>
-			<el-button @click="toNext">{{feedback.buttonText}}</el-button>
+			<el-button type="danger" @click="toNext">{{feedback.buttonText}}</el-button>
 		</div>
-		<div v-else>
-			<i class="fa fa-check-circle"></i>
-			<span class="feedback-title">{{feedback.title}}</span>
+		<div v-else class="feedback success">
+			<div class="feedback-title">
+				<i class="fa fa-check-circle"></i>
+				<span>{{feedback.title}}</span>
+			</div>
 			<p class="feedback-msg">
-				<span v-if="feedback.time != ''">{{feedback.time}}秒后，</span>
+				<span class="time-down" v-if="feedback.time != ''">{{feedback.time}}秒后，</span>
 				{{feedback.msg}}
 			</p>
-			<el-button @click="toNext">{{feedback.buttonText}}</el-button>
+			<el-button type="success" @click="toNext">{{feedback.buttonText}}</el-button>
 		</div>
 	</section>
 </template>
@@ -93,3 +97,41 @@
 		}
 	}
 </script>
+<style lang="scss" scoped>
+	@import '~scss_vars';
+	.feedback-wrap{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		padding: 100px 10px 0;
+		text-align: center;
+		background: #E7E7F0;
+		.feedback{
+			&.success{
+				.feedback-title{
+					color: $-color-success;
+				}
+			}
+			&.fail{
+				.feedback-title{
+					color: $-color-danger;
+				}
+			}
+			.feedback-title{
+				font-size: 24px;
+			}
+			.feedback-msg{
+				margin-top: 20px;
+				font-size: 16px;
+				.time-down{
+					color: $-color-primary;
+				}
+			}
+			.el-button{
+				margin-top: 40px;
+				padding: 12px;
+				font-size: 16px;
+			}
+		}
+	}
+</style>
