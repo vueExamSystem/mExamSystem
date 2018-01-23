@@ -1,7 +1,7 @@
 <template>
 	<section class="feedback">
 		<div v-if="feedback.type == 'fail'">
-			<i class="fa fa-exclamation-triangle"></i>
+			<i class="fa fa-exclamation-circle"></i>
 			<span class="feedback-title">{{feedback.title}}</span>
 			<p class="feedback-msg">
 				<span v-if="feedback.time != ''">{{feedback.time}}秒后，</span>
@@ -10,7 +10,7 @@
 			<el-button @click="toNext">{{feedback.buttonText}}</el-button>
 		</div>
 		<div v-else>
-			<i class="fa fa-exclamation-triangle"></i>
+			<i class="fa fa-check-circle"></i>
 			<span class="feedback-title">{{feedback.title}}</span>
 			<p class="feedback-msg">
 				<span v-if="feedback.time != ''">{{feedback.time}}秒后，</span>

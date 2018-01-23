@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="maskLoading">
 		<template v-if="isValidLink">
 			<section v-show="!isCardVisible">
 				<mt-header title="考试中" fixed>
@@ -56,7 +56,7 @@
 <script>
 	// 注意题目数据需要按“单选”、“多选”、“判断”、“选做”顺序，否则需要前端重改！！
 	import FeedBack from '../common/FeedBack'
-	import { getPaperProblemList } from '../../api/api';
+	import { getPaperProblemList, submitExamPaper } from '../../api/api';
 	import Card from './Card.vue'
 	export default{
 		props:{
@@ -93,6 +93,7 @@
 					buttonText: '返回到首页'
 				},
 				isLoaded: false,
+				maskLoading: false,
 				isCardVisible: false
 			}
 		},
@@ -168,6 +169,7 @@
 					this.isValidLink = true;
 					this.startTime = item.startTime;
 					this.endTime = item.endTime;
+					this.optionNeed = item.optionNeed;//选做题必答
 					if(this.getRemainSeconds(this.startTime)>0 || this.getRemainSeconds(this.endTime)<0){//无效链接
 						this.feedbackOptions.withinPath = this.fullPath;
 						this.isValidLink = false;
@@ -231,13 +233,35 @@
 				}
 			},
 			submitPaper(){//直接交卷
-				console.log('submitted!')
-				this.$router.push('/feedback');
+				this.maskLoading = true;
+				var totalLength = this.problemList.length;//总题数
+				var myAnswers = [];
+				for(var i=0;i<totalLength;i++){
+					var item = this.problemList[i];
+					var myanswer = item.myAnswer?item.myAnswer.toString():'';
+					myAnswers.push(myanswer);
+				}
+				console.log('myAnswers',myAnswers);//答案可能"C,D"或"D,C",未按照从A-Z排序
+				var params = {
+					id: this.id,
+					myAnswers
+				};
+				submitExamPaper(params).then(()=>{
+					this.maskLoading = false;
+					this.$router.push('/feedback');
+				}).catch((error)=>{
+					this.maskLoading = false;
+					this.$toast({
+					  message: '提交失败',
+					  iconClass: 'fa fa-exclamation-triangle'
+					});
+				});
+				
 			},
 			checkPaper(){//检测是否答完
 				var isFinished = true;
-				var unNecessaryCount = this.count.option;
-				var necessaryCount = this.problemList.length - unNecessaryCount;
+				var unNecessaryCount = this.count.option;//选做题个数
+				var necessaryCount = this.problemList.length - unNecessaryCount;//必做题个数
 				//必做题检测
 				for(var i=0;i<necessaryCount;i++){
 					var item = this.problemList[i];
@@ -260,8 +284,8 @@
 				}
 				if(isFinished){
 					//选做题
-					var isOptionNeededCount = 3;//选做题必做个数
-					var isOptionFinishedCount = 0;//选做题答题个数
+					var isOptionNeededCount = this.optionNeed;//选做题必做个数
+					var isOptionFinishedCount = 0;//选做题已答题个数
 					for(var i=necessaryCount;i<this.problemList.length;i++){
 						var item = this.problemList[i];
 						if(item.type === 'check'){

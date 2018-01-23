@@ -28,7 +28,7 @@ export default {
         let noTokenMock = new MockAdapter(axios);
         let mock = new MockAdapter(instance);
 
-        //登录
+        //请求登录
         noTokenMock.onPost('/login').reply(config => {
             let {username, password} = JSON.parse(config.data);
             return new Promise((resolve, reject) => {
@@ -51,9 +51,7 @@ export default {
             });
         });
 
-
-
-        //获取用户列表
+        //获取用户信息
         mock.onPost('/user/info').reply(config => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
@@ -69,7 +67,7 @@ export default {
             });
         });
 
-        //获取用户列表
+        //获取考试列表
         mock.onPost('/exam/list').reply(config => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
@@ -79,24 +77,41 @@ export default {
                         data: [{
                             id: '1',
                             name: '大一物理（上）期中考试1',
-                            startTime: '2018/01/22 17:00',
-                            endTime: '2018/01/22 18:00'
+                            startTime: '2018/01/23 9:22',
+                            endTime: '2018/01/23 11:25',
+                            optionNeed: 2//选做题必答
                         },{
                             id: '2',
                             name: '大一高等数学（上）期中考试2',
                             startTime: '2018/01/22 17:00',
-                            endTime: '2018/01/22 18:45'
+                            endTime: '2018/01/22 18:45',
+                            optionNeed: 3//选做题必答
                         },{
                             id: '3',
                             name: '大一大学英语（上）期中考试3',
                             startTime: '2018/01/22 16:40',
-                            endTime: '2018/01/22 14:45'
+                            endTime: '2018/01/22 14:45',
+                            optionNeed: 3//选做题必答
                         },{
                             id: '4',
                             name: '大一计算机（上）期中考试4',
                             startTime: '2018/01/23 14:00',
-                            endTime: '2018/01/22 14:45'
+                            endTime: '2018/01/22 14:45',
+                            optionNeed: 3//选做题必答
                         }]
+                    }]);
+                }, 1000);
+            });
+        });
+
+        //考试交卷
+        mock.onPost('/exam/submit').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 0,
+                        msg: '请求成功',
+                        data: ''
                     }]);
                 }, 1000);
             });
