@@ -2,7 +2,7 @@
 	<section class="feedback-wrap">
 		<div v-if="feedback.type == 'fail'" class="feedback fail">
 			<div class="feedback-title">
-				<i class="fa fa-exclamation-circle"></i>
+				<i class="el-icon-warning"></i>
 				<span>{{feedback.title}}</span>
 			</div>
 			<p class="feedback-msg">
@@ -13,7 +13,7 @@
 		</div>
 		<div v-else class="feedback success">
 			<div class="feedback-title">
-				<i class="fa fa-check-circle"></i>
+				<i class="el-icon-success"></i>
 				<span>{{feedback.title}}</span>
 			</div>
 			<p class="feedback-msg">
