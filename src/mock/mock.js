@@ -108,22 +108,52 @@ export default {
         mock.onPost('/search/list').reply(config => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
+                    console.log('config',config)
+                    var params = JSON.parse(config.data).params;
+                    var data;
+                    if(params.type == 'exam'){
+                        data = [ 
+                            {
+                                id: '11',
+                                name: 'search大一物理（上）期中考试11',
+                                startTime: '2018/01/25 00:00',
+                                endTime: '2018/01/25 02:00',
+                                optionNeed: 2//选做题必答
+                            },
+                            {
+                                id: '12',
+                                name: 'search大一物理（上）期中考试12',
+                                startTime: '2018/01/25 00:00',
+                                endTime: '2018/01/25 02:00',
+                                optionNeed: 2//选做题必答
+                            },
+                            {
+                                id: '13',
+                                name: 'search大一物理（上）期中考试13',
+                                startTime: '2018/01/25 00:00',
+                                endTime: '2018/01/25 02:00',
+                                optionNeed: 2//选做题必答
+                            },
+                            {
+                                id: '14',
+                                name: 'search大一物理（上）期中考试14',
+                                startTime: '2018/01/25 00:00',
+                                endTime: '2018/01/25 02:00',
+                                optionNeed: 2//选做题必答
+                            },
+                            {
+                                id: '15',
+                                name: 'search大一物理（上）期中考试15',
+                                startTime: '2018/01/25 00:00',
+                                endTime: '2018/01/25 02:00',
+                                optionNeed: 2//选做题必答
+                            }
+                        ];
+                    }
                     resolve([200, {
                         code: 0,
                         msg: '请求成功',
-                        data: [ 
-                            {value: '111',text:'aaaaaaaaa'},
-                            {value: '222',text:'bbbbbbbbb'},
-                            {value: '333',text:'ccccccccc'},
-                            {value: '444',text:'ddddddddd'},
-                            {value: '555',text:'eeeeeeeee'},
-                            {value: '666',text:'fffffffff'},
-                            {value: '777',text:'ggggggggg'},
-                            {value: '888',text:'hhhhhhhhh'},
-                            {value: '999',text:'iiiiiiiii'},
-                            {value: '100',text:'jjjjjjjjj'},
-                            {value: '101',text:'kkkkkkkkk'}
-                        ]
+                        data
                     }]);
                 }, 1000);
             });
