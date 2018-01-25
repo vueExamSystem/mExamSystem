@@ -132,8 +132,8 @@ export default {
                         data: [{
                             id: '1',
                             name: '大一物理（上）期中考试1',
-                            startTime: '2018/01/25 13:25',
-                            endTime: '2018/01/25 15:25',
+                            startTime: '2018/01/25 21:31',
+                            endTime: '2018/01/25 23:25',
                             optionNeed: 2//选做题必答
                         },{
                             id: '2',
@@ -200,8 +200,8 @@ export default {
                         data: [{
                             id: '1',
                             name: '大一物理（上）测验1',
-                            startTime: '2018/01/25 15:10',
-                            endTime: '2018/01/25 17:30',
+                            startTime: '2018/01/25 21:30',
+                            endTime: '2018/01/25 23:25',
                             optionNeed: 2//选做题必答
                         },{
                             id: '2',

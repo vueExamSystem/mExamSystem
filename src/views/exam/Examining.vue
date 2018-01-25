@@ -1,6 +1,6 @@
 <template>
 	<div v-loading="maskLoading">
-		<template v-if="isValidLink">
+		<template v-if="isValidLink && !isSubmitted">
 			<section v-show="!isCardVisible">
 				<mt-header title="考试中" fixed>
 					<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
@@ -94,6 +94,7 @@
 				},
 				isLoaded: false,
 				maskLoading: false,
+				isSubmitted: false,
 				isCardVisible: false
 			}
 		},
@@ -165,20 +166,19 @@
 			init(){
 				var item = JSON.parse(window.localStorage.getItem('examItem'));
 				this.fullPath = this.$route.fullPath;
+				this.feedbackOptions.withinPath = this.fullPath;
 				if(item && item.id && item.id == this.id){
 					this.isValidLink = true;
 					this.startTime = item.startTime;
 					this.endTime = item.endTime;
 					this.optionNeed = item.optionNeed;//选做题必答
 					if(this.getRemainSeconds(this.startTime)>0 || this.getRemainSeconds(this.endTime)<0){//无效链接
-						this.feedbackOptions.withinPath = this.fullPath;
 						this.isValidLink = false;
 					}else{//正常考试
 						this.timeClockRun();
 						this.getProblemList();
 					}
 				}else{//无效链接
-					this.feedbackOptions.withinPath = this.fullPath;
 					this.isValidLink = false;
 				}
 			},
@@ -247,7 +247,11 @@
 					myAnswers
 				};
 				submitExamPaper(params).then(()=>{
-					this.$router.push('/feedback');
+					this.feedbackOptions.type = 'success';
+					this.feedbackOptions.title = '交卷成功！';
+					window.localStorage.removeItem('examItem');
+					this.isSubmitted = true;
+					this.maskLoading = false;
 				}).catch((error)=>{
 					this.maskLoading = false;
 					this.$toast({
