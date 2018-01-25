@@ -41,12 +41,12 @@
 			</div>
 		</div>
  		<div v-show="isSearchVisible">
- 			<page-search :value="searchkey" about="exam" @callback="searchCallback" @close="hideSearch"></page-search>
+ 			<page-search :value="searchkey" about="test" @callback="searchCallback" @close="hideSearch"></page-search>
  		</div>
 	</section>
 </template>
 <script>
-	import { getExamList } from '../../api/api'
+	import { getTestList } from '../../api/api'
 	import Search from '../common/Search.vue'
 	export default {
 		components: {
@@ -71,7 +71,7 @@
 		methods:{
 			init(){
 				this.fullPath = this.$route.fullPath;
-				getExamList().then(res => {
+				getTestList().then(res => {
 					this.list = res.data;
 					this.timeClockRun();
 					this.listenLoading = false;

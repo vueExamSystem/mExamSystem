@@ -13,10 +13,19 @@ export const getUserInfo = params => { return instance.post(`${base}/user/info`,
 export const getExamList = params => { return instance.post(`${base}/exam/list`, { params: params }).then(res => res.data); };
 
 //获取试卷题目列表
-export const getPaperProblemList = params => { return instance.post(`${base}/paper/problem/list`, params ); };
+export const getPaperProblemList = params => { return instance.post(`${base}/exam/problem/list`, params ); };
 
 //考试交卷
 export const submitExamPaper = params => { return instance.post(`${base}/exam/submit`, { params: params }).then(res => res.data); };
+
+//测验列表
+export const getTestList = params => { return instance.post(`${base}/test/list`, { params: params }).then(res => res.data); };
+
+//获取测验题目列表
+export const getTestProblemList = params => { return instance.post(`${base}/test/problem/list`, params ); };
+
+//测验交卷
+export const submitTestPaper = params => { return instance.post(`${base}/test/submit`, { params: params }).then(res => res.data); };
 
 //搜索列表
 export const searchList = params => { return instance.post(`${base}/search/list`, { params: params }).then(res => res.data); };

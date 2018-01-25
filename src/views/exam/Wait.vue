@@ -42,12 +42,12 @@
 				nowDate: new Date(),
 				detail:{},
 				feedbackOptions:{
-					withinPath: '/wait',
+					withinPath: '',
 					type: 'fail',
 					title: '链接无效',
-					msg: '返回到首页',
-					nextLink: '/',
-					buttonText: '返回到首页'
+					msg: '返回到考试',
+					nextLink: '/exam',
+					buttonText: '返回到考试'
 				},
 				isValidLink: true
 			}

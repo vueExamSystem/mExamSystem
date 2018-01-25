@@ -2,7 +2,7 @@
 	<div v-loading="maskLoading">
 		<template v-if="isValidLink">
 			<section v-show="!isCardVisible">
-				<mt-header title="考试中" fixed>
+				<mt-header title="答题" fixed>
 					<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
 					<span @click="finishedPaper" slot="right" v-if="isLoaded">交卷</span>
 				</mt-header>
@@ -56,7 +56,7 @@
 <script>
 	// 注意题目数据需要按“单选”、“多选”、“判断”、“选做”顺序，否则需要前端重改！！
 	import FeedBack from '../common/FeedBack'
-	import { getPaperProblemList, submitExamPaper } from '../../api/api';
+	import { getTestProblemList, submitTestPaper } from '../../api/api';
 	import Card from './Card.vue'
 	export default{
 		props:{
@@ -85,12 +85,12 @@
 					option: 0 //选做
 				},
 				feedbackOptions:{
-					withinPath: '/examining',
+					withinPath: '',
 					type: 'fail',
 					title: '链接无效',
-					msg: '返回到首页',
-					nextLink: '/',
-					buttonText: '返回到首页'
+					msg: '返回到测验',
+					nextLink: '/test',
+					buttonText: '返回到测验'
 				},
 				isLoaded: false,
 				maskLoading: false,
@@ -187,7 +187,7 @@
 				var params = {
 					id: this.id
 				}
-				getPaperProblemList(params).then( res =>{
+				getTestProblemList(params).then( res =>{
 					this.problemList = res.data;
 					for(var i=0;i<this.problemList.length;i++){
 						var item = this.problemList[i];
@@ -246,7 +246,7 @@
 					id: this.id,
 					myAnswers
 				};
-				submitExamPaper(params).then(()=>{
+				submitTestPaper(params).then(()=>{
 					this.$router.push('/feedback');
 				}).catch((error)=>{
 					this.maskLoading = false;

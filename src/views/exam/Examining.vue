@@ -85,12 +85,12 @@
 					option: 0 //选做
 				},
 				feedbackOptions:{
-					withinPath: '/examining',
+					withinPath: '',
 					type: 'fail',
 					title: '链接无效',
-					msg: '返回到首页',
-					nextLink: '/',
-					buttonText: '返回到首页'
+					msg: '返回到考试',
+					nextLink: '/exam',
+					buttonText: '返回到考试'
 				},
 				isLoaded: false,
 				maskLoading: false,

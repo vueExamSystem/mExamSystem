@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<section v-if="isValidLink">
-			<mt-header title="等待考试" fixed>
+			<mt-header title="测验等待" fixed>
 				<span class="text-primary" @click="close" slot="right">关闭</span>
 			</mt-header>
 			<div class="main">
@@ -42,12 +42,12 @@
 				nowDate: new Date(),
 				detail:{},
 				feedbackOptions:{
-					withinPath: '/wait',
+					withinPath: '',
 					type: 'fail',
 					title: '链接无效',
-					msg: '返回到首页',
+					msg: '返回到测验',
 					nextLink: '/test',
-					buttonText: '返回到首页'
+					buttonText: '返回到测验'
 				},
 				isValidLink: true
 			}
