@@ -8,7 +8,7 @@
 				</mt-header>
 				<template >
 					<div class="main">
-						<div class="title clearfix">
+						<div class="main-title black clearfix">
 							<div class="pull-left">
 								<span>{{typeName}}</span>
 								<span class="order">（<a class="larger">{{currentTypeNum}}</a>/{{currentTypeTotal}}）</span>
@@ -401,13 +401,7 @@
 <style lang="scss" scoped>
 	@import '~scss_vars';
 	.main{
-		margin-top: 40px;
-		margin-bottom: 40px;
-		.title{
-			font-size: 12px;
-			line-height: 28px;
-			padding: 0 10px;
-			background: #E7E7F0;
+		.main-title{
 			.order{
 				letter-spacing: 1px;
 			}
@@ -418,9 +412,6 @@
 			.plane{
 				margin-right: -10px;
 			}
-		}
-		.content{
-			padding: 10px;
 		}
 	}
 </style>

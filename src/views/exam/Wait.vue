@@ -6,7 +6,7 @@
 			</mt-header>
 			<div class="main">
 				<div class="img-clock-down">
-					<img src="/static/images/logo.png">
+					<img src="/static/images/wait.png">
 					<div class="time-down">
 						<span>{{remainTime(detail.startTime)}}</span>
 					</div>
@@ -160,10 +160,9 @@
 <style lang="scss" scoped>
 	@import '~scss_vars';
 	.main{
-		margin-top: 40px;
 		padding: 40px;
 		.img-clock-down{
-			height: 214px;
+			height: 230px;
 			text-align: center;
 			position: relative;
 			.time-down{

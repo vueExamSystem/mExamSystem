@@ -7,25 +7,25 @@
 		</mt-header>
 		<div class="main">
 			<div class="question-serial">
-				<div class="title">单选题</div>
+				<div class="main-title black">单选题</div>
 				<ul class="question-num">
 					<li v-for="(val, index) in radioList" ><el-button :class="{'is-answerred': isAnswerred(val)}" class="circle" @click="questionChange(val)">{{index+1}}</el-button></li>
 				</ul>
 			</div>
 			<div class="question-serial">
-				<div class="title">多选题</div>
+				<div class="main-title black">多选题</div>
 				<ul class="question-num">
 					<li v-for="(val, index) in checkList" ><el-button :class="{'is-answerred': isAnswerred(val)}" class="circle" @click="questionChange(val)">{{index+1}}</el-button></li>
 				</ul>
 			</div>
 			<div class="question-serial">
-				<div class="title">判断题</div>
+				<div class="main-title black">判断题</div>
 				<ul class="question-num">
 					<li v-for="(val, index) in judgeList" ><el-button :class="{'is-answerred': isAnswerred(val)}" class="circle" @click="questionChange(val)">{{index+1}}</el-button></li>
 				</ul>
 			</div>
 			<div class="question-serial">
-				<div class="title">选做题</div>
+				<div class="main-title black">选做题（{{optionList.length}}选{{optionNeed}}）</div>
 				<ul class="question-num">
 					<li v-for="(val, index) in optionList" ><el-button :class="{'is-answerred': isAnswerred(val)}" class="circle" @click="questionChange(val)">{{index+1}}</el-button></li>
 				</ul>
@@ -46,10 +46,13 @@
 				checkList: [],
 				judgeList: [],
 				optionList: [],
+				optionNeed: 0//选做题必答
 			}
 		},
 		methods:{
 			arrange(){
+				var examItem = JSON.parse(window.localStorage.getItem('examItem'));
+				this.optionNeed = examItem.optionNeed;
 				for(var i=0;i<this.list.length;i++){
 					var item = this.list[i];
 					if(item.isNecessary === true){
@@ -101,38 +104,5 @@
 </script>
 <style lang="scss" scoped>
 	@import '~scss_vars';
-	.main{
-		margin-top: 40px;
-		.question-serial{
-			.title{
-				font-size: 12px;
-				line-height: 28px;
-				padding: 0 10px;
-				background: #E7E7F0;
-			}
-			.question-num{
-				padding: 10px;
-				font-size: 0;
-				&>li{
-					display: inline-block;
-					width: 20%;
-					margin: 10px 0;
-				}
-			}
-			.circle{
-				width: 32px;
-				height: 32px;
-				border-radius: 100%;
-				border-color: #B5B5CD;
-				font-size: 18px;
-				color: #8684BC;
-				&.is-answerred{
-					color: #fff;
-					background: #87BFBC;
-					border-color: #87BFBC;
-				}
-			}
-		}
-		
-	}
+	
 </style>

@@ -5,10 +5,10 @@
 				<mt-button @click="showSearch" icon="search" slot="left"></mt-button>
 			</mt-header>
 			<div class="main">
-				<p class="title">本周考试</p>
+				<p class="main-title">本周考试</p>
 				<div class="content" v-loading="listenLoading">
 					<ul class="section-list">
-						<li v-for="(exam,index) in examList">
+						<li v-for="(exam,index) in list">
 							<template v-if="isTodayExam(exam.startTime) && isValid(exam.startTime)">
 								<p>{{exam.name}}</p>
 								<div>
@@ -57,7 +57,7 @@
 				fullPath: '',
 				nowDate: new Date(),
 				timeClock: '',
-				examList:[],
+				list:[],
 				searchkey: '',
 				listenLoading: true,
 				isSearchVisible: false
@@ -72,7 +72,7 @@
 			init(){
 				this.fullPath = this.$route.fullPath;
 				getExamList().then(res => {
-					this.examList = res.data;
+					this.list = res.data;
 					this.timeClockRun();
 					this.listenLoading = false;
 				});
@@ -80,8 +80,8 @@
 			searchCallback(item){
 				console.log('item',item)
 				this.hideSearch();
-				this.examList.length = 0;
-				this.examList.push(item);
+				this.list.length = 0;
+				this.list.push(item);
 			},
 			/**string转换为date
 			*dateString:2018/01/09 18:00
@@ -129,7 +129,7 @@
 			},
 			toWaitExam(id,index){//进入考试页面
 				this.clearClock();
-				var item = this.examList[index];
+				var item = this.list[index];
 				window.localStorage.setItem('examItem',JSON.stringify(item));
 				this.$router.push({ path: `/wait/${id}`});
 			},
@@ -203,19 +203,5 @@
 </script>
 <style lang="scss" scoped>
 	@import '~scss_vars';
-	.main{
-		margin: 40px 0 50px;
-		.title{
-			font-size: 12px;
-			line-height: 28px;
-			padding: 0 10px;
-			color: $color-primary;
-			background: #E7E7F0;
-		}
-		.content{
-			padding: 10px;
-			min-height: 200px;
-		}
-	}
 	
 </style>
