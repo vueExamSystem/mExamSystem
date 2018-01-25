@@ -14,6 +14,7 @@ import TestWait from '../views/test/Wait.vue'
 import Testing from '../views/test/Examining.vue'
 /*预习*/
 import PreviewHome from '../views/preview/Home.vue'
+import PreviewPractising from '../views/preview/Examining.vue'
 /*成绩*/
 import ScoreHome from '../views/score/Home.vue'
 /*设置*/
@@ -87,6 +88,12 @@ const routes = [//不需要权限的页面
         path: '/test/testing/:id',
         component: Testing,
         name: '测验中',
+        props: true,
+    },
+    {
+        path: '/preview/practising/:id',
+        component: PreviewPractising,
+        name: '练习中',
         props: true,
     },
     {

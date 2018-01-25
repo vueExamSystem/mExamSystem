@@ -221,11 +221,40 @@ $color-primary: #8684BC;
 .mint-datetime-action {
   color: $color-primary;
 }
+/*头部选项卡*/
+.el-tabs.el-tabs--top{
+	.el-tabs__header.is-top{
+		margin: 0;
+		box-shadow: 0 2px 4px 0 #B5B5CD;
+		z-index: 1;
+		.el-tabs__nav{
+			min-width: 100%;
+		}
+	}
+	&.tab-two{
+		.el-tabs__item{
+			width: 30%;
+			margin: 0 10%;
+			text-align: center;
+			padding: 0;
+			color: #4a4a4a;
+			font-size: 17px;
+			border: transparent solid 3px;
+			border-width: 0 0 3px;
+			&.is-active{
+				color: #3C5398;
+				border-bottom-color: #8684BC;
+			}
+		}
+	}
+}
+
 .main{
 	margin: 40px 0 50px;
 	.main-title{
 		font-size: 12px;
 		line-height: 28px;
+		height: 28px;
 		padding: 0 10px;
 		color: $color-primary;
 		background: #E7E7F0;

@@ -240,6 +240,68 @@ export default {
             });
         });
 
+        //获取预习习题列表
+        mock.onPost('/preview/list/exercise').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 0,
+                        msg: '请求成功',
+                        data: [{
+                            id: '1',
+                            name: '大一物理第一章练习1',
+                            overTime: '2018/01/25 23:37',
+                            optionNeed: 2//选做题必答
+                        },{
+                            id: '2',
+                            name: '大一物理第一章练习2',
+                            overTime: '2018/01/25 23:45',
+                            optionNeed: 3//选做题必答
+                        },{
+                            id: '3',
+                            name: '大一物理第一章练习3',
+                            overTime: '2018/01/26 00:05',
+                            optionNeed: 3//选做题必答
+                        },{
+                            id: '4',
+                            name: '大一物理第一章练习4',
+                            overTime: '2018/01/26 11:00',
+                            optionNeed: 3//选做题必答
+                        }]
+                    }]);
+                }, 1000);
+            });
+        });
+
+        //获取预习资料列表
+        mock.onPost('/preview/list/doc').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 0,
+                        msg: '请求成功',
+                        data: [{
+                            id: '1',
+                            name: '物理第一章预习',
+                            course: '大学物理'
+                        },{
+                            id: '2',
+                            name: '高等数学第一章预习',
+                            course: '高等数学',
+                        },{
+                            id: '3',
+                            name: '大一大学英语第一章预习',
+                            course: '大学英语'
+                        },{
+                            id: '4',
+                            name: '大一计算机第一章预习',
+                            course: '计算机原理'
+                        }]
+                    }]);
+                }, 1000);
+            });
+        });
+
         //获取用户列表（分页）
         mock.onGet('/user/listpage').reply(config => {
             let {page, name, pageSize} = config.params;

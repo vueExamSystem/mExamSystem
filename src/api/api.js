@@ -27,6 +27,12 @@ export const getTestProblemList = params => { return instance.post(`${base}/test
 //测验交卷
 export const submitTestPaper = params => { return instance.post(`${base}/test/submit`, { params: params }).then(res => res.data); };
 
+//获取预习习题列表
+export const getExerciseList = params => { return instance.post(`${base}/preview/list/exercise`, { params: params }).then(res => res.data); };
+
+//获取预习资料列表
+export const getDocList = params => { return instance.post(`${base}/preview/list/doc`, { params: params }).then(res => res.data); };
+
 //搜索列表
 export const searchList = params => { return instance.post(`${base}/search/list`, { params: params }).then(res => res.data); };
 
