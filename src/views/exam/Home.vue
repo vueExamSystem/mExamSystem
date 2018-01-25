@@ -131,7 +131,7 @@
 				this.clearClock();
 				var item = this.list[index];
 				window.localStorage.setItem('examItem',JSON.stringify(item));
-				this.$router.push({ path: `/wait/${id}`});
+				this.$router.push({ path: `/exam/wait/${id}`});
 			},
 			isValid(dateString){//是否没有过期
 				var isInvalid = true;

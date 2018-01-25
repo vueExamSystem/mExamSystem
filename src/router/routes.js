@@ -10,6 +10,8 @@ import ExamWait from '../views/exam/Wait.vue'
 import Examining from '../views/exam/Examining.vue'
 /*测验*/
 import TestHome from '../views/test/Home.vue'
+import TestWait from '../views/test/Wait.vue'
+import Testing from '../views/test/Examining.vue'
 /*预习*/
 import PreviewHome from '../views/preview/Home.vue'
 /*成绩*/
@@ -36,44 +38,56 @@ const routes = [//不需要权限的页面
         name: '反馈提示'
     },
     {
-        path: '/wait/:id',
-        component: ExamWait,
-        name: '等待考试',
-        props: true,
-    },
-    {
-        path: '/examining/:id',
-        component: Examining,
-        name: 'examining',
-        props: true,
-    },
-    {
         path: '/',
         component: HomePage,
         name: '主页',
         redirect: '/exam',
         children:[{
-                path: 'exam',
+                path: '/exam',
                 component: ExamHome,
-                name: '考试',
+                name: '考试'
             },{
-                path: 'test',
+                path: '/test',
                 component: TestHome,
-                name: '测验',
+                name: '测验'
             },{
                 path: 'preview',
                 component: PreviewHome,
-                name: '预习',
+                name: '预习'
             },{
                 path: 'score',
                 component: ScoreHome,
-                name: '成绩',
+                name: '成绩'
             },{
                 path: 'setting',
                 component: SettingHome,
-                name: '设置',
+                name: '设置'
             }
         ]
+    },
+    {
+        path: '/exam/wait/:id',
+        component: ExamWait,
+        name: '等待考试',
+        props: true,
+    },
+    {
+        path: '/exam/examining/:id',
+        component: Examining,
+        name: '考试中',
+        props: true,
+    },
+    {
+        path: '/test/wait/:id',
+        component: TestWait,
+        name: '等待测验',
+        props: true,
+    },
+    {
+        path: '/test/testing/:id',
+        component: Testing,
+        name: '测验中',
+        props: true,
     },
     {
         path: '/404',

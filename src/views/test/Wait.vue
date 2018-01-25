@@ -46,7 +46,7 @@
 					type: 'fail',
 					title: '链接无效',
 					msg: '返回到首页',
-					nextLink: '/',
+					nextLink: '/test',
 					buttonText: '返回到首页'
 				},
 				isValidLink: true
@@ -64,7 +64,7 @@
 		},
 		methods:{
 			init(){
-				var item = JSON.parse(window.localStorage.getItem('examItem'));
+				var item = JSON.parse(window.localStorage.getItem('testItem'));
 				this.fullPath = this.$route.fullPath;
 				if(item && item.id && item.id == this.id){
 					this.$set(this.detail,'name',item.name);
@@ -91,7 +91,7 @@
 				return new Date(dateString);
 			},
 			toExam(){
-				this.$router.push({ path: `/exam/examining/${this.id}`});
+				this.$router.push({ path: `/test/testing/${this.id}`});
 			},
 			getRemainSeconds(dateString){//获取剩余总秒数
 				var thisD = this.dateParse(dateString);
@@ -134,7 +134,7 @@
 			},
 			close(){
 				this.clearClock();//关闭倒计时
-				this.$router.push({ path: '/exam'});
+				this.$router.push({ path: '/test'});
 			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{
