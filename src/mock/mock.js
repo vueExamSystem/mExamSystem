@@ -59,7 +59,13 @@ export default {
                         code: 0,
                         msg: '请求成功',
                         data: {
-                            roles: ['admin']
+                            userId: '01112307',//账号
+                            studentNo: '01112307',//学号
+                            userName: '黄烨',
+                            school: '南京大学',
+                            grade: '2017',
+                            department: '计算机系',
+                            class: '3'
                         }
                         
                     }]);
@@ -200,8 +206,8 @@ export default {
                         data: [{
                             id: '1',
                             name: '大一物理（上）测验1',
-                            startTime: '2018/01/27 23:26',
-                            endTime: '2018/01/27 23:50',
+                            startTime: '2018/01/27 23:55',
+                            endTime: '2018/01/27 23:59',
                             optionNeed: 2//选做题必答
                         },{
                             id: '2',
