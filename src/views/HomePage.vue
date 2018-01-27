@@ -63,9 +63,6 @@
 
 <style lang="scss">
 	@import '~scss_vars';
-	.home-main{
-		margin-bottom: 50px;
-	}
 	.nav.nav-footer.fixed{
 		position:fixed;
 		bottom: 0;

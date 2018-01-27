@@ -200,8 +200,8 @@ export default {
                         data: [{
                             id: '1',
                             name: '大一物理（上）测验1',
-                            startTime: '2018/01/27 18:04',
-                            endTime: '2018/01/27 20:25',
+                            startTime: '2018/01/27 23:26',
+                            endTime: '2018/01/27 23:50',
                             optionNeed: 2//选做题必答
                         },{
                             id: '2',
@@ -322,6 +322,23 @@ export default {
                             id: '4',
                             name: '大学英语'
                         }]
+                    }]);
+                }, 3000);
+            });
+        });
+
+        //获取资料内容
+        mock.onPost('/preview/doc').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200,{
+                        code: 0,
+                        msg: '请求成功',
+                        data:{
+                            imgList:['/static/images/logo.png','/static/images/wait.png'],
+                            content: '《大学物理》作者是叶伟国、余国祥。是2012年12月3日清华大学出版社出版的图书，该书讲述了物理学的基本规律和基本概念。主要内容包括：力和运动、功和能、机械振动和波动等。',
+                            videoSrc: 'http://pic.ibaotu.com/00/49/65/61H888piCs2t.mp4_10s.mp4'
+                        }
                     }]);
                 }, 3000);
             });

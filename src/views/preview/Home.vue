@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<div v-show="!isFilterVisible">
+		<div v-show="!isFilterVisible && !isDocVisible">
 			<el-tabs class="tab-two" type="card" v-model="activeName">
 			    <el-tab-pane label="预习习题" name="previewExercises">
 			    	<div class="main">
@@ -67,7 +67,7 @@
 											<img src="/static/images/clock.png" width="15">
 											<span class="time">{{doc.course}}</span>
 										</div>
-										<mt-button class="pull-right" type="primary" @click="toPreviewDoc(doc.id,index)">我要预习</mt-button>
+										<mt-button class="pull-right" type="primary" @click="showDoc(doc.id,doc.name)">我要预习</mt-button>
 									</div>
 								</li>
 							</ul>
@@ -79,14 +79,19 @@
 	    <div v-show="isFilterVisible">
 	    	<tab-filter @close="hideFilter" @confirm="filterCallback"></tab-filter>
 	    </div>
+	    <div v-if="isDocVisible">
+	    	<doc-content :id="docId" :name="docName" @close="hideDoc"></doc-content>
+	    </div>
 	</section>
 </template>
 <script>
 	import { getExerciseList, getDocList } from '../../api/api'
 	import TabFilter from '../common/TabFilter.vue'
+	import Doc from './Doc.vue'
 	export default {
 		components:{
-			tabFilter: TabFilter
+			tabFilter: TabFilter,
+			docContent: Doc
 		},
 		data(){
 			return {
@@ -100,7 +105,10 @@
 				isFilterVisible: false,
 				listenLoading: true,
 				docListenLoading: true,
-				isInitDocList: false//是否初始化资料列表
+				isInitDocList: false,//是否初始化资料列表
+				docId: '',//预习资料id
+				docName: '',//预习资料名称
+				isDocVisible: false //预习资料可见性
 			}
 		},
 		computed:{
@@ -143,6 +151,16 @@
 	        },
 	        hideFilter(){
 	        	this.isFilterVisible = false;
+				this.$store.dispatch('ShowNav');
+	        },
+	        showDoc(id, name){
+	        	this.docId = id;
+	        	this.docName = name;
+	        	this.isDocVisible = true;
+				this.$store.dispatch('HideNav');
+	        },
+	        hideDoc(){
+	        	this.isDocVisible = false;
 				this.$store.dispatch('ShowNav');
 	        },
 			/**string转换为date
@@ -193,9 +211,6 @@
 				var item = this.list[index];
 				window.localStorage.setItem('previewItem',JSON.stringify(item));
 				this.$router.push({ path: `/preview/practising/${id}`});
-			},
-			toPreviewDoc(id,index){//进入资料页面
-
 			},
 			isValid(dateString){//是否没有过期
 				var isInvalid = true;
