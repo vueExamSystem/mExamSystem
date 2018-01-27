@@ -3,7 +3,7 @@
 		<div class="home-main">
 			<router-view></router-view>
 		</div>
-		<div class="nav nav-footer fixed">
+		<div v-show="isNavVisible" class="nav nav-footer fixed">
 			<ul class="clearfix">
 				<li>
 					<router-link to="/exam">
@@ -44,11 +44,18 @@
 	export default {
 		data() {
 			return {
+				
+			}
+		},
+		computed:{
+			isNavVisible(){
+				return this.$store.getters.isNavVisible;
 			}
 		},
 		methods: {
 		},
 		mounted() {
+			
 		}
 	}
 

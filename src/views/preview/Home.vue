@@ -139,9 +139,11 @@
 			},
 	        showFilter(){
 	        	this.isFilterVisible = true;
+	        	this.$store.dispatch('HideNav');
 	        },
 	        hideFilter(){
 	        	this.isFilterVisible = false;
+				this.$store.dispatch('ShowNav');
 	        },
 			/**string转换为date
 			*dateString:2018/01/09 18:00

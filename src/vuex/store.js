@@ -4,9 +4,11 @@ Vue.use(Vuex)
 
 const state = {
     token: window.sessionStorage.getItem('token') || '',
+    isNavVisible: 1//底部导航是否可见
 };
 const getters = {
-  token: state => state.token
+  token: state => state.token,
+  isNavVisible: state => state.isNavVisible
 };
 const mutations = {
   SET_TOKEN(state,payload){
@@ -16,6 +18,12 @@ const mutations = {
   LOG_OUT(state){
       window.sessionStorage.removeItem('token');
     state.token = '';
+  },
+  SHOW_NAV(state){
+    state.isNavVisible = true;
+  },
+  HIDE_NAV(state){
+    state.isNavVisible = false;
   }
 };
 const actions = {
@@ -24,6 +32,12 @@ const actions = {
   },
   LogOut({commit},payload){
       commit('LOG_OUT',payload)
+  },
+  ShowNav({commit},payload){
+      commit('SHOW_NAV',payload)
+  },
+  HideNav({commit},payload){
+      commit('HIDE_NAV',payload)
   }
 };
 

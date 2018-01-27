@@ -111,7 +111,7 @@
 		top: 40px;
 		left: 0;
 		right: 0;
-		bottom: 50px;
+		bottom: 0;
 		z-index:0;
 	}
 </style>
