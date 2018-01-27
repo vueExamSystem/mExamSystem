@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<template v-if="!isFilterVisible">
+		<div v-show="!isFilterVisible">
 			<el-tabs class="tab-two" type="card" v-model="activeName">
 			    <el-tab-pane label="预习习题" name="previewExercises">
 			    	<div class="main">
@@ -55,7 +55,7 @@
 								<span>预习资料</span>
 							</div>
 							<div class="pull-right">
-								<mt-button type="primary" @click="showFilter" class="plane">筛选</mt-button>
+								<mt-button type="primary" @click="showFilter" class="plane" :disabled="!isInitDocList">筛选</mt-button>
 							</div>
 						</div>
 						<div class="content" v-loading="docListenLoading">
@@ -75,15 +75,19 @@
 					</div>
 			    </el-tab-pane>
 		    </el-tabs>
-	    </template>
-	    <template v-else>
-	    	<div>filter</div>
-	    </template>
+	    </div>
+	    <div v-show="isFilterVisible">
+	    	<tab-filter @close="hideFilter" @confirm="filterCallback"></tab-filter>
+	    </div>
 	</section>
 </template>
 <script>
 	import { getExerciseList, getDocList } from '../../api/api'
+	import TabFilter from '../common/TabFilter.vue'
 	export default {
+		components:{
+			tabFilter: TabFilter
+		},
 		data(){
 			return {
 				activeName: 'previewExercises',
@@ -92,9 +96,11 @@
 				timeClock: '',
 				list:[],//练习列表
 				docList:[],//资料列表
+				docFilter:{},//资料过滤
 				isFilterVisible: false,
 				listenLoading: true,
-				docListenLoading: true
+				docListenLoading: true,
+				isInitDocList: false//是否初始化资料列表
 			}
 		},
 		computed:{
@@ -105,17 +111,31 @@
 		methods:{
 			init(){
 				this.fullPath = this.$route.fullPath;
-				//获取预习习题列表
+				this.getListOfExercise();//获取预习习题列表
+				//注意：获取预习资料列表需要先等待筛选条件后再自动执行
+			},
+			getListOfExercise(){//获取预习习题列表
+				this.listenLoading = true;
+				this.list = [];
 				getExerciseList().then(res => {
 					this.list = res.data;
 					this.timeClockRun();
 					this.listenLoading = false;
 				});
-				//获取预习资料列表
-				getDocList().then(res => {
+			},
+			getListOfDoc(){//获取预习资料列表
+				this.docListenLoading = true;
+				this.docList = [];
+				getDocList(this.docFilter).then(res => {
 					this.docList = res.data;
 					this.docListenLoading = false;
+					this.isInitDocList = true;
 				});
+			},
+			filterCallback(filter){//过滤回调
+				this.docFilter = filter;
+				this.hideFilter();
+				this.getListOfDoc();//获取预习资料列表
 			},
 	        showFilter(){
 	        	this.isFilterVisible = true;
@@ -240,5 +260,10 @@
 	@import '~scss_vars';
 	.main{
 		margin-top: 0;
+		.main-title{
+			.plane{
+				margin-right: -10px;
+			}
+		}
 	}
 </style>

@@ -33,6 +33,9 @@ export const getExerciseList = params => { return instance.post(`${base}/preview
 //获取预习资料列表
 export const getDocList = params => { return instance.post(`${base}/preview/list/doc`, { params: params }).then(res => res.data); };
 
+//获取用户所有课程
+export const getUserCourse = params => { return instance.post(`${base}/user/course`, { params: params }).then(res => res.data); };
+
 //搜索列表
 export const searchList = params => { return instance.post(`${base}/search/list`, { params: params }).then(res => res.data); };
 

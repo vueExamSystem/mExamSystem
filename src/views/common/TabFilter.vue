@@ -1,0 +1,111 @@
+<template>
+	<section>
+		<mt-header title="筛选" fixed>
+		    <mt-button slot="left" icon="back" @click="back">返回</mt-button>
+			<span @click="confirm" slot="right">确定</span>
+		</mt-header>
+		<div class="main">
+			<el-tabs type="card" tab-position="left" style="height: 100%;">
+			    <el-tab-pane label="发布时间">
+			    	<mt-radio v-model="timeValue" align="right" :options="timeOption"></mt-radio>
+			    </el-tab-pane>
+			    <el-tab-pane label="所属课程">
+			    	<div v-loading="courseLoading" style="min-height:200px;">
+			    		<mt-radio v-if="!courseLoading" v-model="courseValue" align="right" :options="courseOption"></mt-radio>
+			    	</div>
+			    </el-tab-pane>
+			    <el-tab-pane label="预习状态">
+			    	<mt-radio v-model="stateValue" align="right" :options="stateOption"></mt-radio>
+			    </el-tab-pane>
+			</el-tabs>
+		</div>
+	</section>
+</template>
+<script>
+	import { getUserCourse } from '../../api/api'
+	export default {
+		data(){
+			//数据后台可相应更改
+			return {
+				timeValue: "7d",//发布时间
+				timeOption: [
+					{
+					    label: "近一周",
+					    value: "7d"
+					},
+					{
+					    label: "近一个月",
+					    value: "1m"
+				    },
+					{
+					    label: "近半年",
+					    value: "6m"
+					},
+					{
+					    label: "半年以上",
+					    value: ">6m"
+					}
+				],
+				courseValue: "",//所属课程
+				courseOption: [],
+				stateValue: "0",//预习状态
+				stateOption: [
+					{
+					    label: "全部",
+					    value: "0,1"
+					},
+					{
+					    label: "已预习",
+					    value: "1"
+					},
+					{
+					    label: "未预习",
+					    value: "0"
+					}],
+				courseLoading: true
+			}
+		},
+		methods:{
+			init(){
+				//获取用户所有课程
+				getUserCourse().then(res=>{
+					this.courseOption = res.data.map(course=>{
+						return {
+							label: course.name,
+							value: course.id
+						}
+					});
+					this.courseValue = this.courseOption[0].value;
+					this.courseLoading = false;
+					this.confirm();
+				});
+			},
+			back(){
+				this.$emit("close");
+			},
+			confirm(){
+				var params = {
+					publishTime: this.timeValue,//发布时间
+					course: this.courseValue,//所属课程
+					state: this.stateValue//预习状态
+				};
+				this.$emit("confirm", params);
+			}
+		},
+		mounted(){
+			this.init();
+		}
+	}
+</script>
+<style lang="scss" scoped>
+	@import "~scss_vars";
+	.main{
+		margin: 0;
+		position: absolute;
+		top: 40px;
+		left: 0;
+		right: 0;
+		bottom: 50px;
+		z-index:0;
+	}
+</style>

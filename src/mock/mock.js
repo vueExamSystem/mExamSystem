@@ -200,8 +200,8 @@ export default {
                         data: [{
                             id: '1',
                             name: '大一物理（上）测验1',
-                            startTime: '2018/01/25 21:30',
-                            endTime: '2018/01/25 23:25',
+                            startTime: '2018/01/27 18:04',
+                            endTime: '2018/01/27 20:25',
                             optionNeed: 2//选做题必答
                         },{
                             id: '2',
@@ -299,6 +299,31 @@ export default {
                         }]
                     }]);
                 }, 1000);
+            });
+        });
+
+        //获取用户所有课程
+        mock.onPost('/user/course').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 0,
+                        msg: '请求成功',
+                        data: [{
+                            id: '1',
+                            name: '大学物理'
+                        },{
+                            id: '2',
+                            name: '高等数学',
+                        },{
+                            id: '3',
+                            name: '电路逻辑'
+                        },{
+                            id: '4',
+                            name: '大学英语'
+                        }]
+                    }]);
+                }, 3000);
             });
         });
 
