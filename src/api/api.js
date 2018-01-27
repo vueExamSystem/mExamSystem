@@ -9,6 +9,9 @@ export const requestLogin = params => { return axios.post(`${base}/login`, param
 //用户信息
 export const getUserInfo = params => { return instance.post(`${base}/user/info`, params).then(res => res.data); };
 
+//修改用户密码
+export const updatePassword = params => { return instance.post(`${base}/user/editpwd`, params).then(res => res.data); };
+
 //考试列表
 export const getExamList = params => { return instance.post(`${base}/exam/list`, { params: params }).then(res => res.data); };
 

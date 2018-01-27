@@ -417,6 +417,12 @@ $color-primary: #8684BC;
 			& + li{
 				border-top: 1px solid #B5B5CD;
 			}
+			.mint-cell{
+				min-height: 40px;
+				.mint-cell-wrapper{
+					font-size: 14px;
+				}
+			}
 		}
 	}
 	.display-box-footer{

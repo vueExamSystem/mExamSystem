@@ -1,33 +1,42 @@
 <template>
 	<section>
-		<mt-header title="个人信息" fixed>
-		    <mt-button slot="right" @click="logOut">退出登录</mt-button>
-		</mt-header>
-		<div class="main">
-			<div class="content" v-loading="listenLoading">
-				<div class="display-box" v-if="!listenLoading">
-					<div class="clearfix">
-						<div class="pull-left" style="width:30%;padding-top:30px;text-align:center;color: #8684BC;">
-							<span class="iconfont icon-student-larger" style="font-size: 60px;"></span>
+		<div v-show="!isUpdatepwdVisible">
+			<mt-header title="个人信息" fixed>
+			    <mt-button slot="right" @click="logOut">退出登录</mt-button>
+			</mt-header>
+			<div class="main">
+				<div class="content" v-loading="listenLoading">
+					<div class="display-box" v-if="!listenLoading">
+						<div class="clearfix">
+							<div class="pull-left" style="width:30%;padding-top:30px;text-align:center;color: #8684BC;">
+								<span class="iconfont icon-student-larger" style="font-size: 60px;"></span>
+							</div>
+							<ul class="pull-right" style="width:70%">
+								<li>{{userName}}（{{studentNo}}）</li>
+								<li>{{classInfo}}</li>
+								<li>{{school}}</li>
+							</ul>
 						</div>
-						<ul class="pull-right" style="width:70%">
-							<li>{{userName}}（{{studentNo}}）</li>
-							<li>{{classInfo}}</li>
-							<li>{{school}}</li>
-						</ul>
-					</div>
-					<div class="display-box-footer">
-						<span>账号：{{userId}}</span>
-						<mt-button class="pull-right" type="primary" @click="editPassword">修改密码</mt-button>
+						<div class="display-box-footer">
+							<span>账号：{{userId}}</span>
+							<mt-button class="pull-right" type="primary" @click="showUpdatePwd">修改密码</mt-button>
+						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+		<div v-if="isUpdatepwdVisible">
+			<update-password @close="hideUpdatePwd"></update-password>
 		</div>
 	</section>
 </template>
 <script>
 	import { getUserInfo } from '../../api/api';
+	import Password from './Password.vue'
 	export default {
+		components:{
+			updatePassword: Password
+		},
 		data(){
 			return {
 				userId: '',//账号
@@ -37,7 +46,8 @@
                 grade: '',//级别
                 department: '',//院系 
                 class: '',//班级
-                listenLoading: true
+                listenLoading: true,
+                isUpdatepwdVisible: false
 			}
 		},
 		computed:{
@@ -65,7 +75,12 @@
 			logOut(){
 				this.$router.push('/login');
 			},
-			editPassword(){}
+			showUpdatePwd(){
+				this.isUpdatepwdVisible = true;
+			},
+			hideUpdatePwd(){
+				this.isUpdatepwdVisible = false;
+			}
 		},
 		mounted() {
 			this.init();

@@ -73,6 +73,19 @@ export default {
             });
         });
 
+        //修改用户密码
+        mock.onPost('/user/editpwd').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 0,
+                        msg: '密码修改成功',
+                        data: {}
+                    }]);
+                }, 1000);
+            });
+        });
+
         //搜索列表
         mock.onPost('/search/list').reply(config => {
             return new Promise((resolve, reject) => {
