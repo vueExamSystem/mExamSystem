@@ -7,15 +7,21 @@
 		<div class="main">
 			<el-tabs type="card" tab-position="left" style="height: 100%;">
 			    <el-tab-pane label="发布时间">
-			    	<mt-radio v-model="timeValue" align="right" :options="timeOption"></mt-radio>
+			    	<el-radio-group class="tab-radio-group" v-model="timeValue">
+						<el-radio v-for="option in timeOption" :label="option.value">{{option.label}}</el-radio>
+					</el-radio-group>
 			    </el-tab-pane>
 			    <el-tab-pane label="所属课程">
 			    	<div v-loading="courseLoading" style="min-height:200px;">
-			    		<mt-radio v-if="!courseLoading" v-model="courseValue" align="right" :options="courseOption"></mt-radio>
+			    		<el-radio-group class="tab-radio-group" v-if="!courseLoading" v-model="courseValue">
+							<el-radio v-for="option in courseOption" :label="option.value">{{option.label}}</el-radio>
+						</el-radio-group>
 			    	</div>
 			    </el-tab-pane>
 			    <el-tab-pane label="预习状态">
-			    	<mt-radio v-model="stateValue" align="right" :options="stateOption"></mt-radio>
+			    	<el-radio-group class="tab-radio-group" v-model="stateValue">
+						<el-radio v-for="option in stateOption" :label="option.value">{{option.label}}</el-radio>
+					</el-radio-group>
 			    </el-tab-pane>
 			</el-tabs>
 		</div>
