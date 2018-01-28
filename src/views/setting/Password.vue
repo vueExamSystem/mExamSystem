@@ -8,7 +8,7 @@
 				<div class="display-box">
 					<ul>
 						<li>
-							<mt-field label="" placeholder="请输入原密码（初始密码为111111）" type="password" v-model="oldPwd"></mt-field>
+							<mt-field placeholder="请输入原密码（初始密码为111111）" type="password" v-model="oldPwd"></mt-field>
 						</li>
 						<li>
 							<mt-field placeholder="请输入新密码" type="password" v-model="newPwd"></mt-field>
