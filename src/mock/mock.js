@@ -363,6 +363,128 @@ export default {
             });
         });
 
+        //获取学期课程
+        mock.onPost('/score/courses').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200,{
+                        code: 0,
+                        msg: '请求成功',
+                        data:[{
+                            id: '1',
+                            name: '2017年-2018年第一学期',
+                            avgScore: 100,
+                            courseList: [{
+                                id: '311',
+                                name: '大三大学物理（上）'
+                            },{
+                                id: '312',
+                                name: '大三高等数学（上）',
+                            },{
+                                id: '313',
+                                name: '大三电路逻辑（上）'
+                            },{
+                                id: '314',
+                                name: '大三大学英语（上）'
+                            }]
+                        }, {
+                            id: '2',
+                            name: '2016年-2017年第二学期',
+                            avgScore: 80,
+                            courseList: [{
+                                id: '221',
+                                name: '大二大学物理（下）'
+                            },{
+                                id: '222',
+                                name: '大二高等数学（下）',
+                            },{
+                                id: '223',
+                                name: '大二电路逻辑（下）'
+                            },{
+                                id: '224',
+                                name: '大二大学英语（下）'
+                            }]
+                        }, {
+                            id: '3',
+                            name: '2016年-2017年第一学期',
+                            avgScore: 60,
+                            courseList: [{
+                                id: '211',
+                                name: '大二大学物理（上）'
+                            },{
+                                id: '212',
+                                name: '大二高等数学（上）',
+                            },{
+                                id: '213',
+                                name: '大二电路逻辑（上）'
+                            },{
+                                id: '214',
+                                name: '大二大学英语（上）'
+                            }]
+                        }, {
+                            id: '4',
+                            name: '2015年-2016年第二学期',
+                            avgScore: 90,
+                            courseList: [{
+                                id: '121',
+                                name: '大一大学物理（下）'
+                            },{
+                                id: '122',
+                                name: '大一高等数学（下）',
+                            },{
+                                id: '123',
+                                name: '大一电路逻辑（下）'
+                            },{
+                                id: '124',
+                                name: '大一大学英语（下）'
+                            }]
+                        }, {
+                            id: '5',
+                            name: '2015年-2016年第一学期',
+                            avgScore: 50,
+                            courseList: [{
+                                id: '111',
+                                name: '大一大学物理（上）'
+                            },{
+                                id: '112',
+                                name: '大一高等数学（上）',
+                            },{
+                                id: '113',
+                                name: '大一电路逻辑（上）'
+                            },{
+                                id: '114',
+                                name: '大一大学英语（上）'
+                            }]
+                        }]
+                    }]);
+                }, 1000);
+            });
+        });
+
+        //通过学期和课程获取成绩综合表
+        mock.onPost('/score/statistics').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200,{
+                        code: 0,
+                        msg: '请求成功',
+                        data:{
+                            course:'大学物理',
+                            max: 100,
+                            min: 60,
+                            avg: 79,
+                            statistics:[
+                                {count:200, flag:'优秀'},
+                                {count:200, flag:'良好'},
+                                {count:200, flag:'中等'},
+                                {count:20, flag:'不及格'}
+                            ]
+                        }
+                    }]);
+                }, 1000);
+            });
+        });
+
         //获取用户列表（分页）
         mock.onGet('/user/listpage').reply(config => {
             let {page, name, pageSize} = config.params;

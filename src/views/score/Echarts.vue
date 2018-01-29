@@ -7,7 +7,9 @@
 
     export default {
         props: {
-            
+            data: {
+                type: Array
+            }
         },
         data() {
             return {
@@ -25,7 +27,7 @@
                     },
                     series: [
                         {
-                            name:'访问来源',
+                            name:'',
                             type:'pie',
                             radius: ['0', '90%'],
                             avoidLabelOverlap: false,
@@ -53,12 +55,7 @@
                                     show: false
                                 }
                             },
-                            data:[
-                                {value:200, name:'优秀'},
-                                {value:200, name:'良好'},
-                                {value:200, name:'中等'},
-                                {value:20, name:'不及格'},
-                            ]
+                            data:this.data
                         }
                     ],
                     color: [

@@ -42,6 +42,12 @@ export const getDocContent = params => { return instance.post(`${base}/preview/d
 //获取用户所有课程
 export const getUserCourse = params => { return instance.post(`${base}/user/course`, { params: params }).then(res => res.data); };
 
+//获取学期和课程信息
+export const getTermAndCourseList = params => { return instance.post(`${base}/score/courses`, { params: params }).then(res => res.data); };
+
+//通过学期和课程获取成绩综合表
+export const getScoresByTermCourse = params => { return instance.post(`${base}/score/statistics`, { params: params }).then(res => res.data); };
+
 //搜索列表
 export const searchList = params => { return instance.post(`${base}/search/list`, { params: params }).then(res => res.data); };
 
