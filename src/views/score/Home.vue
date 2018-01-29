@@ -15,7 +15,7 @@
 		<div class="main">
 			<div class="content" v-loading="maskLoading">
 				<div class="display-box">
-					<table class="score-info score-best">
+					<table class="score-info" :class="scoreLevel()">
 						<tr>
 							<td width="28%" class="score-grade">
 								<span>总体</span>
@@ -102,6 +102,19 @@
 						}
 					});
 				});
+			},
+			scoreLevel(){//分数等级
+				if(this.avgScore){
+					if(this.avgScore>=90){
+						return 'score-best';
+					}else if(this.avgScore>=80){
+						return 'score-better';
+					}else if(this.avgScore>=60){
+						return 'score-normal';
+					}else{
+						return 'score-fail';
+					}
+				}
 			},
 			termChange(){
 				this.maskLoading = true;

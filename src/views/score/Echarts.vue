@@ -30,7 +30,8 @@
                             name:'',
                             type:'pie',
                             radius: ['0', '90%'],
-                            avoidLabelOverlap: false,
+                            startAngle: 180,
+                            avoidLabelOverlap: true,
                             label: {
                                 normal: {
                                     show: true,
@@ -59,10 +60,10 @@
                         }
                     ],
                     color: [
+                        '#87BFBC',
                         '#AEE2AD',
                         '#F8D39A',
-                        '#EB8B87',
-                        '#87BFBC'
+                        '#EB8B87'
                     ]
                 });
             },

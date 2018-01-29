@@ -497,11 +497,41 @@ $color-primary: #8684BC;
 		&.score-best{
 			.score-grade{
 				&>h3{
-					color: $-color-success!important;
+					color: #87BFBC!important;
 				}
 			}
 			.img-grade{
 				background-image: url('/static/images/score-best.png');
+			}
+		}
+		&.score-better{
+			.score-grade{
+				&>h3{
+					color: #AEE2AD!important;
+				}
+			}
+			.img-grade{
+				background-image: url('/static/images/score-better.png');
+			}
+		}
+		&.score-normal{
+			.score-grade{
+				&>h3{
+					color: #F8D39A!important;
+				}
+			}
+			.img-grade{
+				background-image: url('/static/images/score-normal.png');
+			}
+		}
+		&.score-fail{
+			.score-grade{
+				&>h3{
+					color: #EB8B87!important;
+				}
+			}
+			.img-grade{
+				background-image: url('/static/images/score-fail.png');
 			}
 		}
 		td{
