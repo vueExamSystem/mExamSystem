@@ -48,6 +48,15 @@ export const getTermAndCourseList = params => { return instance.post(`${base}/sc
 //通过学期和课程获取成绩综合表
 export const getScoresByTermCourse = params => { return instance.post(`${base}/score/statistics`, { params: params }).then(res => res.data); };
 
+//获取考试成绩列表
+export const getExamScoreList = params => { return instance.post(`${base}/score/exam`, { params: params }).then(res => res.data); };
+
+//获取测验成绩列表
+export const getTestScoreList = params => { return instance.post(`${base}/score/test`, { params: params }).then(res => res.data); };
+
+//获取练习成绩列表
+export const getExerciseScoreList = params => { return instance.post(`${base}/score/exercise`, { params: params }).then(res => res.data); };
+
 //搜索列表
 export const searchList = params => { return instance.post(`${base}/search/list`, { params: params }).then(res => res.data); };
 

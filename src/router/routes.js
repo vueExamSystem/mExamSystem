@@ -17,6 +17,8 @@ import PreviewHome from '../views/preview/Home.vue'
 import PreviewPractising from '../views/preview/Examining.vue'
 /*成绩*/
 import ScoreHome from '../views/score/Home.vue'
+import ScoreList from '../views/score/List.vue'
+import ScoreAnalysis from '../views/score/Analysis.vue'
 /*设置*/
 import SettingHome from '../views/setting/Home.vue'
 
@@ -94,6 +96,18 @@ const routes = [//不需要权限的页面
         path: '/preview/practising/:id',
         component: PreviewPractising,
         name: '练习中',
+        props: true,
+    },
+    {
+        path: '/score/list/:term',
+        component: ScoreList,
+        name: '详细成绩',
+        props: true,
+    },
+    {
+        path: '/score/analysis/:id',
+        component: ScoreAnalysis,
+        name: '详细成绩',
         props: true,
     },
     {

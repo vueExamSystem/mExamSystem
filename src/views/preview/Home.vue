@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<div v-show="!isFilterVisible && !isDocVisible">
-			<el-tabs class="tab-two" type="card" v-model="activeName">
+			<el-tabs type="card" v-model="activeName">
 			    <el-tab-pane label="预习习题" name="previewExercises">
 			    	<div class="main">
 						<p class="main-title">待完成练习</p>

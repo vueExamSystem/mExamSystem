@@ -485,6 +485,93 @@ export default {
             });
         });
 
+        //获取考试成绩列表
+        mock.onPost('/score/exam').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200,{
+                        code: 0,
+                        msg: '请求成功',
+                        data:[{
+                            id: '4',
+                            name: '大学物理期末考试',
+                            score: 90
+                        },{
+                            id: '3',
+                            name: '大学物理二测考试',
+                            score: 79
+                        },{
+                            id: '2',
+                            name: '大学物理一测考试',
+                            score: 90
+                        },{
+                            id: '1',
+                            name: '大学物理期中考试',
+                            score: 79
+                        }]
+                    }]);
+                }, 1000);
+            });
+        });
+        
+        //获取测验成绩列表
+        mock.onPost('/score/test').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200,{
+                        code: 0,
+                        msg: '请求成功',
+                        data:[{
+                            id: '4',
+                            name: '大学物理第四章测验',
+                            score: 90
+                        },{
+                            id: '3',
+                            name: '大学物理第三章测验',
+                            score: 79
+                        },{
+                            id: '2',
+                            name: '大学物理第二章测验',
+                            score: 90
+                        },{
+                            id: '1',
+                            name: '大学物理第一章测验',
+                            score: 79
+                        }]
+                    }]);
+                }, 1000);
+            });
+        });
+
+        //获取练习成绩列表
+        mock.onPost('/score/exercise').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200,{
+                        code: 0,
+                        msg: '请求成功',
+                        data:[{
+                            id: '4',
+                            name: '大学物理第四章练习',
+                            score: 90
+                        },{
+                            id: '3',
+                            name: '大学物理第三章练习',
+                            score: 79
+                        },{
+                            id: '2',
+                            name: '大学物理第二章练习',
+                            score: 90
+                        },{
+                            id: '1',
+                            name: '大学物理第一章练习',
+                            score: 79
+                        }]
+                    }]);
+                }, 1000);
+            });
+        });
+
         //获取用户列表（分页）
         mock.onGet('/user/listpage').reply(config => {
             let {page, name, pageSize} = config.params;

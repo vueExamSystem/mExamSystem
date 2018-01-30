@@ -254,6 +254,12 @@ $color-primary: #8684BC;
 }
 /*头部选项卡*/
 .el-tabs.el-tabs--top{
+	&.bg-light-blue .el-tabs__header.is-top{
+		background: #E7E7F0;
+	}
+	&.little .el-tabs__nav .el-tabs__item{
+		font-size: 14px;
+	}
 	.el-tabs__header.is-top{
 		margin: 0;
 		box-shadow: 0 2px 4px 0 #B5B5CD;
@@ -262,12 +268,14 @@ $color-primary: #8684BC;
 			min-width: 100%;
 		}
 	}
-	&.tab-two{
+	.el-tabs__nav{
+		float: none;
+		text-align: center;
 		.el-tabs__item{
-			width: 30%;
-			margin: 0 10%;
+			display: inline-block;
+			padding: 0 24px;
+			margin: 0 10px;
 			text-align: center;
-			padding: 0;
 			color: #4a4a4a;
 			font-size: 17px;
 			border: transparent solid 3px;

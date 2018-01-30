@@ -2,7 +2,7 @@
 	<section>
 		<header class="mint-header is-fixed">
 			<div class="mint-header-title">
-				<el-select @change="termChange" :loading="termLoading" class="el-form-select" v-model="termValue" placeholder="请选择">
+				<el-select @change="termChange" :loading="termLoading" class="el-form-select" v-model="termValue" placeholder="学期">
 				    <el-option
 				      v-for="item in termOptions"
 				      :key="item.id"
@@ -25,13 +25,13 @@
 								<div class="img-grade"></div>
 							</td>
 							<td width="40%" class="score-detail">
-								<mt-button type="primary" @click="showDetail(exam.id)">详细成绩</mt-button>
+								<mt-button type="primary" @click="showDetail">详细成绩</mt-button>
 							</td>
 						</tr>
 					</table>
 				</div>
 				<section class="content-title" style="margin-top: 20px;">
-					<el-select @change="courseChange" class="el-head-select" v-model="courseValue" placeholder="学期">
+					<el-select @change="courseChange" class="el-head-select" v-model="courseValue" placeholder="课程">
 					    <el-option :loading="courseLoading" 
 					      v-for="item in courseOptions"
 					      :key="item.id"
@@ -167,6 +167,11 @@
 						this.detailLoading = false;
 					}
 				});
+			},
+			showDetail(){//进入详情列表
+				window.localStorage.setItem('courseValue',this.courseValue);
+				window.localStorage.setItem('courseList',JSON.stringify(this.courseOptions));
+				this.$router.push({ path: `/score/list/${this.termValue}`});
 			}
 		},
 		mounted() {
