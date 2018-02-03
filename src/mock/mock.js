@@ -15,7 +15,8 @@ import {
 } from './data/question';
 import {
     PaperList,
-    ProblemList
+    ProblemList,
+    AnalysisList
 } from './data/paper';
 
 let _Users = Users;
@@ -495,19 +496,23 @@ export default {
                         data:[{
                             id: '4',
                             name: '大学物理期末考试',
-                            score: 90
+                            score: 90,
+                            optionNeed: 2
                         },{
                             id: '3',
                             name: '大学物理二测考试',
-                            score: 79
+                            score: 79,
+                            optionNeed: 2
                         },{
                             id: '2',
                             name: '大学物理一测考试',
-                            score: 59
+                            score: 59,
+                            optionNeed: 2
                         },{
                             id: '1',
                             name: '大学物理期中考试',
-                            score: 80
+                            score: 80,
+                            optionNeed: 2
                         }]
                     }]);
                 }, 1000);
@@ -524,19 +529,23 @@ export default {
                         data:[{
                             id: '4',
                             name: '大学物理第四章测验',
-                            score: 90
+                            score: 90,
+                            optionNeed: 2
                         },{
                             id: '3',
                             name: '大学物理第三章测验',
-                            score: 80
+                            score: 80,
+                            optionNeed: 2
                         },{
                             id: '2',
                             name: '大学物理第二章测验',
-                            score: 79
+                            score: 79,
+                            optionNeed: 2
                         },{
                             id: '1',
                             name: '大学物理第一章测验',
-                            score: 60
+                            score: 60,
+                            optionNeed: 2
                         }]
                     }]);
                 }, 1000);
@@ -553,20 +562,36 @@ export default {
                         data:[{
                             id: '4',
                             name: '大学物理第四章练习',
-                            score: 90
+                            score: 90,
+                            optionNeed: 2
                         },{
                             id: '3',
                             name: '大学物理第三章练习',
-                            score: 59
+                            score: 59,
+                            optionNeed: 2
                         },{
                             id: '2',
                             name: '大学物理第二章练习',
-                            score: 89
+                            score: 89,
+                            optionNeed: 2
                         },{
                             id: '1',
                             name: '大学物理第一章练习',
-                            score: 60
+                            score: 60,
+                            optionNeed: 2
                         }]
+                    }]);
+                }, 1000);
+            });
+        });
+
+        mock.onPost('/score/analysis').reply(config => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200,{
+                        code: 0,
+                        msg: '请求成功',
+                        data: AnalysisList
                     }]);
                 }, 1000);
             });

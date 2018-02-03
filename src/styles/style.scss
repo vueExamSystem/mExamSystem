@@ -105,7 +105,6 @@
 	  	}
 	}
 	.el-question-options {
-	    padding: 10px;
 	    .el-radio, .el-checkbox {
 	        display: block;
 	        margin: 10px 0;
@@ -162,6 +161,18 @@
 		padding: 5px 10px;
 		vertical-align: middle;
 	}
+	&.el-question-fail{
+		.el-radio.is-checked, .el-checkbox.is-checked{
+			border-color: #D06D69;
+		}
+		.el-radio.is-checked .order, .el-checkbox.is-checked .order{
+			background: #D06D69;
+			border-right-color: #D06D69;
+		}
+	}
+	.el-question-info{
+		margin-top: 40px;
+	}
 }
 
 .el-info {
@@ -179,6 +190,7 @@ $color-primary: #8684BC;
 	box-shadow: 0 2px 4px 0 #B5B5CD;
 	font-size: 18px;
 	color: #4A4A4A;
+	z-index: 9999!important;
 	.mint-button-icon{
 		.mintui{
 			font-size:20px;
@@ -646,6 +658,13 @@ $color-primary: #8684BC;
 			color: #fff;
 			background: #87BFBC;
 			border-color: #87BFBC;
+			&.is-answerred-success{
+
+			}
+			&.is-answerred-fail{
+				background: #D06D69;
+				border-color: #D06D69;
+			}
 		}
 	}
 }

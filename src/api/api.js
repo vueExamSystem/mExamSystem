@@ -57,6 +57,9 @@ export const getTestScoreList = params => { return instance.post(`${base}/score/
 //获取练习成绩列表
 export const getExerciseScoreList = params => { return instance.post(`${base}/score/exercise`, { params: params }).then(res => res.data); };
 
+//获取答题结果详情列表
+export const getAnalysisList = params => { return instance.post(`${base}/score/analysis`, { params: params }).then(res => res.data); };
+
 //搜索列表
 export const searchList = params => { return instance.post(`${base}/search/list`, { params: params }).then(res => res.data); };
 
