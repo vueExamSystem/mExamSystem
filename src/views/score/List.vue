@@ -24,11 +24,11 @@
 			<el-tabs class="bg-light-blue little" type="card" v-model="activeName">
 			    <el-tab-pane label="考试" name="examScore">
 					<div class="content" v-loading="examLoading">
-						<ul class="section-list">
-							<li v-for="(exam,index) in examScoreList">
+						<ul class="section-list score-list">
+							<li v-for="(exam,index) in examScoreList" :class="scoreLevel(exam.score)">
 								<p>{{exam.name}}</p>
 								<div>
-									<h3>{{exam.score}}</h3>
+									<h3>{{exam.score}}分</h3>
 									<mt-button class="pull-right" type="primary" @click="examDetail(exam.id)">答题详情</mt-button>
 								</div>
 							</li>
@@ -37,11 +37,11 @@
 			    </el-tab-pane>
 			    <el-tab-pane label="测验" name="testScore">
 					<div class="content" v-loading="testLoading">
-						<ul class="section-list">
-							<li v-for="(test,index) in testScoreList">
+						<ul class="section-list score-list">
+							<li v-for="(test,index) in testScoreList" :class="scoreLevel(test.score)">
 								<p>{{test.name}}</p>
 								<div>
-									<h3>{{test.score}}</h3>
+									<h3>{{test.score}}分</h3>
 									<mt-button class="pull-right" type="primary" @click="testDetail(test.id)">答题详情</mt-button>
 								</div>
 							</li>
@@ -50,11 +50,11 @@
 			    </el-tab-pane>
 			    <el-tab-pane label="练习" name="exerciseScore">
 					<div class="content" v-loading="exerciseLoading">
-						<ul class="section-list">
-							<li v-for="(exercise,index) in exerciseScoreList">
+						<ul class="section-list score-list">
+							<li v-for="(exercise,index) in exerciseScoreList" :class="scoreLevel(exercise.score)">
 								<p>{{exercise.name}}</p>
 								<div>
-									<h3>{{exercise.score}}</h3>
+									<h3>{{exercise.score}}分</h3>
 									<mt-button class="pull-right" type="primary" @click="exerciseDetail(exercise.id)">答题详情</mt-button>
 								</div>
 							</li>
@@ -131,6 +131,17 @@
 			examDetail(id){console.log('examid',id)},
 			testDetail(id){console.log('testid',id)},
 			exerciseDetail(id){console.log('exerciseid',id)},
+			scoreLevel(score){//分数等级
+				if(score>=90){
+					return 'score-best';
+				}else if(score>=80){
+					return 'score-better';
+				}else if(score>=60){
+					return 'score-normal';
+				}else{
+					return 'score-fail';
+				}
+			},
 			back(){
 				this.$router.push({path: '/score'});
 			}
@@ -142,5 +153,7 @@
 </script>
 <style lang="scss" scoped>
 	@import '~scss_vars';
-	
+	.content{
+		padding: 20px 10px;
+	}
 </style>

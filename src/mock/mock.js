@@ -503,17 +503,17 @@ export default {
                         },{
                             id: '2',
                             name: '大学物理一测考试',
-                            score: 90
+                            score: 59
                         },{
                             id: '1',
                             name: '大学物理期中考试',
-                            score: 79
+                            score: 80
                         }]
                     }]);
                 }, 1000);
             });
         });
-        
+
         //获取测验成绩列表
         mock.onPost('/score/test').reply(config => {
             return new Promise((resolve, reject) => {
@@ -528,15 +528,15 @@ export default {
                         },{
                             id: '3',
                             name: '大学物理第三章测验',
-                            score: 79
+                            score: 80
                         },{
                             id: '2',
                             name: '大学物理第二章测验',
-                            score: 90
+                            score: 79
                         },{
                             id: '1',
                             name: '大学物理第一章测验',
-                            score: 79
+                            score: 60
                         }]
                     }]);
                 }, 1000);
@@ -557,15 +557,15 @@ export default {
                         },{
                             id: '3',
                             name: '大学物理第三章练习',
-                            score: 79
+                            score: 59
                         },{
                             id: '2',
                             name: '大学物理第二章练习',
-                            score: 90
+                            score: 89
                         },{
                             id: '1',
                             name: '大学物理第一章练习',
-                            score: 79
+                            score: 60
                         }]
                     }]);
                 }, 1000);
