@@ -40,8 +40,8 @@
 				</div>
 			</div>
 		</div>
- 		<div v-show="isSearchVisible">
- 			<page-search :value="searchkey" about="exam" @callback="searchCallback" @close="hideSearch"></page-search>
+ 		<div v-if="isSearchVisible">
+ 			<page-search :value="searchkey" about="exam" @search="searchCallback" @select="selectCallback" @loadall="loadall" @close="hideSearch"></page-search>
  		</div>
 	</section>
 </template>
@@ -77,8 +77,18 @@
 					this.listenLoading = false;
 				});
 			},
-			searchCallback(item){
-				console.log('item',item)
+			loadall(){//重新加载全部
+				this.hideSearch();
+				this.list = [];
+				this.listenLoading = true;
+				this.clearClock();
+				this.init();
+			},
+			searchCallback(results){//搜索区，点击搜索后的回调
+				this.hideSearch();
+				this.list = results;
+			},
+			selectCallback(item){//搜索区，单条点击后的回调
 				this.hideSearch();
 				this.list.length = 0;
 				this.list.push(item);
@@ -176,9 +186,11 @@
  			showSearch(){//展示搜索页面
  				this.searchkey = '';
  				this.isSearchVisible = true;
+	        	this.$store.dispatch('HideNav');
  			},
  			hideSearch(){//隐藏搜索页面
  				this.isSearchVisible = false;
+				this.$store.dispatch('ShowNav');
  			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{

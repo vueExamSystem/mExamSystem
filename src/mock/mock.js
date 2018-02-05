@@ -91,7 +91,6 @@ export default {
         mock.onPost('/search/list').reply(config => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    console.log('config',config)
                     var params = JSON.parse(config.data).params;
                     var data;
                     if(params.type == 'exam'){
@@ -132,6 +131,32 @@ export default {
                                 optionNeed: 2//选做题必答
                             }
                         ];
+                    }else if(params.type == 'test'){
+                        data = [{
+                            id: '1',
+                            name: 'search大一物理（上）测验1',
+                            startTime: '2018/02/06 00:05',
+                            endTime: '2018/02/06 03:05',
+                            optionNeed: 2//选做题必答
+                        },{
+                            id: '2',
+                            name: 'search大一高等数学（上）测验2',
+                            startTime: '2018/02/06 00:08',
+                            endTime: '2018/02/06 03:00',
+                            optionNeed: 3//选做题必答
+                        },{
+                            id: '3',
+                            name: 'search大一大学英语（上）测验3',
+                            startTime: '2018/02/06 00:10',
+                            endTime: '2018/02/06 02:05',
+                            optionNeed: 3//选做题必答
+                        },{
+                            id: '4',
+                            name: 'search大一计算机（上）测验4',
+                            startTime: '2018/02/06 00:30',
+                            endTime: '2018/02/06 01:45',
+                            optionNeed: 3//选做题必答
+                        }];
                     }
                     resolve([200, {
                         code: 0,

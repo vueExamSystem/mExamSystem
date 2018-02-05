@@ -3,14 +3,26 @@
 		<header class="mint-header is-fixed">
 			<el-row :gutter="10">
 				<el-col :span="21">
-					<el-autocomplete v-model="searchkey" :fetch-suggestions="querySearchAsync" placeholder="请输入搜索关键字" valueKey="name" @select="handleSelect" :trigger-on-focus="triggerOnFocus" :select-when-unmatched="selectWhenUnmatched">
-						<i class="el-icon-search el-input__icon" slot="prefix" @click="handleIconSearch"></i>
+					 <el-input placeholder="请输入搜索关键字" v-model="searchkey" @input="querySearchAsync">
+					 	<i class="el-icon-search el-input__icon" slot="prefix" @click="handleIconSearch"></i>
 						<i class="el-icon-circle-close el-input__icon" slot="suffix" @click="handleIconClear"></i>
-					</el-autocomplete>
+					 </el-input>
 				</el-col>
 				<el-col :span="3"><el-button type="text" @click="callback">取消</el-button></el-col>
 			</el-row>
 		</header>
+		<div class="main" style="min-height: 200px;" v-loading="listenLoading">
+			<ul class="list-cell-view" v-if="!!results">
+				<template v-if="searchkey && results.length == 0">
+					<li class="no-data"><span>没有搜到相关数据</span></li>
+				</template>
+				<template v-else>
+					<li v-for="item in results" @click="handleSelect(item)">
+						<a>{{item.name}}</a>
+					</li>
+				</template>
+			</ul>
+		</div>
 	</div>
 </template>
 <script>
@@ -28,33 +40,51 @@
 		data(){
 			return {
 				searchkey: this.value,
-				triggerOnFocus: false,
-				selectWhenUnmatched: true
+				results: null,
+				listenLoading: false,
+				timeHandle: ''
 			}
 		},
 		methods:{
-			querySearchAsync(queryString, cb) { 
-				if(queryString){
-					var params = {
-						searchkey: queryString,
-						type: this.about,
-					};
-					searchList(params).then((res)=>{
-						var results = res.data;
-						cb(results); 
-					});
-				}else{
-					cb([]);
-				}
+			querySearchAsync() {
+				if(this.timeHandle){
+					clearTimeout(this.timeHandle);
+				} 
+				this.timeHandle = setTimeout(()=>{
+					if(this.searchkey){
+						this.listenLoading = true;
+						var params = {
+							searchkey: this.searchkey,
+							type: this.about,
+						};
+						searchList(params).then((res)=>{
+							if(!this.searchkey){
+								this.results = null;
+							}else{
+								this.results = res.data;
+							}
+							this.listenLoading = false;
+						});
+					}else{
+						this.results = null;
+					}
+				},200);
 			}, 
-			handleIconSearch(ev){
+			handleIconSearch(){
+				if(!this.searchkey){
+					this.$emit('loadall');
+				}else{
+					this.$emit('search', this.results);
+				}
 			},
-			handleIconClear(ev){
+			handleIconClear(){
 				this.searchkey = '';
-				this.results = [];
+				this.results = null;
 			},
 			handleSelect(item) { 
-				this.$emit('callback', item);
+				setTimeout(()=>{
+					this.$emit('select', item);
+				},300);
 			},
 			callback(){
 				this.$emit('close');

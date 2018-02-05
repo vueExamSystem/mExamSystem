@@ -40,8 +40,8 @@
 				</div>
 			</div>
 		</div>
- 		<div v-show="isSearchVisible">
- 			<page-search :value="searchkey" about="test" @callback="searchCallback" @close="hideSearch"></page-search>
+ 		<div v-if="isSearchVisible">
+ 			<page-search :value="searchkey" about="test" @search="searchCallback" @select="selectCallback" @loadall="loadall" @close="hideSearch"></page-search>
  		</div>
 	</section>
 </template>
@@ -77,8 +77,18 @@
 					this.listenLoading = false;
 				});
 			},
-			searchCallback(item){
-				console.log('item',item)
+			loadall(){//重新加载全部
+				this.hideSearch();
+				this.list = [];
+				this.listenLoading = true;
+				this.clearClock();
+				this.init();
+			},
+			searchCallback(results){//搜索区，点击搜索后的回调
+				this.hideSearch();
+				this.list = results;
+			},
+			selectCallback(item){//搜索区，单条点击后的回调
 				this.hideSearch();
 				this.list.length = 0;
 				this.list.push(item);
@@ -130,7 +140,7 @@
 			toWaitExam(id,index){//进入考试页面
 				this.clearClock();
 				var item = this.list[index];
-				window.localStorage.setItem('testItem',JSON.stringify(item));console.log('11')
+				window.localStorage.setItem('testItem',JSON.stringify(item));
 				this.$router.push({ path: `/test/wait/${id}`});
 			},
 			isValid(dateString){//是否没有过期
@@ -176,9 +186,11 @@
  			showSearch(){//展示搜索页面
  				this.searchkey = '';
  				this.isSearchVisible = true;
+	        	this.$store.dispatch('HideNav');
  			},
  			hideSearch(){//隐藏搜索页面
  				this.isSearchVisible = false;
+				this.$store.dispatch('ShowNav');
  			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{
