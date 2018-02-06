@@ -25,6 +25,9 @@
 				<el-tabs id="scoreTab" class="bg-light-blue little" type="card" v-model="activeName">
 				    <el-tab-pane label="考试" name="examScore">
 						<div class="content" v-loading="examLoading">
+							<div class="section-no-item" v-if="!examLoading && examScoreList.length == 0">
+								<img src="/static/images/nolist.png">
+							</div>
 							<ul class="section-list score-list">
 								<li v-for="(exam,index) in examScoreList" :class="scoreLevel(exam.ranking)">
 									<p>{{exam.name}}</p>
@@ -38,6 +41,9 @@
 				    </el-tab-pane>
 				    <el-tab-pane label="测验" name="testScore">
 						<div class="content" v-loading="testLoading">
+							<div class="section-no-item" v-if="!testLoading && testScoreList.length == 0">
+								<img src="/static/images/nolist.png">
+							</div>
 							<ul class="section-list score-list">
 								<li v-for="(test,index) in testScoreList" :class="scoreLevel(test.ranking)">
 									<p>{{test.name}}</p>
@@ -51,6 +57,9 @@
 				    </el-tab-pane>
 				    <el-tab-pane label="练习" name="exerciseScore">
 						<div class="content" v-loading="exerciseLoading">
+							<div class="section-no-item" v-if="!exerciseLoading && exerciseScoreList.length == 0">
+								<img src="/static/images/nolist.png">
+							</div>
 							<ul class="section-list score-list">
 								<li v-for="(exercise,index) in exerciseScoreList" :class="scoreLevel(exercise.ranking)">
 									<p>{{exercise.name}}</p>

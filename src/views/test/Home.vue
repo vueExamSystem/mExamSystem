@@ -7,6 +7,9 @@
 			<div class="main">
 				<p class="main-title">本周测验</p>
 				<div class="content" v-loading="listenLoading">
+					<div class="section-no-item" v-if="!listenLoading && list.length == 0">
+						<img src="/static/images/nolist.png">
+					</div>
 					<ul class="section-list">
 						<li v-for="(exam,index) in list">
 							<template v-if="isTodayExam(exam.startTime) && isValid(exam.startTime)">

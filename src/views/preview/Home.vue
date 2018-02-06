@@ -6,6 +6,9 @@
 			    	<div class="main">
 						<p class="main-title">待完成练习</p>
 						<div class="content" v-loading="listenLoading">
+							<div class="section-no-item" v-if="!listenLoading && list.length == 0">
+								<img src="/static/images/nolist.png">
+							</div>
 							<ul class="section-list">
 								<li v-for="(exam,index) in list">
 									<template v-if="isTodayExam(exam.overTime)">
@@ -59,6 +62,9 @@
 							</div>
 						</div>
 						<div class="content" v-loading="docListenLoading">
+							<div class="section-no-item" v-if="!docListenLoading && docList.length == 0">
+								<img src="/static/images/nolist.png">
+							</div>
 							<ul class="section-list">
 								<li v-for="(doc,index) in docList">
 									<p>{{doc.name}}</p>
