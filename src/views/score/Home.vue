@@ -70,6 +70,7 @@
 			return {
 				maskLoading: true,
 		        avgScore: '',//总分
+		        ranking: '',//等级
 				termValue: '',//选中的学期id
 				termOptions: [],//学期数据
 				termLoading: true,
@@ -92,6 +93,7 @@
 					this.termOptions = res.data;
 					this.termValue = this.termOptions[0].id;
 					this.avgScore = this.termOptions[0].avgScore;
+					this.ranking = this.termOptions[0].ranking;
 					this.termLoading = false;
 					this.courseOptions = this.termOptions[0].courseList;
 					this.courseValue = this.courseOptions[0].id;
@@ -104,23 +106,30 @@
 				});
 			},
 			scoreLevel(){//分数等级
-				if(this.avgScore){
-					if(this.avgScore>=90){
-						return 'score-best';
-					}else if(this.avgScore>=80){
-						return 'score-better';
-					}else if(this.avgScore>=60){
-						return 'score-normal';
-					}else{
-						return 'score-fail';
-					}
+				var rankClass = '';
+				switch(this.ranking){
+					case '1'://优秀
+						rankClass = 'score-best';
+						break;
+					case '2'://良好
+						rankClass = 'score-better';
+						break;
+					case '3'://中等s
+						rankClass = 'score-normal';
+						break;
+					case '4'://不及格
+						rankClass = 'score-fail';
+						break;
+					default: break;
 				}
+				return rankClass;
 			},
 			termChange(){
 				this.maskLoading = true;
 				this.courseLoading = true;
 				var curentTermInfo = _.filter(this.termOptions, {id: this.termValue})[0];
 				this.avgScore = curentTermInfo.avgScore;
+				this.ranking = curentTermInfo.ranking;
 				this.courseOptions = curentTermInfo.courseList;
 				this.courseValue = this.courseOptions[0].id;
 				this.courseLoading = false;

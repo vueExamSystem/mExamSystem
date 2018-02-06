@@ -1,20 +1,6 @@
 import Mock from 'mockjs';
 import _ from 'lodash';
 
-const PaperList = [];
-
-for (let i = 0; i < 10; i++) {
-    PaperList.push(Mock.mock({
-        id: i+1,
-        name:'物理期中考试',
-        time:'60',
-        project:'大学物理',
-        category:'随机',
-        status: i%3,
-        creator:'admin'
-    }));
-}
-
 //查看题目列表
 const ProblemList = [{
     id: '1',
@@ -478,7 +464,6 @@ const AnalysisList = [{
 }];
 
 export {
-    PaperList,
     ProblemList,
     AnalysisList
 };

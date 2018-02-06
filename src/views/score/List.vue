@@ -26,7 +26,7 @@
 				    <el-tab-pane label="考试" name="examScore">
 						<div class="content" v-loading="examLoading">
 							<ul class="section-list score-list">
-								<li v-for="(exam,index) in examScoreList" :class="scoreLevel(exam.score)">
+								<li v-for="(exam,index) in examScoreList" :class="scoreLevel(exam.ranking)">
 									<p>{{exam.name}}</p>
 									<div>
 										<h3>{{exam.score}}分</h3>
@@ -39,7 +39,7 @@
 				    <el-tab-pane label="测验" name="testScore">
 						<div class="content" v-loading="testLoading">
 							<ul class="section-list score-list">
-								<li v-for="(test,index) in testScoreList" :class="scoreLevel(test.score)">
+								<li v-for="(test,index) in testScoreList" :class="scoreLevel(test.ranking)">
 									<p>{{test.name}}</p>
 									<div>
 										<h3>{{test.score}}分</h3>
@@ -52,7 +52,7 @@
 				    <el-tab-pane label="练习" name="exerciseScore">
 						<div class="content" v-loading="exerciseLoading">
 							<ul class="section-list score-list">
-								<li v-for="(exercise,index) in exerciseScoreList" :class="scoreLevel(exercise.score)">
+								<li v-for="(exercise,index) in exerciseScoreList" :class="scoreLevel(exercise.ranking)">
 									<p>{{exercise.name}}</p>
 									<div>
 										<h3>{{exercise.score}}分</h3>
@@ -71,7 +71,7 @@
 	</div>
 </template>
 <script>
-	import { getTermAndCourseList, getExamScoreList, getTestScoreList, getExerciseScoreList } from '../../api/api';
+	import { getCourseListByTerm, getExamScoreList, getTestScoreList, getExerciseScoreList } from '../../api/api';
 	import Analysis from './Analysis.vue';
 	export default {
 		props:{
@@ -109,46 +109,66 @@
 					this.courseLoading = false;
 				}else{
 					//获取学期课程数据
-					getTermAndCourseList().then(res => {
-						//res data
-						//...
+					var params = {
+						term: this.term
+					};
+					getCourseListByTerm(params).then(res => {
+						this.courseOptions = res.data;
+						this.courseValue = this.courseOptions[0].id;
+						this.courseLoading = false;
+						this.getThoseList();
 					});
 				}
+				this.getThoseList();
 				
+			},
+			getThoseList(){//获取分数列表数据
 				var params = {
-					term: this.term,
-					course: this.courseValue
+					term: this.term,//学期
+					course: this.courseValue//课程
 				};
-
 				//获取考试成绩列表
+				this.examLoading = true;
 				getExamScoreList(params).then(res=>{
 					this.examScoreList = res.data;
 					this.examLoading = false;
 				});
 
 				//获取考试成绩列表
+				this.testLoading = true;
 				getTestScoreList(params).then(res=>{
 					this.testScoreList = res.data;
 					this.testLoading = false;
 				});
 
 				//获取考试成绩列表
+				this.exerciseLoading = true;
 				getExerciseScoreList(params).then(res=>{
 					this.exerciseScoreList = res.data;
 					this.exerciseLoading = false;
 				});
 			},
-			courseChange(){},
-			scoreLevel(score){//分数等级
-				if(score>=90){
-					return 'score-best';
-				}else if(score>=80){
-					return 'score-better';
-				}else if(score>=60){
-					return 'score-normal';
-				}else{
-					return 'score-fail';
+			courseChange(){//课程变更
+				this.getThoseList();
+			},
+			scoreLevel(ranking){//分数等级
+				var rankClass = '';
+				switch(ranking){
+					case '1'://优秀
+						rankClass = 'score-best';
+						break;
+					case '2'://良好
+						rankClass = 'score-better';
+						break;
+					case '3'://中等s
+						rankClass = 'score-normal';
+						break;
+					case '4'://不及格
+						rankClass = 'score-fail';
+						break;
+					default: break;
 				}
+				return rankClass;
 			},
 			showAnalysis(item){
 				this.analysisId = item.id;
