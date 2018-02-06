@@ -70,7 +70,7 @@
 									<p>{{doc.name}}</p>
 									<div>
 										<div class="time-down">
-											<img src="/static/images/clock.png" width="15">
+											<i class="iconfont icon-kecheng-larger"></i>
 											<span class="time">{{doc.course}}</span>
 										</div>
 										<mt-button class="pull-right" type="primary" @click="showDoc(doc.id,doc.name)">我要预习</mt-button>
