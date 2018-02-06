@@ -264,6 +264,41 @@ $color-primary: #8684BC;
 .mint-datetime-action {
   color: $color-primary;
 }
+.v-modal{
+	z-index: 9999!important;
+}
+.mint-msgbox-wrapper{
+	z-index: 99999!important;
+	.mint-msgbox{
+		width: 80%;
+		top: 40%;
+		background: #FAFAFA;
+		border-radius: 12px;
+		.mint-msgbox-content{
+			padding: 20px;
+			.mint-msgbox-message{
+				color: #4A4A4A;
+				font-size: 18px;
+			}
+		}
+		.mint-msgbox-btns{
+			height: 44px;
+			line-height: 44px;
+			.mint-msgbox-btn{
+				font-size: 18px;
+				&.mint-msgbox-confirm{
+					background-image: linear-gradient(90deg, #AA84BC 0%, #8684BC 100%);
+					color: #fff;
+				}
+				&.mint-msgbox-cancel{
+					color: #9B9B9B;
+				}
+			}
+		}
+		
+	}
+}
+
 /*头部选项卡*/
 .el-tabs.el-tabs--top{
 	&.bg-light-blue .el-tabs__header.is-top{
