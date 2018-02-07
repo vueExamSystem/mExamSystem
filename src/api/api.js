@@ -1,7 +1,7 @@
 import axios from 'axios';
 import instance  from '../axios';
 
-let base = '';
+let base = 'http://localhost:8081/api';
 
 //请求登录
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
