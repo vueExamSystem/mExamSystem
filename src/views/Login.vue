@@ -20,7 +20,7 @@
     data() {
       return {
         loginForm: {
-          account: 'admin',
+          account: 'zengjie',
           checkPass: '123456'
         },
         logining: false
@@ -50,7 +50,7 @@
             requestLogin(loginParams).then(res => {
               this.logining = false;
               let { msg, code, data } = res;
-              if (code !== 200) {
+              if (code != 0) {
                 this.alertError(msg);
               } else {
                 this.$store.dispatch('SetToken', {token:data.token});

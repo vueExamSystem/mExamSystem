@@ -56,14 +56,15 @@
 				if(this.grade){//年
 					grade = grade.substr(2,2);
 				}
-				return grade + '级' + this.department + this.class + '班';
+				return this.department ;
+				//return grade + '级' + this.department + this.class + '班';
 			}
 		},
 		methods:{
 			init(){
 				getUserInfo().then(res=>{
 					this.userId = res.data.userId;
-					this.studentNo = res.data.studentNo;
+					this.studentNo = res.data.userAccount;
 					this.userName = res.data.userName;
 					this.school = res.data.school;
 					this.grade = res.data.grade;

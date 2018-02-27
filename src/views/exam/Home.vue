@@ -12,15 +12,15 @@
 					</div>
 					<ul class="section-list">
 						<li v-for="(exam,index) in list">
-							<template v-if="isTodayExam(exam.startTime) && isValid(exam.startTime)">
+							<template v-if="isTodayExam(exam.beginTime) && isValid(exam.beginTime)">
 								<p>{{exam.name}}</p>
 								<div>
 									<div class="time-down">
 										<img src="/static/images/clock.png" width="15">
 										<span>倒计时：</span>
-										<span class="time">{{remainTime(exam.startTime)}}</span>
+										<span class="time">{{remainTime(exam.beginTime)}}</span>
 									</div>
-									<mt-button v-show="isShouldExam(exam.startTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
+									<mt-button v-show="isShouldExam(exam.beginTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
 								</div>
 								<div class="flag">
 									<span>今日</span>
@@ -31,10 +31,10 @@
 								<div>
 									<div class="time-down">
 										<img src="/static/images/clock.png" width="15">
-										<span>{{exam.startTime}}</span>
+										<span>{{exam.beginTime}}</span>
 									</div>
 								</div>
-								<div class="flag" v-if="isTodayExam(exam.startTime)">
+								<div class="flag" v-if="isTodayExam(exam.beginTime)">
 									<span>今日</span>
 								</div>
 							</template>
@@ -75,7 +75,7 @@
 			init(){
 				this.fullPath = this.$route.fullPath;
 				getExamList().then(res => {
-					this.list = res.data;
+					this.list = res.data.rows;
 					this.timeClockRun();
 					this.listenLoading = false;
 				});

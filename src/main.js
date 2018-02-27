@@ -14,8 +14,8 @@ import router from './router'
 import store from './vuex/store'
 import Vuex from 'vuex'
 
-import Mock from './mock'
-Mock.bootstrap();
+//import Mock from './mock'
+//Mock.bootstrap();
 
 Vue.use(Common)
 Vue.use(ElementUI)

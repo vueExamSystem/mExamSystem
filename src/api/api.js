@@ -1,10 +1,11 @@
 import axios from 'axios';
-import instance  from '../axios';
+import instance  from './instance';
+import qs from 'qs'
 
-let base = '';
+let base = 'http://localhost:8082/api/stu';
 
 //请求登录
-export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
+export const requestLogin = params => { return axios.post(`${base}/login`, qs.stringify(params)).then(res => res.data); };
 
 //用户信息
 export const getUserInfo = params => { return instance.post(`${base}/user/info`, params).then(res => res.data); };
