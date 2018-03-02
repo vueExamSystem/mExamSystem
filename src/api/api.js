@@ -17,7 +17,7 @@ export const updatePassword = params => { return instance.post(`${base}/user/edi
 export const getExamList = params => { return instance.post(`${base}/exam/list`, { params: params }).then(res => res.data); };
 
 //获取试卷题目列表
-export const getPaperProblemList = params => { return instance.post(`${base}/exam/problem/list`, params ); };
+export const getPaperProblemList = params => { return instance.post(`${base}/exam/problem/list`, qs.stringify(params) ).then(res => res.data); };
 
 //考试交卷
 export const submitExamPaper = params => { return instance.post(`${base}/exam/submit`, { params: params }).then(res => res.data); };
