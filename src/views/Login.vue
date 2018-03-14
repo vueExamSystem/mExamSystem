@@ -20,7 +20,7 @@
     data() {
       return {
         loginForm: {
-          account: 'zengjie',
+          account: '080510101',
           checkPass: '123456'
         },
         logining: false

@@ -2,8 +2,8 @@ import axios from 'axios';
 import instance  from './instance';
 import qs from 'qs'
 
-let base = 'http://localhost:8082/api/stu';
-
+let base = 'http://localhost:8081/api/stu';
+//let base = 'http://121.43.164.178:8081/api/stu';//公网线上调试api
 //请求登录
 export const requestLogin = params => { return axios.post(`${base}/login`, qs.stringify(params)).then(res => res.data); };
 
@@ -14,7 +14,7 @@ export const getUserInfo = params => { return instance.post(`${base}/user/info`,
 export const updatePassword = params => { return instance.post(`${base}/user/editpwd`, params).then(res => res.data); };
 
 //考试列表
-export const getExamList = params => { return instance.post(`${base}/exam/list`, { params: params }).then(res => res.data); };
+export const getExamList = params => { return instance.post(`${base}/exam/list`, qs.stringify(params)).then(res => res.data); };
 
 //获取试卷题目列表
 export const getPaperProblemList = params => { return instance.post(`${base}/exam/problem/list`, qs.stringify(params) ).then(res => res.data); };
