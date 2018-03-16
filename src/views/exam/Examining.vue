@@ -94,9 +94,9 @@
 	</div>
 </template>
 <script>
-	// 注意题目数据需要按“单选”、“多选”、“判断”、“选做”顺序，否则需要前端重改！！
+	// 注意题目需要按“单选”、“多选”、“判断”、“选做”顺序
 	import FeedBack from '../common/FeedBack'
-	import { getPaperProblemList, submitExamPaper } from '../../api/api';
+	import { getPaperProblemList, submitExamPaper, submitOneProblem } from '../../api/api';
 	import Card from './Card.vue'
 	export default {
         props: {
@@ -116,6 +116,7 @@
                 startTime: '',
                 endTime: '',
                 nowDate: new Date(),
+                mustCount: 0,
 
                 current: 0,
                 currentType: 'radio',
@@ -128,7 +129,9 @@
                 judgeList: [],
                 optionalList: [],
 
-                cardList: {},
+                problemList: [],//整合在一起的试题
+
+                cardList: {},//传给题卡的参数
 
                 feedbackOptions: {
                     withinPath: '',
@@ -145,7 +148,7 @@
             }
         },
         computed: {
-            problem() {
+            problem() {//当前试题
                 var currentP = {};
                 var radioCount = this.radioList.length;
                 var checkCount = this.checkList.length;
@@ -195,7 +198,6 @@
                     this.isValidLink = true;
                     this.startTime = item.startTime;
                     this.endTime = item.endTime;
-                    this.optionNeed = item.optionNeed;//选做题必答
                     if (this.getRemainSeconds(this.startTime) > 0 || this.getRemainSeconds(this.endTime) < 0) {//无效链接
                         this.isValidLink = false;
                     } else {//正常考试
@@ -217,7 +219,9 @@
                     this.checkList = res.check || [];
                     this.judgeList = res.judge || [];
                     this.optionalList = res.optional || [];
-                    this.totalCount = this.radioList.length + this.checkList.length + this.judgeList.length + this.optionalList.length;
+                    this.mustCount = res.paper.mustCount;//选做题必答
+                    this.problemList = [].concat(this.radioList, this.checkList, this.judgeList, this.optionalList);
+                    this.totalCount = this.problemList.length;
                     this.cardList = res;
                     this.isLoaded = true;
                 });
@@ -251,17 +255,22 @@
             },
             submitPaper() {//直接交卷
                 this.maskLoading = true;
-                var totalLength = this.totalCount;//总题数
-                var myAnswers = [];
-                // for(var i=0;i<totalLength;i++){
-                // 	var item = this.problemList[i];
-                // 	var myanswer = item.myAnswer?item.myAnswer.toString():'';
-                // 	myAnswers.push(myanswer);
-                // }
-                console.log('myAnswers', myAnswers);//答案可能"C,D"或"D,C",未按照从A-Z排序
+                _.forEach(this.problemList, problem => {
+                    if(!problem.myAnswer){//未答的题设置为空
+                        if (problem.questionTypeId === 2) {
+                            this.$set(problem, 'myAnswer', []);
+                        } else {
+                            this.$set(problem, 'myAnswer', '');
+                        }
+                    }else{
+                        if(problem.questionTypeId === 2){
+                            problem.myAnswer.sort();//答案可能"C,D"或"D,C",按照从A-Z排序
+                        }
+                    }
+                });
                 var params = {
-                    id: this.id,
-                    myAnswers
+                    id: this.id, //试卷id
+                    problemList: this.problemList //防止中途数据没有保存，最后全部再重新保存答案
                 };
                 submitExamPaper(params).then(() => {
                     this.feedbackOptions.type = 'success';
@@ -280,52 +289,66 @@
             },
             checkPaper() {//检测是否答完
                 var isFinished = true;
-                var unNecessaryCount = this.count.option;//选做题个数
-                var necessaryCount = this.totalCount - unNecessaryCount;//必做题个数
                 //必做题检测
-                // for(var i=0;i<necessaryCount;i++){
-                // 	var item = this.problemList[i];
-                // 	if(typeof item.myAnswer === 'undefined'){
-                // 		isFinished = false;
-                // 		break;
-                // 	}else{
-                // 		if(item.type === 'check'){
-                // 			if(item.myAnswer.length == 0){
-                // 				isFinished = false;
-                // 				break;
-                // 			}
-                // 		}else{
-                // 			if(item.myAnswer == ''){
-                // 				isFinished = false;
-                // 				break;
-                // 			}
-                // 		}
-                // 	}
-                // }
+                _.forEach(this.problemList, (problem,index) => {
+                    if (index < this.totalCount - this.optionalList.length) {
+                        if (!this.isAnswerred(problem)) {
+                            isFinished = false;
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                });
                 if (isFinished) {
                     //选做题
-                    var isOptionNeededCount = this.optionNeed;//选做题必做个数
-                    var isOptionFinishedCount = 0;//选做题已答题个数
-                    // for(var i=necessaryCount;i<this.problemList.length;i++){
-                    // 	var item = this.problemList[i];
-                    // 	if(item.type === 'check'){
-                    // 		if(item.myAnswer.length != 0){
-                    // 			++isOptionFinishedCount;
-                    // 		}
-                    // 	}else{
-                    // 		if(item.myAnswer != ''){
-                    // 			++isOptionFinishedCount;
-                    // 		}
-                    // 	}
-                    // }
-                    if (isOptionFinishedCount < isOptionNeededCount) {
+                    var optionalFinishedCount = 0;//选做题已答题个数
+                    _.forEach(this.optionalList, problem => {
+                        if(this.isAnswerred(problem)){
+                            ++optionalFinishedCount;
+                        }
+                    });
+                    if (optionalFinishedCount < this.mustCount) {
                         isFinished = false;
                     }
                 }
                 return isFinished;
             },
+            isAnswerred(problem) {//试题是否已回答
+                var isAnswerred = false;
+                if (!problem || !problem.myAnswer) {
+                    isAnswerred = false;
+                } else {
+                    isAnswerred = problem.myAnswer.length > 0;
+                }
+                return isAnswerred;
+            },
+            submitCurrentProblem() {//保存当前答案
+                if (this.isAnswerred(this.problem)) {
+                    var params = {
+                        id: this.id,    //试卷id
+                        questionId: this.problem.id,  //试题id
+                        myAnswer: this.problem.myAnswer //学生答案
+                    };
+                    submitOneProblem(params).then(res => {
+                        if (res.code != 0) {
+                            this.alertError(res.msg);
+                        }
+                    }).catch(error => {
+                        console.log('error',error)
+                    });
+                }
+            },
+            alertError(msg){
+                this.$toast({
+                    message: msg,
+                    position: 'middle',
+                    duration: 1000
+                });
+            },
             showQuestionCard() {//显示题卡
                 this.isCardVisible = true;
+                this.submitCurrentProblem();//保存当前答案
             },
             hideQuestionCard() {//隐藏题卡
                 this.isCardVisible = false;
@@ -343,6 +366,7 @@
             },
             nextProblem() {//下一题
                 if (this.current < this.totalCount - 1) {
+                    this.submitCurrentProblem();//保存当前答案
                     ++this.current;
                 } else {
                     this.$toast({

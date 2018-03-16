@@ -25,7 +25,7 @@
 				</ul>
 			</div>
 			<div class="question-serial">
-				<div class="main-title black">选做题（{{optionalList.length}}选{{optionNeed}}）</div>
+				<div class="main-title black">选做题（{{optionalList.length}}选{{mustCount}}）</div>
 				<ul class="question-num">
 					<li v-for="(val, index) in optionalList" ><el-button :class="{'is-answerred': isAnswerred(val)}" class="circle" @click="questionChange('optional',index)">{{index+1}}</el-button></li>
 				</ul>
@@ -46,39 +46,25 @@
                 checkList: [],
                 judgeList: [],
                 optionalList: [],
-                optionNeed: 0//选做题必答
+                mustCount: 0//选做题必答
             }
         },
         methods: {
             arrange() {
-                var examItem = JSON.parse(window.localStorage.getItem('examItem'));
-                this.optionNeed = examItem.optionNeed;
+                this.mustCount = this.list.paper.mustCount;
                 this.radioList = this.list.radio;
                 this.checkList = this.list.check;
                 this.judgeList = this.list.judge;
                 this.optionalList = this.list.optional;
             },
-            isAnswerred(problem) {
+            isAnswerred(problem) {//试题是否已回答
                 var isAnswerred = false;
-                if (!problem.myAnswer) {
-                    return isAnswerred;
+                if (!problem || !problem.myAnswer) {
+                    isAnswerred = false;
                 } else {
-                    if (problem.questionTypeId === 2) {
-                        if (problem.myAnswer.length == 0) {
-                            isAnswerred = false;
-                        } else {
-                            isAnswerred = true;
-                        }
-
-                    } else {
-                        if (problem.myAnswer == '') {
-                            isAnswerred = false;
-                        } else {
-                            isAnswerred = true;
-                        }
-                    }
-                    return isAnswerred;
+                    isAnswerred = problem.myAnswer.length > 0;
                 }
+                return isAnswerred;
             },
             questionChange(type, index) {
                 var current = index;
