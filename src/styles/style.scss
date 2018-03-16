@@ -85,26 +85,31 @@
 }
 .el-question {
 	.el-question-title {
-	  	font-size: 0;
-	    line-height: 22px;
+		font-size: 16px;
 		color: #4A4A4A;
-		letter-spacing: 0.87px;
-		line-height: 22px;
-		padding: 10px 0;
-	  	.current{
-			display:inline-block;
-			width: 30px;
-			font-size: 14px;
-			vertical-align: top;
-	  	}
-	  	.text{
-	  		display:inline-block;
-	  		width: calc(100% - 35px);
-	  		font-size: 14px;
-			vertical-align: top;
-	  	}
+		letter-spacing: 1px;
+		line-height: 26px;
+		margin: 20px 0 30px;
+		&.has-order{
+			position: relative;
+			text-indent: 30px;
+			&>.el-question-index{
+				position: absolute;
+				top: 0;
+				left: -30px;
+				line-height: 26px;
+			}
+		}
 	}
 	.el-question-options {
+		.el-radio-group,.el-checkbox-group{
+			.radio-short-div{
+				font-size: 14px;
+				img{
+					max-width: 100%;
+				}
+			}
+		}
 	    .el-radio, .el-checkbox {
 	        display: block;
 	        margin: 10px 0;
