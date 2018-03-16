@@ -21,7 +21,7 @@
 											<span>倒计时：</span>
 											<span class="time">{{remainTime(exam.beginTime)}}</span>
 										</div>
-										<mt-button class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
+										<mt-button :disabled="!isShouldExam(exam.beginTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
 									</div>
 									<div class="flag">
 										<span>今日</span>

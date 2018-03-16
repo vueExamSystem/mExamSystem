@@ -8,7 +8,7 @@
 				<div class="img-clock-down">
 					<img src="/static/images/wait.png">
 					<div class="time-down">
-						<span>{{remainTime(detail.startTime)}}</span>
+						<span>{{remainTime(detail.beginTime)}}</span>
 					</div>
 				</div>
 				<div class="display-box">
@@ -54,7 +54,7 @@
 		},
 		computed:{
 			totalTime(){
-				var sDate = this.dateParse(this.detail.startTime);
+				var sDate = this.dateParse(this.detail.beginTime);
 				var eDate = this.dateParse(this.detail.endTime);
 				var minuteSeconds = 1000 * 60;//一分钟毫秒数
 				var hourSeconds = minuteSeconds * 60;//一小时毫秒数 
@@ -68,9 +68,9 @@
 				this.fullPath = this.$route.fullPath;
 				if(item && item.id && item.id == this.id){
 					this.$set(this.detail,'name',item.name);
-					this.$set(this.detail,'startTime',item.startTime);
+					this.$set(this.detail,'beginTime',item.beginTime);
 					this.$set(this.detail,'endTime',item.endTime);
-					if(this.getRemainSeconds(this.detail.startTime)>0){//倒计时
+					if(this.getRemainSeconds(this.detail.beginTime)>0){//倒计时
 						this.isValidLink = true;
 						this.timeClockRun();
 					}else{
