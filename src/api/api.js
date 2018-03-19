@@ -20,10 +20,10 @@ export const getExamList = params => { return instance.post(`${base}/exam/list`,
 export const getPaperProblemList = params => { return instance.post(`${base}/exam/problem/list`, qs.stringify(params) ).then(res => res.data); };
 
 //提交某道题目学生的答案
-export const submitOneProblem = params => { return instance.post(`${base}/exam/submit/one`, { params: params }).then(res => res.data); };
+export const submitOneProblem = params => { return instance.post(`${base}/exam/submit/one`, qs.stringify(params)).then(res => res.data); };
 
 //考试交卷
-export const submitExamPaper = params => { return instance.post(`${base}/exam/submit`, { params: params }).then(res => res.data); };
+export const submitExamPaper = params => { return instance.post(`${base}/exam/submit`, qs.stringify(params)).then(res => res.data); };
 
 //测验列表
 export const getTestList = params => { return instance.post(`${base}/test/list`, { params: params }).then(res => res.data); };

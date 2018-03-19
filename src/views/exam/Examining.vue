@@ -124,6 +124,8 @@
                 currentTypeName: '单选题',//当前类型
                 currentTypeTotal: 0,//当前类型题数
                 totalCount: 0,
+                stu_paper:{},//学生试卷
+                paperId:0,//学生试卷id
                 radioList: [],
                 checkList: [],
                 judgeList: [],
@@ -215,6 +217,8 @@
                 };
                 getPaperProblemList(params).then(res => {
                     res = res.data;
+                    this.stu_paper=res.paper;
+                    this.paperId=res.paper.id;//设置试卷Id
                     this.radioList = res.radio || [];
                     this.checkList = res.check || [];
                     this.judgeList = res.judge || [];
@@ -224,6 +228,17 @@
                     this.totalCount = this.problemList.length;
                     this.cardList = res;
                     this.isLoaded = true;
+                    this.current=res.current;//设置序号
+
+                    //遍历设置多选题的已答的选项 变成数组[]
+                     _.forEach(this.problemList, problem => {
+	                     	if (problem.questionTypeId === 2) {
+	                     		var array=problem.myAnswer.split(',');
+	                     		this.$set(problem, 'myAnswer', array);
+	                    	}
+                     });
+                     console.log('this.problemList',this.problemList);
+
                 });
             },
             finishedPaper() {//检测并交卷
@@ -255,23 +270,61 @@
             },
             submitPaper() {//直接交卷
                 this.maskLoading = true;
+                var list=[];
+                //计算答题百分比 已作答题数/总题数 选做题计选做题的必做题数
+	                var answer_num=0;
+	                var opt_answer_num=0;
+	                var percent=0;
                 _.forEach(this.problemList, problem => {
                     if(!problem.myAnswer){//未答的题设置为空
                         if (problem.questionTypeId === 2) {
-                            this.$set(problem, 'myAnswer', []);
+                            this.$set(problem, 'myAnswer', '');
                         } else {
                             this.$set(problem, 'myAnswer', '');
                         }
                     }else{
                         if(problem.questionTypeId === 2){
                             problem.myAnswer.sort();//答案可能"C,D"或"D,C",按照从A-Z排序
+                            this.$set(problem, 'myAnswer', problem.myAnswer.join(','));//多选数组变成1,2
                         }
                     }
+                   if(problem.isOptional){
+		                    if(problem.myAnswer){
+		                    	opt_answer_num++;
+		                    }
+		                }
+		            else{
+		                	if(problem.myAnswer){
+		                    	answer_num++;
+		                    }
+		                }
+                    var question={
+                    	questionId:problem.id,
+                    	answer:problem.myAnswer
+                    };
+                    list.push(question);
                 });
+
+					var radiocount = this.stu_paper.radioCount;
+	                var checkcount = this.stu_paper.checkCount;
+	                var judgecount = this.stu_paper.judgeCount;
+	                var optionalcount = this.stu_paper.optionalCount;
+	                var mustcount = this.stu_paper.mustCount;
+	                var totalCount =radiocount+checkcount+judgecount+mustcount;
+	                opt_answer_num =opt_answer_num>mustcount?mustcount:opt_answer_num;
+	                answer_num=answer_num+opt_answer_num;
+					percent=answer_num/totalCount;
+					percent=(answer_num*100)/totalCount;
+					percent=percent.toFixed(2);//保留2位小数
                 var params = {
-                    id: this.id, //试卷id
-                    problemList: this.problemList //防止中途数据没有保存，最后全部再重新保存答案
+                    examId: this.id, 
+                    paperId:this.paperId,//试卷id
+                    percent:percent,//完成百分比
+                    currentQuestionId:this.current,//用序号代替
+                    questionList: list //防止中途数据没有保存，最后全部再重新保存答案
                 };
+                params={ 'submitData':JSON.stringify(params)};
+                //console.log('submitExamPaper',params);
                 submitExamPaper(params).then(() => {
                     this.feedbackOptions.type = 'success';
                     this.feedbackOptions.title = '交卷成功！';
@@ -325,11 +378,41 @@
             },
             submitCurrentProblem() {//保存当前答案
                 if (this.isAnswerred(this.problem)) {
-                    var params = {
-                        id: this.id,    //试卷id
-                        questionId: this.problem.id,  //试题id
-                        myAnswer: this.problem.myAnswer //学生答案
-                    };
+                   
+                    //console.log('submitOneProblem',params);
+                    //计算答题百分比 已作答题数/总题数 选做题计选做题的必做题数
+	                var answer_num=0;
+	                var opt_answer_num=0;
+	                var percent=0;
+	                _.forEach(this.problemList, problem => {
+	                	 if(problem.isOptional){
+		                    if(problem.myAnswer){
+		                    	opt_answer_num++;
+		                    }
+		                }else{
+		                	if(problem.myAnswer){
+		                    	answer_num++;
+		                    }
+		                }
+	                });
+	                var radiocount = this.stu_paper.radioCount;
+	                var checkcount = this.stu_paper.checkCount;
+	                var judgecount = this.stu_paper.judgeCount;
+	                var optionalcount = this.stu_paper.optionalCount;
+	                var mustcount = this.stu_paper.mustCount;
+	                var totalCount =radiocount+checkcount+judgecount+mustcount;
+	                opt_answer_num =opt_answer_num>mustcount?mustcount:opt_answer_num;
+	                answer_num=answer_num+opt_answer_num;
+					percent=(answer_num*100)/totalCount;
+					percent=percent.toFixed(2);//保留2位小数
+					//console.log('percent',percent);
+					 var params = {
+		                        paperId: this.paperId,    //试卷id
+		                        questionId: this.current,//this.problem.id,  //试题id 用序号代替
+		                        answer: this.problem.myAnswer, //学生答案
+		                        percent:percent
+		                    };
+
                     submitOneProblem(params).then(res => {
                         if (res.code != 0) {
                             this.alertError(res.msg);
