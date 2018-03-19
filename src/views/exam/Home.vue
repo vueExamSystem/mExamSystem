@@ -13,7 +13,7 @@
 					<ul class="section-list">
 						<li v-for="(exam,index) in list">
 							<template v-if="isTodayExam(exam.beginTime)">
-								<template v-if="isValid(exam.beginTime)">
+								<template v-if="isValid(exam,exam.beginTime)">
 									<p>{{exam.name}}</p>
 									<div>
 										<div class="time-down">
@@ -27,7 +27,7 @@
 										<span>今日</span>
 									</div>
 								</template>
-								<template v-else-if="isValid(exam.endTime)">
+								<template v-else-if="isValid(exam,exam.endTime)">
 									<p>{{exam.name}}</p>
 									<div>
 										<div class="time-down">
@@ -187,13 +187,17 @@
 				window.localStorage.setItem('examItem',JSON.stringify(item));
 				this.$router.push({ path: `/exam/examining/${id}`});
 			},
-			isValid(dateString){//是否没有过期
+			isValid(exam,dateString){//是否没有过期
 				var isInvalid = true;
-				var thisD = this.dateParse(dateString);
-				var totalSeconds = (thisD.getTime() - this.nowDate.getTime());
-				if(totalSeconds <= 0){
-					isInvalid = false;
-				}
+				if(exam.status==1){
+					isInvalid=false;
+				}else{
+					var thisD = this.dateParse(dateString);
+					var totalSeconds = (thisD.getTime() - this.nowDate.getTime());
+					if(totalSeconds <= 0){
+						isInvalid = false;
+						}
+					}
 				return isInvalid;
 			},
 			isTodayExam(dateString){//是否今天考
