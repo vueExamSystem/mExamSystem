@@ -90,6 +90,7 @@
 			init(){
 				//获取学期课程数据
 				getTermAndCourseList().then(res => {
+					res=res.data;
 					this.termOptions = res.data.rows;
 					this.termValue = this.termOptions[0].id;
 					//this.avgScore = this.termOptions[0].avgScore;

@@ -213,7 +213,7 @@
             getProblemList() {
                 //to do
                 var params = {
-                    id: this.id
+                    examId: this.id
                 };
                 getPaperProblemList(params).then(res => {
                     res = res.data;
@@ -233,11 +233,13 @@
                     //遍历设置多选题的已答的选项 变成数组[]
                      _.forEach(this.problemList, problem => {
 	                     	if (problem.questionTypeId === 2) {
+                                if(problem.myAnswer!=null){
 	                     		var array=problem.myAnswer.split(',');
 	                     		this.$set(problem, 'myAnswer', array);
+                                }
 	                    	}
                      });
-                     console.log('this.problemList',this.problemList);
+                     //console.log('this.problemList',this.problemList);
 
                 });
             },
@@ -407,12 +409,13 @@
 					percent=percent.toFixed(2);//保留2位小数
 					//console.log('percent',percent);
 					 var params = {
+                                examId: this.id,//考试id
 		                        paperId: this.paperId,    //试卷id
 		                        questionId: this.current,//this.problem.id,  //试题id 用序号代替
 		                        answer: this.problem.myAnswer, //学生答案
 		                        percent:percent
 		                    };
-
+                    //console.log('submitOneProblem',params);
                     submitOneProblem(params).then(res => {
                         if (res.code != 0) {
                             this.alertError(res.msg);

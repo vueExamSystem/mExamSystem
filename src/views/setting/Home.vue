@@ -52,24 +52,24 @@
 		},
 		computed:{
 			classInfo(){
-				var grade = this.grade;
-				if(this.grade){//年
-					grade = grade.substr(2,2);
-				}
-				return this.department ;
-				//return grade + '级' + this.department + this.class + '班';
+				// var grade = this.grade;
+				// if(this.grade){//年
+				// 	grade = grade.substr(2,2);
+				// }
+				// return this.department ;
+				return this.department+this.grade+ this.class;
 			}
 		},
 		methods:{
 			init(){
 				getUserInfo().then(res=>{
-					this.userId = res.data.userId;
-					this.studentNo = res.data.userAccount;
+					this.userId = res.data.studentNo;
+					this.studentNo = res.data.studentNo;
 					this.userName = res.data.userName;
 					this.school = res.data.school;
-					this.grade = res.data.grade;
-					this.department = res.data.department;
-					this.class = res.data.class;
+					this.grade = res.data.gradeName;
+					this.department = res.data.collegeName;
+					this.class = res.data.groupName;
 					this.listenLoading = false;
 				})
 			},

@@ -8,10 +8,10 @@ let base = 'http://121.43.164.178:8081/api/stu';//公网线上调试api
 export const requestLogin = params => { return axios.post(`${base}/login`, qs.stringify(params)).then(res => res.data); };
 
 //用户信息
-export const getUserInfo = params => { return instance.post(`${base}/user/info`, params).then(res => res.data); };
+export const getUserInfo = params => { return instance.post(`${base}/user/info`, qs.stringify(params)).then(res => res.data); };
 
 //修改用户密码
-export const updatePassword = params => { return instance.post(`${base}/user/editpwd`, params).then(res => res.data); };
+export const updatePassword = params => { return instance.post(`${base}/user/editpwd`, qs.stringify(params)).then(res => res.data); };
 
 //考试列表
 export const getExamList = params => { return instance.post(`${base}/exam/list`, qs.stringify(params)).then(res => res.data); };
@@ -26,46 +26,46 @@ export const submitOneProblem = params => { return instance.post(`${base}/exam/s
 export const submitExamPaper = params => { return instance.post(`${base}/exam/submit`, qs.stringify(params)).then(res => res.data); };
 
 //测验列表
-export const getTestList = params => { return instance.post(`${base}/test/list`, { params: params }).then(res => res.data); };
+export const getTestList = params => { return instance.post(`${base}/test/list`, qs.stringify(params)).then(res => res.data); };
 
 //获取测验题目列表
-export const getTestProblemList = params => { return instance.post(`${base}/test/problem/list`, params ); };
+export const getTestProblemList = params => { return instance.post(`${base}/test/problem/list`, qs.stringify(params) ); };
 
 //测验交卷
-export const submitTestPaper = params => { return instance.post(`${base}/test/submit`, { params: params }).then(res => res.data); };
+export const submitTestPaper = params => { return instance.post(`${base}/test/submit`, qs.stringify(params)).then(res => res.data); };
 
 //获取预习习题列表
-export const getExerciseList = params => { return instance.post(`${base}/preview/list/exercise`, { params: params }).then(res => res.data); };
+export const getExerciseList = params => { return instance.post(`${base}/preview/list/exercise`, qs.stringify(params)).then(res => res.data); };
 
 //获取预习资料列表
-export const getDocList = params => { return instance.post(`${base}/preview/list/doc`, { params: params }).then(res => res.data); };
+export const getDocList = params => { return instance.post(`${base}/preview/list/doc`,qs.stringify(params)).then(res => res.data); };
 
 //获取预习资料内容
-export const getDocContent = params => { return instance.post(`${base}/preview/doc`, { params: params }).then(res => res.data); };
+export const getDocContent = params => { return instance.post(`${base}/preview/doc`, qs.stringify(params)).then(res => res.data); };
 
 //获取用户所有课程
-export const getUserCourse = params => { return instance.post(`${base}/user/course`, { params: params }).then(res => res.data); };
+export const getUserCourse = params => { return instance.post(`${base}/user/course`, qs.stringify(params)).then(res => res.data); };
 
 //获取学期和课程信息
-export const getTermAndCourseList = params => { return instance.post(`${base}/score/courses`, { params: params }).then(res => res.data); };
+export const getTermAndCourseList = params => { return instance.post(`${base}/score/courses`, qs.stringify(params)).then(res => res.data); };
 
 //通过学期和课程获取成绩综合表
-export const getScoresByTermCourse = params => { return instance.post(`${base}/score/statistics`, { params: params }).then(res => res.data); };
+export const getScoresByTermCourse = params => { return instance.post(`${base}/score/statistics`, qs.stringify(params)).then(res => res.data); };
 
 //获取某学期的课程信息
-export const getCourseListByTerm = params => { return instance.post(`${base}/score/term/courses`, { params: params }).then(res => res.data); };
+export const getCourseListByTerm = params => { return instance.post(`${base}/score/term/courses`, qs.stringify(params)).then(res => res.data); };
 
 //获取考试成绩列表
-export const getExamScoreList = params => { return instance.post(`${base}/score/exam`, { params: params }).then(res => res.data); };
+export const getExamScoreList = params => { return instance.post(`${base}/score/exam`, qs.stringify(params)).then(res => res.data); };
 
 //获取测验成绩列表
-export const getTestScoreList = params => { return instance.post(`${base}/score/test`, { params: params }).then(res => res.data); };
+export const getTestScoreList = params => { return instance.post(`${base}/score/test`, qs.stringify(params)).then(res => res.data); };
 
 //获取练习成绩列表
-export const getExerciseScoreList = params => { return instance.post(`${base}/score/exercise`, { params: params }).then(res => res.data); };
+export const getExerciseScoreList = params => { return instance.post(`${base}/score/exercise`, qs.stringify(params)).then(res => res.data); };
 
 //获取答题结果详情列表
-export const getAnalysisList = params => { return instance.post(`${base}/score/analysis`, { params: params }).then(res => res.data); };
+export const getAnalysisList = params => { return instance.post(`${base}/score/analysis`, qs.stringify(params)).then(res => res.data); };
 
 //搜索列表
-export const searchList = params => { return instance.post(`${base}/search/list`, { params: params }).then(res => res.data); };
+export const searchList = params => { return instance.post(`${base}/search/list`, qs.stringify(params)).then(res => res.data); };
