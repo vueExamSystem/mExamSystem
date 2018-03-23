@@ -90,11 +90,10 @@
 			init(){
 				//获取学期课程数据
 				getTermAndCourseList().then(res => {
-					res=res.data;
-					this.termOptions = res.data.rows;
+					this.termOptions = res.data;
 					this.termValue = this.termOptions[0].id;
 					//this.avgScore = this.termOptions[0].avgScore;
-					this.ranking = this.termOptions[0].ranking;
+					//this.ranking = this.termOptions[0].ranking;
 					this.termLoading = false;
 					this.courseOptions = this.termOptions[0].courseList;
 					this.courseValue = this.courseOptions[0].id;
@@ -129,8 +128,8 @@
 				this.maskLoading = true;
 				this.courseLoading = true;
 				var curentTermInfo = _.filter(this.termOptions, {id: this.termValue})[0];
-				this.avgScore = curentTermInfo.avgScore;
-				this.ranking = curentTermInfo.ranking;
+				//this.avgScore = curentTermInfo.avgScore;
+				//this.ranking = curentTermInfo.ranking;
 				this.courseOptions = curentTermInfo.courseList;
 				this.courseValue = this.courseOptions[0].id;
 				this.courseLoading = false;
@@ -143,9 +142,10 @@
 			getScoresInfo(){//获取成绩综合信息
 				this.isChartDraw = false;
 				var params = {
-					term: this.termValue,
-					course: this.courseValue
+					termId: this.termValue,
+					courseId: this.courseValue
 				};
+				console.log('getScoresByTermCourse',params);
 				return new Promise((resolve, reject) => {
 					getScoresByTermCourse(params).then(res => {
 						if(res.code === 0){
@@ -154,6 +154,8 @@
 							this.min = data.min;
 							this.max = data.max;
 							this.avg = data.avg;
+							this.avgScore = data.avg;
+							this.ranking=data.rank;
 							this.echartData = data.statistics.map(score => {
 								return {
 									value: score.count,
@@ -179,8 +181,8 @@
 				});
 			},
 			showDetail(){//进入详情列表
-				window.localStorage.setItem('courseValue',this.courseValue);
 				window.localStorage.setItem('courseList',JSON.stringify(this.courseOptions));
+				window.localStorage.setItem('courseValue',this.courseValue);
 				this.$router.push({ path: `/score/list/${this.termValue}`});
 			}
 		},

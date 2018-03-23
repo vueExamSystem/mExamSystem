@@ -206,8 +206,9 @@
 			getList(){
 				//to do
 				var params = {
-					id: this.id
+					examId: this.id
 				};
+				console.log('getAnalysisList',params);
 				getAnalysisList(params).then( res =>{
 					this.problemList = res.data;
 					for(var i=0;i<this.problemList.length;i++){

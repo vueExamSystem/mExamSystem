@@ -50,7 +50,7 @@ export const getUserCourse = params => { return instance.post(`${base}/user/cour
 export const getTermAndCourseList = params => { return instance.post(`${base}/score/courses`, qs.stringify(params)).then(res => res.data); };
 
 //通过学期和课程获取成绩综合表
-export const getScoresByTermCourse = params => { return instance.post(`${base}/score/statistics`, qs.stringify(params)).then(res => res.data); };
+export const getScoresByTermCourse = params => { return instance.post(`${base}/score/stat`, qs.stringify(params)).then(res => res.data); };
 
 //获取某学期的课程信息
 export const getCourseListByTerm = params => { return instance.post(`${base}/score/term/courses`, qs.stringify(params)).then(res => res.data); };

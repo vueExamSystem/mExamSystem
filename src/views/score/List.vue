@@ -11,8 +11,8 @@
 					</button>
 				</div>
 				<div style="position:absolute;width:160px;left:50%;margin-left:-80px;">
-					<el-select @change="courseChange" class="el-form-select" v-model="courseValue" placeholder="课程">
-					    <el-option :loading="courseLoading" 
+					<el-select @change="courseChange" class="el-form-select"  v-model="courseValue" placeholder="课程">
+					    <el-option  :loading="courseLoading"
 					      v-for="item in courseOptions"
 					      :key="item.id"
 					      :label="item.name"
@@ -113,13 +113,13 @@
 				var courseValue = window.localStorage.getItem('courseValue');
 				var courseList = window.localStorage.getItem('courseList');
 				if(courseValue && courseList){
-					this.courseValue = courseValue;
 					this.courseOptions = JSON.parse(courseList);
+					this.courseValue = parseInt(courseValue);
 					this.courseLoading = false;
 				}else{
 					//获取学期课程数据
 					var params = {
-						term: this.term
+						termId: this.term
 					};
 					getCourseListByTerm(params).then(res => {
 						this.courseOptions = res.data;
@@ -133,11 +133,10 @@
 			},
 			getThoseList(){//获取分数列表数据
 				var params = {
-					term: this.term,//学期
-					course: this.courseValue//课程
+					termId: this.term,//学期
+					courseId: this.courseValue//课程
 				};
 				//获取考试成绩列表
-				this.examLoading = true;
 				getExamScoreList(params).then(res=>{
 					this.examScoreList = res.data;
 					this.examLoading = false;
@@ -158,6 +157,7 @@
 				});
 			},
 			courseChange(){//课程变更
+
 				this.getThoseList();
 			},
 			scoreLevel(ranking){//分数等级
