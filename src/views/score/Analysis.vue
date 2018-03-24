@@ -9,7 +9,7 @@
 					<div class="main">
 						<div class="main-title black clearfix">
 							<div class="pull-left">
-								<span>{{typeName}}</span>
+								<span>{{currentTypeName}}</span>
 								<span class="order">（<a class="larger">{{currentTypeNum}}</a>/{{currentTypeTotal}}）</span>
 								<el-button v-show="isLoaded && isSuccess == ''" size="mini" type="warning" round>未选做</el-button>
 								<el-button v-show="isLoaded && isSuccess == '1'" size="mini" type="success" round>正确</el-button>
@@ -21,21 +21,61 @@
 						</div>
 						<div class="content" style="min-height: 300px;" v-loading="!isLoaded">
 							<div class="el-question" v-if="isLoaded" :class="{'el-question-success':isSuccess === '1','el-question-fail':isSuccess === '0'}">
-								<div class="el-question-title">
-									<span class="current">{{currentTypeNum}}.</span>
-									<span class="text">{{problem.title}}</span>
+								<div class="el-question-title has-order">
+									<span class="el-question-index">{{current + 1}}.</span>
+									<div v-html="problem.content"></div>
 								</div>
-								<div class="el-question-options mask">
-									<template v-if="problem.type == 'check'">
-										<el-checkbox-group v-model="problem.myAnswer">
-											<el-checkbox v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-checkbox>
-										</el-checkbox-group>
-									</template>
-									<template v-else>
-										<el-radio-group v-model="problem.myAnswer">
-											<el-radio v-for="option in problem.options" :label="option.flag"><span class="order">{{option.flag}}</span>{{option.text}}</el-radio>
-										</el-radio-group>
-									</template>
+								<div v-if="problem.questionTypeId === 2" class="el-question-options mask">
+									<el-checkbox-group v-model="problem.myAnswer">
+										<el-checkbox class="radio-short" label="A">
+											<span class="order">A</span>
+											<div class="radio-short-div" v-html="problem.optiona"></div>
+										</el-checkbox>
+										<el-checkbox class="radio-short" label="B">
+											<span class="order">B</span>
+											<div class="radio-short-div" v-html="problem.optionb"></div>
+										</el-checkbox>
+										<el-checkbox class="radio-short" label="C">
+											<span class="order">C</span>
+											<div class="radio-short-div" v-html="problem.optionc"></div>
+										</el-checkbox>
+										<el-checkbox class="radio-short" label="D">
+											<span class="order">D</span>
+											<div class="radio-short-div" v-html="problem.optiond"></div>
+										</el-checkbox>
+									</el-checkbox-group>
+								</div>
+								<div v-else-if="problem.questionTypeId === 3" class="el-question-options mask">
+									<el-radio-group v-model="problem.myAnswer">
+										<el-radio class="radio-short" label="A">
+											<span class="order">A</span>
+											<div class="radio-short-div" v-html="problem.optiona"></div>
+										</el-radio>
+										<el-radio class="radio-short" label="B">
+											<span class="order">B</span>
+											<div class="radio-short-div" v-html="problem.optionb"></div>
+										</el-radio>
+									</el-radio-group>
+								</div>
+								<div v-else class="el-question-options mask">
+									<el-radio-group v-model="problem.myAnswer">
+										<el-radio class="radio-short" label="A">
+											<span class="order">A</span>
+											<div class="radio-short-div" v-html="problem.optiona"></div>
+										</el-radio>
+										<el-radio class="radio-short" label="B">
+											<span class="order">B</span>
+											<div class="radio-short-div" v-html="problem.optionb"></div>
+										</el-radio>
+										<el-radio v-if="problem.optionc" class="radio-short" label="C">
+											<span class="order">C</span>
+											<div class="radio-short-div" v-html="problem.optionc"></div>
+										</el-radio>
+										<el-radio v-if="problem.optiond" class="radio-short" label="D">
+											<span class="order">D</span>
+											<div class="radio-short-div" v-html="problem.optiond"></div>
+										</el-radio>
+									</el-radio-group>
 								</div>
 								<div class="el-question-info">
 									<div class="el-info">
@@ -66,7 +106,7 @@
 					</div>
 				</template>
 			</section>
-			<question-card :list="problemList" v-if="isLoaded" v-show="isCardVisible" @close="hideQuestionCard" @jump="jumpProblem"></question-card>
+			<question-card :list="cardList" v-if="isLoaded" v-show="isCardVisible" @close="hideQuestionCard" @jump="jumpProblem"></question-card>
 		</template>
 		<template v-else>
 			<my-feedback :options="feedbackOptions"></my-feedback>
@@ -78,197 +118,198 @@
 	import FeedBack from '../common/FeedBack'
 	import { getAnalysisList } from '../../api/api';
 	import Card from './Card.vue'
-	export default{
-		props:{
-			id:{
-				required: true
-			},
-			name:{
-				required: true
-			}
-		},
-		components:{
-			questionCard: Card,
-			myFeedback:FeedBack
-		},
-		data(){
-			return {
-				isValidLink: true,
-				fullPath: '',
-				current: 0,
-				problemList:[],
-				count:{
-					radio: 0, //单选
-					check: 0, //多选
-					judge: 0, //判断
-					option: 0 //选做
-				},
-				feedbackOptions:{
-					withinPath: '',
-					type: 'fail',
-					title: '链接无效',
-					msg: '返回到考试',
-					nextLink: '/exam',
-					buttonText: '返回到考试'
-				},
-				isLoaded: false,
-				isCardVisible: false
-			}
-		},
-		computed:{
-			problem(){
-				if(this.problemList[this.current]){
-					var currentP = this.problemList[this.current];
-					if(!currentP.myAnswer){
-						if(currentP.type == "check"){
-							this.$set(currentP,'myAnswer',[]);
-						}else{
-							this.$set(currentP,'myAnswer','');
-						}
-					}
-					return currentP;
-				}else{
-					return {};
-				}
-				
-			},
-			isSuccess(){
-				if(!this.problem.isNecessary && (this.problem.myAnswer == '' || (_.isArray(this.problem.myAnswer) && this.problem.myAnswer.length == 0))){//选做题未做的
-					return '';
-				}else{
-					if(this.problem.isSuccess){
-						return '1';
-					}else{
-						return '0';
-					}
-				}
-			},
-			typeName(){//当前类型
-				var name = '';
-				if(this.problem && typeof this.problem.isNecessary != 'undefined'){
-					if(this.problem.isNecessary === true){
-						switch(this.problem.type){
-							case 'radio': name = '单选题';break;
-							case 'check': name = '多选题';break;
-							case 'judge': name = '判断题';break;
-							default: break;
-						}
-					}else{
-						name = '选做题';
-					}
-				}else{
-					name = '题目';
-				}
-				return name;
-			},
-			currentTypeNum(){//当前类型题数
-				var num = 1;
-				if(this.problem.isNecessary === true){
-					switch(this.problem.type){
-						case 'radio': num = this.current + 1;break;
-						case 'check': num = this.current + 1 - this.count.radio;break;
-						case 'judge': num = this.current + 1 - (this.count.radio + this.count.check);break;
-						default: break;
-					}
-				}else{
-					num = this.current + 1 - (this.count.radio + this.count.check + this.count.judge);
-				}
-				return num;
-			},
-			currentTypeTotal(){//当前类型题数
-				var total = 0;
-				if(this.problem.isNecessary === true){
-					switch(this.problem.type){
-						case 'radio': total = this.count.radio;break;
-						case 'check': total = this.count.check;break;
-						case 'judge': total = this.count.judge;break;
-						default: break;
-					}
-				}else{
-					total = this.count.option;
-				}
-				return total;
-			}
-		},
-		methods:{
-			init(){
-				var item = JSON.parse(window.localStorage.getItem('scoreItem'));
-				this.fullPath = this.$route.fullPath;
-				this.feedbackOptions.withinPath = this.fullPath;
-				if(item && item.id && item.id == this.id){
-					this.isValidLink = true;
-					this.optionNeed = item.optionNeed;//选做题必答
-					this.getList();
-				}else{//无效链接
-					this.isValidLink = false;
-				}
-			},
-			getList(){
-				//to do
-				var params = {
-					examId: this.id
-				};
-				console.log('getAnalysisList',params);
-				getAnalysisList(params).then( res =>{
-					this.problemList = res.data;
-					for(var i=0;i<this.problemList.length;i++){
-						var item = this.problemList[i];
-						if(item.isNecessary === true){
-							switch(item.type){
-								case 'radio': ++this.count.radio;break;
-								case 'check': ++this.count.check;break;
-								case 'judge': ++this.count.judge;break;
-								default: break;
-							}
-						}else{
-							++this.count.option;
-						}
-					}
-					this.isLoaded = true;
-				});
-			},
-			showQuestionCard(){//显示题卡
-				this.isCardVisible = true;
-			},
-			hideQuestionCard(){//隐藏题卡
-				this.isCardVisible = false;
-			},
-			prevProblem(){//上一题
-				if(this.current<=0){
-					this.$toast({
-			          	message: '这已经是第一题。',
-			          	position: 'middle',
-			          	duration: 1000
-			        });
-				}else{
-					--this.current;
-				}
-			},
-			nextProblem(){//下一题
-				if(this.current < this.problemList.length-1){
-					++this.current;
-				}else{
-					this.$toast({
-			          	message: '这已经是最后一题。',
-			          	position: 'middle',
-			          	duration: 1000
-			        });
-				}
-			},
-			jumpProblem(index){//跳转到某一题
-				this.hideQuestionCard();
-				if(index>=0 && index<=this.problemList.length){
-					this.current = index;
-				}
-			},
-			back(){
-				this.$emit('close')
-			}
-		},
-		mounted(){
-			this.init();
-		}
-	}
+	export default {
+        props: {
+            id: {
+                required: true
+            },
+            name: {
+                required: true
+            }
+        },
+        components: {
+            questionCard: Card,
+            myFeedback: FeedBack
+        },
+        data() {
+            return {
+                isValidLink: true,
+                fullPath: '',
+                mustCount: 0,
+
+                current: 0,
+                currentType: 'radio',
+                currentTypeNum: 1,//当前类型题数
+                currentTypeName: '单选题',//当前类型
+                currentTypeTotal: 0,//当前类型题数
+                totalCount: 0,
+                stu_paper: {},//学生试卷
+                paperId: 0,//学生试卷id
+                radioList: [],
+                checkList: [],
+                judgeList: [],
+                optionalList: [],
+
+                problemList: [],//整合在一起的试题
+
+                cardList: {},//传给题卡的参数
+
+                feedbackOptions: {
+                    withinPath: '',
+                    type: 'fail',
+                    title: '链接无效',
+                    msg: '返回到考试',
+                    nextLink: '/exam',
+                    buttonText: '返回到考试'
+                },
+                isLoaded: false,
+                isCardVisible: false
+            }
+        },
+        computed: {
+            problem() {//当前试题
+                var currentP = {};
+                var radioCount = this.radioList.length;
+                var checkCount = this.checkList.length;
+                var judgeCount = this.judgeList.length;
+                var optionalCount = this.optionalList.length;
+                if (this.current < radioCount) {
+                    this.currentType = 'radio';
+                    this.currentTypeName = '单选题';
+                    this.currentTypeNum = this.current + 1;
+                    this.currentTypeTotal = radioCount;
+                    currentP = this.radioList[this.current];
+                } else if (this.current < radioCount + checkCount) {
+                    this.currentType = 'check';
+                    this.currentTypeName = '多选题';
+                    this.currentTypeNum = this.current - radioCount + 1;
+                    this.currentTypeTotal = checkCount;
+                    currentP = this.checkList[this.current - radioCount];
+                } else if (this.current < radioCount + checkCount + judgeCount) {
+                    this.currentType = 'judge';
+                    this.currentTypeName = '判断题';
+                    this.currentTypeNum = this.current - radioCount - checkCount + 1;
+                    this.currentTypeTotal = judgeCount;
+                    currentP = this.judgeList[this.current - radioCount - checkCount];
+                } else {
+                    this.currentType = 'optional';
+                    this.currentTypeName = '选做题';
+                    this.currentTypeNum = this.current - radioCount - checkCount - judgeCount + 1;
+                    this.currentTypeTotal = optionalCount;
+                    currentP = this.optionalList[this.current - radioCount - checkCount - judgeCount];
+                }
+                return currentP;
+            },
+            isSuccess() {
+                if (!this.problem || JSON.stringify(this.problem) == '{}') {
+                    return '-1';
+                } else {
+                    if (this.problem.answer == this.problem.myAnswer.toString()) {
+                        return '1';
+                    } else {
+                        if (this.problem.isOptional == '1' && this.problem.myAnswer.length == 0) {//选做题未做
+                            return '';
+                        } else {
+                            return '0';
+                        }
+                    }
+                }
+            }
+        },
+        methods: {
+            init() {
+                var item = JSON.parse(window.localStorage.getItem('scoreItem'));
+                this.fullPath = this.$route.fullPath;
+                this.feedbackOptions.withinPath = this.fullPath;
+                if (item && item.id && item.id == this.id) {
+                    this.isValidLink = true;
+                    this.optionNeed = item.optionNeed;//选做题必答
+                    this.getList();
+                } else {//无效链接
+                    this.isValidLink = false;
+                }
+            },
+            getList() {
+                //to do
+                var params = {
+                    examId: this.id
+                };
+                console.log('getAnalysisList', params);
+                getAnalysisList(params).then(res => {
+                    res = res.data;
+                    console.log('res', res);
+                    this.stu_paper = res.paper;
+                    this.paperId = res.paper.id;//设置试卷Id
+                    this.radioList = res.radio || [];
+                    this.checkList = res.check || [];
+                    this.judgeList = res.judge || [];
+                    this.optionalList = res.optional || [];
+                    this.mustCount = res.paper.mustCount;//选做题必答
+                    this.problemList = [].concat(this.radioList, this.checkList, this.judgeList, this.optionalList);
+                    this.totalCount = this.problemList.length;
+                    this.cardList = res;
+                    this.current = res.current || 0;//设置序号
+
+                    //遍历设置多选题的已答的选项 变成数组[]
+                    _.forEach(this.problemList, problem => {
+                        if (!problem.myAnswer) {
+                            if (problem.questionTypeId === 2) {
+                                this.$set(problem, 'myAnswer', []);
+                            } else {
+                                this.$set(problem, 'myAnswer', '');
+                            }
+                        } else {
+                            if (problem.questionTypeId === 2) {
+                                var array = problem.myAnswer.split(',');
+                                this.$set(problem, 'myAnswer', array);
+                            }
+                        }
+                    });
+                    this.isLoaded = true;
+                });
+            },
+            showQuestionCard() {//显示题卡
+                this.isCardVisible = true;
+            },
+            hideQuestionCard() {//隐藏题卡
+                this.isCardVisible = false;
+            },
+            prevProblem() {//上一题
+                if (this.current <= 0) {
+                    this.$toast({
+                        message: '这已经是第一题。',
+                        position: 'middle',
+                        duration: 1000
+                    });
+                } else {
+                    --this.current;
+                }
+            },
+            nextProblem() {//下一题
+                if (this.current < this.problemList.length - 1) {
+                    ++this.current;
+                } else {
+                    this.$toast({
+                        message: '这已经是最后一题。',
+                        position: 'middle',
+                        duration: 1000
+                    });
+                }
+            },
+            jumpProblem(index) {//跳转到某一题
+                this.hideQuestionCard();
+                if (index >= 0 && index <= this.problemList.length) {
+                    this.current = index;
+                }
+            },
+            back() {
+                this.$emit('close')
+            }
+        },
+        mounted() {
+            this.init();
+        }
+    }
 </script>
 <style lang="scss" scoped>
 	@import '~scss_vars';
