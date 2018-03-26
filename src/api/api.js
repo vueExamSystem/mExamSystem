@@ -25,14 +25,20 @@ export const submitOneProblem = params => { return instance.post(`${base}/exam/s
 //考试交卷
 export const submitExamPaper = params => { return instance.post(`${base}/exam/submit`, qs.stringify(params)).then(res => res.data); };
 
+
 //测验列表
-export const getTestList = params => { return instance.post(`${base}/test/list`, qs.stringify(params)).then(res => res.data); };
+export const getTestList = params => { return instance.post(`${base}/quiz/list`, qs.stringify(params)).then(res => res.data); };
 
 //获取测验题目列表
-export const getTestProblemList = params => { return instance.post(`${base}/test/problem/list`, qs.stringify(params) ); };
+export const getTestProblemList = params => { return instance.post(`${base}/quiz/problem/list`, qs.stringify(params)).then(res => res.data); };
+
+//提交某道题目学生的答案
+export const submitOneTestProblem = params => { return instance.post(`${base}/quiz/submit/one`, qs.stringify(params)).then(res => res.data); };
 
 //测验交卷
-export const submitTestPaper = params => { return instance.post(`${base}/test/submit`, qs.stringify(params)).then(res => res.data); };
+export const submitTestPaper = params => { return instance.post(`${base}/quiz/submit`, qs.stringify(params)).then(res => res.data); };
+
+
 
 //获取预习习题列表
 export const getExerciseList = params => { return instance.post(`${base}/preview/list/exercise`, qs.stringify(params)).then(res => res.data); };

@@ -12,29 +12,55 @@
 					</div>
 					<ul class="section-list">
 						<li v-for="(exam,index) in list">
-							<template v-if="isTodayExam(exam.beginTime) && isValid(exam.beginTime)">
-								<p>{{exam.name}}</p>
-								<div>
-									<div class="time-down">
-										<img src="/static/images/clock.png" width="15">
-										<span>倒计时：</span>
-										<span class="time">{{remainTime(exam.beginTime)}}</span>
+							<template v-if="isTodayExam(exam.beginTime)">
+								<template v-if="isValid(exam,exam.beginTime)">
+									<p>{{exam.name}}</p>
+									<div>
+										<div class="time-down">
+											<img src="/static/images/clock.png" width="15">
+											<span>倒计时：</span>
+											<span class="time">{{remainTime(exam.beginTime)}}</span>
+										</div>
+										<mt-button :disabled="!isShouldExam(exam.beginTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
 									</div>
-									<!-- 测试阶段只要是今天开始的都可以进去	
-								<mt-button v-show="isShouldExam(exam.beginTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入测验</mt-button>
-							     -->
-									<mt-button class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入测验</mt-button>
-								</div>
-								<div class="flag">
-									<span>今日</span>
-								</div>
+									<div class="flag">
+										<span>今日</span>
+									</div>
+								</template>
+								<template v-else-if="isValid(exam,exam.endTime)">
+									<p>{{exam.name}}</p>
+									<div>
+										<div class="time-down">
+											<img src="/static/images/clock.png" width="15">
+											<span>剩余时间：</span>
+											<span class="time">{{remainTime(exam.endTime)}}</span>
+										</div>
+										<mt-button class="pull-right" type="primary" @click="toExam(exam.id,index)">进入考试</mt-button>
+									</div>
+									<div class="flag">
+										<span>今日</span>
+									</div>
+								</template>
+								<template v-else>
+									<p>{{exam.name}}</p>
+									<div>
+										<div class="time-down">
+											<img src="/static/images/clock.png" width="15">
+											<span>{{timeRangeFormatter(exam)}}</span>
+										</div>
+										<span class="pull-right">考试结束</span>
+									</div>
+									<div class="flag">
+										<span>今日</span>
+									</div>
+								</template>
 							</template>
 							<template v-else>
 								<p>{{exam.name}}</p>
 								<div>
 									<div class="time-down">
 										<img src="/static/images/clock.png" width="15">
-										<span>{{exam.beginTime}}</span>
+										<span>{{timeRangeFormatter(exam)}}</span>
 									</div>
 								</div>
 								<div class="flag" v-if="isTodayExam(exam.beginTime)">
@@ -99,6 +125,12 @@
 				this.list.length = 0;
 				this.list.push(item);
 			},
+			timeRangeFormatter(row){//时间范围格式化
+                var st = row.beginTime;
+                var et = row.endTime;
+                var etStr = et.split(' ')[1];
+                return st + '-' + etStr;
+            },
 			/**string转换为date
 			*dateString:2018/01/09 18:00
 			*/
@@ -149,13 +181,23 @@
 				window.localStorage.setItem('testItem',JSON.stringify(item));
 				this.$router.push({ path: `/test/wait/${id}`});
 			},
-			isValid(dateString){//是否没有过期
+			toExam(id,index){//直接进入考试页面
+				this.clearClock();
+				var item = this.list[index];
+				window.localStorage.setItem('testItem',JSON.stringify(item));
+				this.$router.push({ path: `/test/testing/${id}`});
+			},
+			isValid(exam,dateString){//是否没有过期
 				var isInvalid = true;
-				var thisD = this.dateParse(dateString);
-				var totalSeconds = (thisD.getTime() - this.nowDate.getTime());
-				if(totalSeconds <= 0){
-					isInvalid = false;
-				}
+				if(exam.status==1){
+					isInvalid=false;
+				}else{
+					var thisD = this.dateParse(dateString);
+					var totalSeconds = (thisD.getTime() - this.nowDate.getTime());
+					if(totalSeconds <= 0){
+						isInvalid = false;
+						}
+					}
 				return isInvalid;
 			},
 			isTodayExam(dateString){//是否今天考
