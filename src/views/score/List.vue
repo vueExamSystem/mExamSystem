@@ -55,7 +55,7 @@
 							</ul>
 						</div>
 				    </el-tab-pane>
-				    <el-tab-pane label="练习" name="exerciseScore">
+				    <el-tab-pane label="预习" name="exerciseScore">
 						<div class="content" v-loading="exerciseLoading">
 							<div class="section-no-item" v-if="!exerciseLoading && exerciseScoreList.length == 0">
 								<img src="/static/images/nolist.png">

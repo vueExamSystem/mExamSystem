@@ -12,7 +12,7 @@
 					</div>
 					<ul class="section-list">
 						<li v-for="(exam,index) in list">
-							<template v-if="isTodayExam(exam.beginTime)">
+							<template v-if="isTodayExam(exam)">
 								<template v-if="isValid(exam,exam.beginTime)">
 									<p>{{exam.name}}</p>
 									<div>
@@ -46,7 +46,9 @@
 									<div>
 										<div class="time-down">
 											<img src="/static/images/clock.png" width="15">
-											<span>{{timeRangeFormatter(exam)}}</span>
+											<span>{{exam.beginTime}}</span>
+											<pre></pre>
+											<span>{{exam.endTime}}</span>
 										</div>
 										<span class="pull-right">考试结束</span>
 									</div>
@@ -60,10 +62,13 @@
 								<div>
 									<div class="time-down">
 										<img src="/static/images/clock.png" width="15">
-										<span>{{timeRangeFormatter(exam)}}</span>
+										<span>{{exam.beginTime}}</span>
+										<pre></pre>
+										<span>{{exam.endTime}}</span>
 									</div>
+									<span class="pull-right">考试结束</span>
 								</div>
-								<div class="flag" v-if="isTodayExam(exam.beginTime)">
+								<div class="flag" v-if="isToday(exam.beginTime)">
 									<span>今日</span>
 								</div>
 							</template>
@@ -128,8 +133,7 @@
 			timeRangeFormatter(row){//时间范围格式化
                 var st = row.beginTime;
                 var et = row.endTime;
-                var etStr = et.split(' ')[1];
-                return st + '-' + etStr;
+                return st + '-' + et;
             },
 			/**string转换为date
 			*dateString:2018/01/09 18:00
@@ -200,13 +204,28 @@
 					}
 				return isInvalid;
 			},
-			isTodayExam(dateString){//是否今天考
+			isToday(dateString){//是否今天考
 				var isToday = 0;
 				var current = this.getDateObj(this.dateParse(dateString));
 				//只初始运行
 				var today = this.getDateObj(new Date());
 				if(today.year === current.year && today.month === current.month && today.day === current.day){
 					isToday = 1;
+				}
+				return isToday;
+			},
+			isTodayExam(exam){//是否今天考
+				var dateString=exam.beginTime;
+				var isToday = 0;
+				if(exam.status==0){
+					isToday=1;
+				}else{
+					var current = this.getDateObj(this.dateParse(dateString));
+					//只初始运行
+					var today = this.getDateObj(new Date());
+					if(today.year === current.year && today.month === current.month && today.day === current.day){
+						isToday = 1;
+					}
 				}
 				return isToday;
 			},

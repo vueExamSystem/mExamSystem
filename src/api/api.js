@@ -39,6 +39,19 @@ export const submitOneTestProblem = params => { return instance.post(`${base}/qu
 export const submitTestPaper = params => { return instance.post(`${base}/quiz/submit`, qs.stringify(params)).then(res => res.data); };
 
 
+//预习列表
+export const getTrainList = params => { return instance.post(`${base}/train/list`, qs.stringify(params)).then(res => res.data); };
+
+//获取预习题目列表
+export const getTrainProblemList = params => { return instance.post(`${base}/train/problem/list`, qs.stringify(params)).then(res => res.data); };
+
+//提交某道题目学生的答案
+export const submitOneTrainProblem = params => { return instance.post(`${base}/train/submit/one`, qs.stringify(params)).then(res => res.data); };
+
+//预习交卷
+export const submitTrainPaper = params => { return instance.post(`${base}/train/submit`, qs.stringify(params)).then(res => res.data); };
+
+
 
 //获取预习习题列表
 export const getExerciseList = params => { return instance.post(`${base}/preview/list/exercise`, qs.stringify(params)).then(res => res.data); };

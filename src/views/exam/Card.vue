@@ -52,10 +52,10 @@
         methods: {
             arrange() {
                 this.mustCount = this.list.paper.mustCount;
-                this.radioList = this.list.radio;
-                this.checkList = this.list.check;
-                this.judgeList = this.list.judge;
-                this.optionalList = this.list.optional;
+                this.radioList = this.list.radio!=null?this.list.radio:[];
+                this.checkList = this.list.check!=null?this.list.check:[];
+                this.judgeList = this.list.judge!=null?this.list.judge:[];
+                this.optionalList = this.list.optional!=null?this.list.optional:[];
             },
             isAnswerred(problem) {//试题是否已回答
                 var isAnswerred = false;
