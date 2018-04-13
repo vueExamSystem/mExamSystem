@@ -5,7 +5,7 @@
       <mt-field placeholder="请输入账号" v-model="loginForm.account" disableClear>
         <i class="iconfont icon-user-larger"></i>
       </mt-field>
-      <mt-field type="password" placeholder="请输入密码" v-model="loginForm.checkPass" disableClear>
+      <mt-field type="password" placeholder="请输入密码" v-model="loginForm.checkPass" disableClear @keyup.enter.native="handleSubmit">
         <i class="iconfont icon-lock-larger"></i>
       </mt-field>
       <mt-button type="primary" @click.native.prevent="handleSubmit"><i v-show="logining" class="fa fa-spinner fa-pulse fa-fw"></i>
