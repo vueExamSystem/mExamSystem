@@ -37,7 +37,7 @@
 										</div>
 										<mt-button class="pull-right" type="primary" @click="toExam(exam.id,index)">进入考试</mt-button>
 									</div>
-									<div class="flag">
+									<div class="flag" v-if="isToday(exam.beginTime)">
 										<span>今日</span>
 									</div>
 								</template>

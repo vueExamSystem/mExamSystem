@@ -52,7 +52,7 @@
 										</div>
 										<span class="pull-right">考试结束</span>
 									</div>
-									<div class="flag">
+									<div class="flag" v-if="isToday(exam.beginTime)">
 										<span>今日</span>
 									</div>
 								</template>

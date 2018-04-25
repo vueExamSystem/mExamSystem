@@ -52,7 +52,7 @@
 										</div>
 										<span class="pull-right">考试结束</span>
 									</div>
-									<div class="flag">
+									<div class="flag" v-if="isToday(exam.beginTime)">
 										<span>今日</span>
 									</div>
 								</template>
@@ -140,6 +140,7 @@
 			*dateString:2018/01/09 18:00
 			*/
 			dateParse(dateString){
+				//dateString=dateString.replace(/\-/g, "/"); 
 				return new Date(dateString);
 			},
 			remainTime(dateString){//倒计时
