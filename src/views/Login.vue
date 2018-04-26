@@ -72,7 +72,7 @@
 <style lang="scss">
   .login-page{
     padding-top: 120px;
-    height: 100%;
+    min-height: 100%;
     background-image: linear-gradient(-180deg, #C6ADD1 0%, #9DAFD0 50%, #ABA9CE 100%);
     .login-container {
       width: 300px;
