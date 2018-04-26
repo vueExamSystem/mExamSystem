@@ -5,9 +5,8 @@ import router from '../router/routes'
 //设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-axios.defaults.baseURL='http://localhost:8082/';//dev
-//axios.defaults.baseURL='http://127.0.0.1:9090/';
-// axios.defaults.baseURL='http://121.43.164.178:9090/';//线上
+// axios.defaults.baseURL='http://localhost:8082/';//dev
+axios.defaults.baseURL='http://121.43.164.178:9090/';//线上
 //创建一个axios实例
 const instance = axios.create();
 

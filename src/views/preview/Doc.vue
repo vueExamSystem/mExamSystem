@@ -1,15 +1,16 @@
 <template>
 	<section>
-		<mt-header :title="name" fixed>
+		<mt-header :title="docRow.name" fixed>
 		    <mt-button slot="left" icon="back" @click="back">返回</mt-button>
 		</mt-header>
 		<div class="main" style="margin-bottom:0;">
-			<div class="content" v-loading="listenLoading">
-				<div class="img-list">
+			<div class="content">
+				<!-- <div class="img-list">
 					<img v-for="img in imgList" :src="img" width="100%">
-				</div>
-				<div class="doc-content">{{content}}</div>
-				<video loop="loop" poster="/static/images/logo.png" width="100%" height="200" v-if="videoSrc" :src="videoSrc" controls="controls"></video>
+				</div> -->
+				<div class="doc-content" v-html="docRow.content"></div>
+				<video loop="loop" poster="/static/images/logo.png" width="100%" height="200" 
+				v-if="docRow.videoUrl" :src="docRow.videoUrl" controls="controls"></video>
 			</div>
 		</div>
 	</section>
@@ -21,13 +22,13 @@
 			id:{
 				required: true
 			},
-			name:{
+			docRow:{
 				required: true
 			}
 		},
 		data(){
 			return {
-				listenLoading: true,
+				listenLoading: false,
 				imgList:[],
 				content: '',
 				videoSrc: ''
@@ -52,7 +53,7 @@
 
 		},
 		mounted(){
-			this.init();
+			//this.init();
 		}
 	}
 </script>

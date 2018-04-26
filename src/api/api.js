@@ -53,10 +53,10 @@ export const submitTrainPaper = params => { return instance.post(`${base}/train/
 
 
 //获取预习习题列表
-export const getExerciseList = params => { return instance.post(`${base}/preview/list/exercise`, qs.stringify(params)).then(res => res.data); };
+//export const getExerciseList = params => { return instance.post(`${base}/preview/list/exercise`, qs.stringify(params)).then(res => res.data); };
 
 //获取预习资料列表
-export const getDocList = params => { return instance.post(`${base}/preview/list/doc`,qs.stringify(params)).then(res => res.data); };
+export const getDocList = params => { return instance.post(`${base}/train/list/doc`,qs.stringify(params)).then(res => res.data); };
 
 //获取预习资料内容
 export const getDocContent = params => { return instance.post(`${base}/preview/doc`, qs.stringify(params)).then(res => res.data); };

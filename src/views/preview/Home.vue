@@ -1,102 +1,160 @@
 <template>
 	<section>
-		<div v-show="!isSearchVisible">
-			<mt-header title="预习习题" fixed>
-				<mt-button @click="showSearch" icon="search" slot="left"></mt-button>
-			</mt-header>
-			<div class="main">
-				<p class="main-title">待完成练习</p>
-				<div class="content" v-loading="listenLoading">
-					<div class="section-no-item" v-if="!listenLoading && list.length == 0">
-						<img src="/static/images/nolist.png">
+		<div v-show="!isFilterVisible && !isDocVisible">
+			<el-tabs type="card" v-model="activeName">
+				<el-tab-pane label="预习资料" name="previewDocs">
+			    	<div class="main">
+						<div class="main-title clearfix">
+							<div class="pull-left">
+								<span>预习资料</span>
+							</div>
+							<div class="pull-right">
+								<mt-button type="primary" @click="showFilter" class="plane" :disabled="!isInitDocList">筛选</mt-button>
+							</div>
+						</div>
+						<div class="content" v-loading="docListenLoading">
+							<div class="section-no-item" v-if="!docListenLoading && docList.length == 0">
+								<img src="/static/images/nolist.png">
+							</div>
+							<ul class="section-list">
+								<li v-for="(doc,index) in docList">
+									<p>{{doc.name}}</p>
+									<div>
+										<div class="time-down">
+											<i class="iconfont icon-kecheng-larger"></i>
+											<span class="time">{{doc.courseName}}</span>
+										</div>
+										<mt-button class="pull-right" type="primary" @click="showDoc(doc)">我要预习</mt-button>
+									</div>
+								</li>
+							</ul>
+						</div>
 					</div>
-					<ul class="section-list">
-						<li v-for="(exam,index) in list">
-							<template v-if="isTodayExam(exam)">
-								<template v-if="isValid(exam,exam.beginTime)">
-									<p>{{exam.name}}</p>
-									<div>
-										<div class="time-down">
-											<img src="/static/images/clock.png" width="15">
-											<span>倒计时：</span>
-											<span class="time">{{remainTime(exam.beginTime)}}</span>
-										</div>
-										<mt-button :disabled="!isShouldExam(exam.beginTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
-									</div>
-									<div class="flag">
-										<span>今日</span>
-									</div>
-								</template>
-								<template v-else-if="isValid(exam,exam.endTime)">
-									<p>{{exam.name}}</p>
-									<div>
-										<div class="time-down">
-											<img src="/static/images/clock.png" width="15">
-											<span>剩余时间：</span>
-											<span class="time">{{remainTime(exam.endTime)}}</span>
-										</div>
-										<mt-button class="pull-right" type="primary" @click="toExam(exam.id,index)">进入考试</mt-button>
-									</div>
-									<div class="flag">
-										<span>今日</span>
-									</div>
-								</template>
-								<template v-else>
-									<p>{{exam.name}}</p>
-									<div>
-										<div class="time-down">
-											<img src="/static/images/clock.png" width="15">
-											<span>{{exam.beginTime}}</span>
-											<pre></pre>
-											<span>{{exam.endTime}}</span>
-										</div>
-										<span class="pull-right">考试结束</span>
-									</div>
-									<div class="flag" v-if="isToday(exam.beginTime)">
-										<span>今日</span>
-									</div>
-								</template>
-							</template>
-							<template v-else>
-								<p>{{exam.name}}</p>
-								<div>
-									<div class="time-down">
-										<img src="/static/images/clock.png" width="15">
-									 	<span>{{exam.beginTime}}</span>
-										<pre></pre>
-										<span>{{exam.endTime}}</span>
-									</div>
-									<span class="pull-right">考试结束</span>
+			    </el-tab-pane>
+				<div v-show="!isSearchVisible">
+				    <el-tab-pane label="预习习题" name="previewExercises">
+						<div class="main">
+							<div class="main-title clearfix">
+								<div class="pull-left">
+									<span>待完成练习</span>
 								</div>
-								<div class="flag" v-if="isToday(exam.beginTime)">
-									<span>今日</span>
+								<div class="pull-right">
+									<mt-button type="primary" class="plane" @click="showSearch" icon="search" slot="left"></mt-button>
 								</div>
-							</template>
-						</li>
-					</ul>
+							</div>
+							<div class="content" v-loading="listenLoading">
+								<div class="section-no-item" v-if="!listenLoading && list.length == 0">
+									<img src="/static/images/nolist.png">
+								</div>
+								<ul class="section-list">
+									<li v-for="(exam,index) in list">
+										<template v-if="isTodayExam(exam)">
+											<template v-if="isValid(exam,exam.beginTime)">
+												<p>{{exam.name}}</p>
+												<div>
+													<div class="time-down">
+														<img src="/static/images/clock.png" width="15">
+														<span>倒计时：</span>
+														<span class="time">{{remainTime(exam.beginTime)}}</span>
+													</div>
+													<mt-button :disabled="!isShouldExam(exam.beginTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
+												</div>
+												<div class="flag">
+													<span>今日</span>
+												</div>
+											</template>
+											<template v-else-if="isValid(exam,exam.endTime)">
+												<p>{{exam.name}}</p>
+												<div>
+													<div class="time-down">
+														<img src="/static/images/clock.png" width="15">
+														<span>剩余时间：</span>
+														<span class="time">{{remainTime(exam.endTime)}}</span>
+													</div>
+													<mt-button class="pull-right" type="primary" @click="toExam(exam.id,index)">进入考试</mt-button>
+												</div>
+												<div class="flag">
+													<span>今日</span>
+												</div>
+											</template>
+											<template v-else>
+												<p>{{exam.name}}</p>
+												<div>
+													<div class="time-down">
+														<img src="/static/images/clock.png" width="15">
+														<span>{{exam.beginTime}}</span>
+														<pre></pre>
+														<span>{{exam.endTime}}</span>
+													</div>
+													<span class="pull-right">考试结束</span>
+												</div>
+												<div class="flag" v-if="isToday(exam.beginTime)">
+													<span>今日</span>
+												</div>
+											</template>
+										</template>
+										<template v-else>
+											<p>{{exam.name}}</p>
+											<div>
+												<div class="time-down">
+													<img src="/static/images/clock.png" width="15">
+												 	<span>{{exam.beginTime}}</span>
+													<pre></pre>
+													<span>{{exam.endTime}}</span>
+												</div>
+												<span class="pull-right">考试结束</span>
+											</div>
+											<div class="flag" v-if="isToday(exam.beginTime)">
+												<span>今日</span>
+											</div>
+										</template>
+									</li>
+								</ul>
+							</div>
+						</div>
+				    </el-tab-pane>
 				</div>
-			</div>
-		</div>
- 		<div v-if="isSearchVisible">
+		    </el-tabs>
+	    </div>
+	    <div v-show="isFilterVisible">
+	    	<tab-filter @close="hideFilter" @confirm="filterCallback"></tab-filter>
+	    </div>
+	    <div v-if="isSearchVisible">
  			<page-search :value="searchkey" about="test" @search="searchCallback" @select="selectCallback" @loadall="loadall" @close="hideSearch"></page-search>
  		</div>
+	    <div v-if="isDocVisible">
+	    	<doc-content :id="docId" :docRow="docRow" @close="hideDoc"></doc-content>
+	    </div>
 	</section>
 </template>
 <script>
-	import { getTrainList } from '../../api/api'
+	import { getTrainList, getDocList } from '../../api/api'
+	import TabFilter from '../common/TabFilter.vue'
+	import Doc from './Doc.vue'
 	import Search from '../common/Search.vue'
 	export default {
-		components: {
+		components:{
+			tabFilter: TabFilter,
+			docContent: Doc,
 			pageSearch:Search
 		},
 		data(){
 			return {
+				activeName: 'previewExercises',
 				fullPath: '',
 				nowDate: new Date(),
 				timeClock: '',
-				list:[],
-				searchkey: '',
+				list:[],//练习列表
+				docList:[],//资料列表
+				docFilter:{},//资料过滤
+				isFilterVisible: false,
 				listenLoading: true,
+				docListenLoading: true,
+				isInitDocList: false,//是否初始化资料列表
+				docId: '',//预习资料id
+				// docName: '',//预习资料名称
+				docRow:'',
+				isDocVisible: false, //预习资料可见性
 				isSearchVisible: false
 			}
 		},
@@ -108,10 +166,26 @@
 		methods:{
 			init(){
 				this.fullPath = this.$route.fullPath;
+				this.getListOfExercise();//获取预习习题列表
+				//注意：获取预习资料列表需要先等待筛选条件后再自动执行
+			},
+			getListOfExercise(){//获取预习习题列表
+				this.listenLoading = true;
+				this.list = [];
 				getTrainList().then(res => {
 					this.list = res.data.rows;
 					this.timeClockRun();
 					this.listenLoading = false;
+				});
+			},
+			getListOfDoc(){//获取预习资料列表
+				this.docListenLoading = true;
+				this.docList = [];
+				getDocList(this.docFilter).then(res => {
+					this.docList = res.data.rows;
+					console.log('this.docList',this.docList);
+					this.docListenLoading = false;
+					this.isInitDocList = true;
 				});
 			},
 			loadall(){//重新加载全部
@@ -130,12 +204,32 @@
 				this.list.length = 0;
 				this.list.push(item);
 			},
-			timeRangeFormatter(row){//时间范围格式化
-                var st = row.beginTime;
-                var et = row.endTime;
-                //var etStr = et.split(' ')[1];
-                return st + '\n' + et;
-            },
+			filterCallback(filter){//过滤回调
+				this.docFilter = filter;
+				this.hideFilter();
+				this.getListOfDoc();//获取预习资料列表
+			},
+	        showFilter(){
+	        	this.isFilterVisible = true;
+	        	this.$store.dispatch('HideNav');
+	        },
+	        hideFilter(){
+	        	this.isFilterVisible = false;
+				this.$store.dispatch('ShowNav');
+	        },
+	        showDoc(row){
+	        	this.docId = row.id;
+	        	// this.docName = row.name;
+	        	this.docRow=row;
+	        	this.isDocVisible = true;
+				this.$store.dispatch('HideNav');
+	        },
+	        hideDoc(){
+	        	this.docId='';
+	        	this.docRow='';
+	        	this.isDocVisible = false;
+				this.$store.dispatch('ShowNav');
+	        },
 			/**string转换为date
 			*dateString:2018/01/09 18:00
 			*/
@@ -170,15 +264,14 @@
 				}
 				return hourStr + ':' + minuteStr + ':' + secondStr;
 			},
-			isShouldExam(dateString){//是否可以进入考试
-				var isShouldExam = false;
+			isTimeOut(dateString){//是否过时
+				var isTimeOut = false;
 				var thisD = this.dateParse(dateString);
-				var crisis = 1000 * 60 * 5 + 1000;//5分钟
-				var totalSeconds = (thisD.getTime() - this.nowDate.getTime());
-				if(totalSeconds <= crisis){
-					isShouldExam = true;
+				var totalSeconds = thisD.getTime() - this.nowDate.getTime();
+				if(totalSeconds <= 0){//现在时间超过截止时间
+					isTimeOut = true;
 				}
-				return isShouldExam;
+				return isTimeOut;
 			},
 			toWaitExam(id,index){//进入考试页面
 				this.clearClock();
@@ -253,15 +346,6 @@
  					string:year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second
  				};
  			},
- 			showSearch(){//展示搜索页面
- 				this.searchkey = '';
- 				this.isSearchVisible = true;
-	        	this.$store.dispatch('HideNav');
- 			},
- 			hideSearch(){//隐藏搜索页面
- 				this.isSearchVisible = false;
-				this.$store.dispatch('ShowNav');
- 			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{
 					if(this.$route.fullPath != this.fullPath){
@@ -276,7 +360,16 @@
 				if(this.timeClock){
 					clearInterval(this.timeClock);
 				}
-			}
+			},
+ 			showSearch(){//展示搜索页面
+ 				this.searchkey = '';
+ 				this.isSearchVisible = true;
+	        	this.$store.dispatch('HideNav');
+ 			},
+ 			hideSearch(){//隐藏搜索页面
+ 				this.isSearchVisible = false;
+				this.$store.dispatch('ShowNav');
+ 			},
 		},
 		mounted() {
 			this.init();
@@ -285,5 +378,12 @@
 </script>
 <style lang="scss" scoped>
 	@import '~scss_vars';
-	
+	.main{
+		margin-top: 0;
+		.main-title{
+			.plane{
+				margin-right: -10px;
+			}
+		}
+	}
 </style>
