@@ -10,36 +10,53 @@
 					<div class="section-no-item" v-if="!listenLoading && list.length == 0">
 						<img src="/static/images/nolist.png">
 					</div>
-					<ul class="section-list">
-						<li v-for="(exam,index) in list">
-							<template v-if="isTodayExam(exam)">
-								<template v-if="isValid(exam,exam.beginTime)">
-									<p>{{exam.name}}</p>
-									<div>
-										<div class="time-down">
-											<img src="/static/images/clock.png" width="15">
-											<span>倒计时：</span>
-											<span class="time">{{remainTime(exam.beginTime)}}</span>
+					<mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+						<ul class="section-list">
+							<li v-for="(exam,index) in list">
+								<template v-if="isTodayExam(exam)">
+									<template v-if="isValid(exam,exam.beginTime)">
+										<p>{{exam.name}}</p>
+										<div>
+											<div class="time-down">
+												<img src="/static/images/clock.png" width="15">
+												<span>倒计时：</span>
+												<span class="time">{{remainTime(exam.beginTime)}}</span>
+											</div>
+											<mt-button :disabled="!isShouldExam(exam.beginTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
 										</div>
-										<mt-button :disabled="!isShouldExam(exam.beginTime)" class="pull-right" type="primary" @click="toWaitExam(exam.id,index)">进入考试</mt-button>
-									</div>
-									<div class="flag">
-										<span>今日</span>
-									</div>
-								</template>
-								<template v-else-if="isValid(exam,exam.endTime)">
-									<p>{{exam.name}}</p>
-									<div>
-										<div class="time-down">
-											<img src="/static/images/clock.png" width="15">
-											<span>剩余时间：</span>
-											<span class="time">{{remainTime(exam.endTime)}}</span>
+										<div class="flag">
+											<span>今日</span>
 										</div>
-										<mt-button class="pull-right" type="primary" @click="toExam(exam.id,index)">进入考试</mt-button>
-									</div>
-									<div class="flag">
-										<span>今日</span>
-									</div>
+									</template>
+									<template v-else-if="isValid(exam,exam.endTime)">
+										<p>{{exam.name}}</p>
+										<div>
+											<div class="time-down">
+												<img src="/static/images/clock.png" width="15">
+												<span>剩余时间：</span>
+												<span class="time">{{remainTime(exam.endTime)}}</span>
+											</div>
+											<mt-button class="pull-right" type="primary" @click="toExam(exam.id,index)">进入考试</mt-button>
+										</div>
+										<div class="flag">
+											<span>今日</span>
+										</div>
+									</template>
+									<template v-else>
+										<p>{{exam.name}}</p>
+										<div>
+											<div class="time-down">
+												<img src="/static/images/clock.png" width="15">
+												<span>{{exam.beginTime}}</span>
+												<pre></pre>
+												<span>{{exam.endTime}}</span>
+											</div>
+											<span class="pull-right">考试结束</span>
+										</div>
+										<div class="flag" v-if="isToday(exam.beginTime)">
+											<span>今日</span>
+										</div>
+									</template>
 								</template>
 								<template v-else>
 									<p>{{exam.name}}</p>
@@ -56,24 +73,9 @@
 										<span>今日</span>
 									</div>
 								</template>
-							</template>
-							<template v-else>
-								<p>{{exam.name}}</p>
-								<div>
-									<div class="time-down">
-										<img src="/static/images/clock.png" width="15">
-										<span>{{exam.beginTime}}</span>
-										<pre></pre>
-										<span>{{exam.endTime}}</span>
-									</div>
-									<span class="pull-right">考试结束</span>
-								</div>
-								<div class="flag" v-if="isToday(exam.beginTime)">
-									<span>今日</span>
-								</div>
-							</template>
-						</li>
-					</ul>
+							</li>
+						</ul>
+					</mt-loadmore>
 				</div>
 			</div>
 		</div>
@@ -96,6 +98,8 @@
 				timeClock: '',
 				list:[],
 				totalCount:0,
+                pageNo: 1,
+                pageSize:10,
 				searchkey: '',
 				listenLoading: true,
 				isSearchVisible: false
@@ -109,13 +113,26 @@
 		methods:{
 			init(){
 				this.fullPath = this.$route.fullPath;
-				getExamList().then(res => {
-					this.list = res.data.rows;
-					this.totalCount=res.data.totalCount;
-					this.timeClockRun();
-					this.listenLoading = false;
-				});
-			},
+				this.getExamListByPageNo();
+                this.timeClockRun();
+            },
+            getExamListByPageNo(){//获取单页数据
+                var params = {
+                    pageNo: this.pageNo,
+                    pageSize: this.pageSize
+                };
+                getExamList(params).then(res => {
+                    this.list = this.list.concat(res.data.rows);
+                    this.totalCount=res.data.totalCount;
+                    this.listenLoading = false;
+
+                    this.allLoaded = (this.list.length == this.totalCount);
+                    this.$refs.loadmore.onBottomLoaded();
+                });
+            },
+            loadBottom(){//底部加载更多数据
+                this.getExamListByPageNo();
+            },
 			loadall(){//重新加载全部
 				this.hideSearch();
 				this.list = [];
