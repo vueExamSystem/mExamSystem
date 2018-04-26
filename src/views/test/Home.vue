@@ -95,6 +95,7 @@
 				nowDate: new Date(),
 				timeClock: '',
 				list:[],
+				totalCount:0,
 				searchkey: '',
 				listenLoading: true,
 				isSearchVisible: false
@@ -110,6 +111,7 @@
 				this.fullPath = this.$route.fullPath;
 				getTestList().then(res => {
 					this.list = res.data.rows;
+					this.totalCount=res.data.totalCount;
 					this.timeClockRun();
 					this.listenLoading = false;
 				});
@@ -123,7 +125,8 @@
 			},
 			searchCallback(results){//搜索区，点击搜索后的回调
 				this.hideSearch();
-				this.list = results;
+				this.list = results.rows;
+				this.totalCount=results.totalCount;
 			},
 			selectCallback(item){//搜索区，单条点击后的回调
 				this.hideSearch();

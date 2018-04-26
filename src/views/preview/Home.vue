@@ -120,7 +120,7 @@
 	    	<tab-filter @close="hideFilter" @confirm="filterCallback"></tab-filter>
 	    </div>
 	    <div v-if="isSearchVisible">
- 			<page-search :value="searchkey" about="test" @search="searchCallback" @select="selectCallback" @loadall="loadall" @close="hideSearch"></page-search>
+ 			<page-search :value="searchkey" about="train" @search="searchCallback" @select="selectCallback" @loadall="loadall" @close="hideSearch"></page-search>
  		</div>
 	    <div v-if="isDocVisible">
 	    	<doc-content :id="docId" :docRow="docRow" @close="hideDoc"></doc-content>
@@ -145,6 +145,7 @@
 				nowDate: new Date(),
 				timeClock: '',
 				list:[],//练习列表
+				totalCount:0,
 				docList:[],//资料列表
 				docFilter:{},//资料过滤
 				isFilterVisible: false,
@@ -174,6 +175,7 @@
 				this.list = [];
 				getTrainList().then(res => {
 					this.list = res.data.rows;
+					this.totalCount=res.data.totalCount;
 					this.timeClockRun();
 					this.listenLoading = false;
 				});
@@ -197,7 +199,8 @@
 			},
 			searchCallback(results){//搜索区，点击搜索后的回调
 				this.hideSearch();
-				this.list = results;
+				this.list = results.rows;
+				this.totalCount=results.totalCount;
 			},
 			selectCallback(item){//搜索区，单条点击后的回调
 				this.hideSearch();

@@ -13,11 +13,11 @@
 		</header>
 		<div class="main" style="min-height: 200px;" v-loading="listenLoading">
 			<ul class="list-cell-view" v-if="!!results">
-				<template v-if="searchkey && results.length == 0">
+				<template v-if="searchkey && results.rows.length == 0">
 					<li class="no-data"><span>没有搜到相关数据</span></li>
 				</template>
 				<template v-else>
-					<li v-for="item in results" @click="handleSelect(item)">
+					<li v-for="item in results.rows" @click="handleSelect(item)">
 						<a>{{item.name}}</a>
 					</li>
 				</template>
@@ -54,8 +54,8 @@
 					if(this.searchkey){
 						this.listenLoading = true;
 						var params = {
-							searchkey: this.searchkey,
-							type: this.about,
+							searchKey: this.searchkey,
+							searchType: this.about,
 						};
 						searchList(params).then((res)=>{
 							if(!this.searchkey){
@@ -64,6 +64,9 @@
 								this.results = res.data;
 							}
 							this.listenLoading = false;
+							if(this.results.length>0){
+								this.handleIconSearch();
+							}
 						});
 					}else{
 						this.results = null;
