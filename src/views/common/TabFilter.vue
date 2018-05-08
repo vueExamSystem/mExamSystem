@@ -33,7 +33,7 @@
 		data(){
 			//数据后台可相应更改
 			return {
-				timeValue: "week",//发布时间
+				timeValue: "month",//发布时间
 				timeOption: [
 					{
 					    label: "近一周",

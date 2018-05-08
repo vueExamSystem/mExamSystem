@@ -16,17 +16,33 @@
 
 <script>
   import { requestLogin } from '../api/api';
+  import Fingerprint2 from 'fingerprintjs2';
   export default {
     data() {
       return {
         loginForm: {
-          account: '080510101',
-          checkPass: '123456'
+          account: '',
+          checkPass: ''
         },
+        deviceCode:'',
         logining: false
       };
     },
     methods: {
+       initDeviceCode(){
+            // var res=new fingerprintjs().get();
+            //  console.log(res);
+            var _this_=this;
+             var fp=new Fingerprint2();
+             fp.get(function(result, components){
+                //console.log('result',result); //a hash, representingyour device fingerprint
+                // console.log(components); // an array of FPcomponents
+                //window.localStorage.setItem('device_code', result);
+                _this_.deviceCode=result;//会报错
+              });
+            // this.deviceCode=window.localStorage.getItem('device_code');
+            // console.log('deviceCode',this.deviceCode);            
+      },
       alertError(msg){
         this.$toast({
           message: msg,
@@ -46,7 +62,8 @@
         }
         if (valid) {
             this.logining = true;
-            var loginParams = { username: this.loginForm.account, password: this.loginForm.checkPass };
+            //console.log('deviceCode',this.deviceCode);
+            var loginParams = { username: this.loginForm.account, password: this.loginForm.checkPass,deviceCode:this.deviceCode };
             requestLogin(loginParams).then(res => {
               this.logining = false;
               let { msg, code, data } = res;
@@ -64,7 +81,10 @@
             return false;
           }
       }
-    }
+    },
+    mounted() {
+        this.initDeviceCode();
+      }
   }
 
 </script>

@@ -13,9 +13,9 @@
 							</div>
 						</div>
 						<div class="content" v-loading="docListenLoading">
-							<div class="section-no-item" v-if="!docListenLoading && docList.length == 0">
+							<!-- <div class="section-no-item" v-if="!docListenLoading && docList.length == 0">
 								<img src="/static/images/nolist.png">
-							</div>
+							</div> -->
 							<mt-loadmore :bottom-method="loadBottomDoc" :bottom-all-loaded="allLoadedDoc" ref="loadmore">
 								<ul class="section-list">
 									<li v-for="(doc,index) in docList">
@@ -151,7 +151,7 @@
 				list:[],//练习列表
 				totalCount:0,
 				pageNo: 1,
-                pageSize:1,
+                pageSize:10,
                 allLoaded:false,
                 totalCountDoc:0,
                 pageNoDoc: 1,
