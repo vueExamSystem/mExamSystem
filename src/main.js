@@ -22,6 +22,18 @@ Vue.use(ElementUI)
 Vue.use(Mint);
 Vue.use(Vuex)
 
+router.beforeEach((to, from, next) => {
+    if (to.path == '/login') {
+        store.dispatch('LogOut');
+        next();
+    } else {
+        if (store.getters.token) {
+            next();
+        }else{
+            next({ path: '/login',query: { redirect: to.fullPath } }); //全部重定向到登录页
+        }
+    }
+});
 new Vue({
   //el: '#app',
   //template: '<App/>',

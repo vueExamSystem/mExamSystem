@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '../vuex/store'
-import router from '../router/routes'
+import router from '../router'
 import Vue from 'vue';
 
 //设置全局axios默认值
@@ -45,10 +45,9 @@ instance.interceptors.response.use(
                         });
                      setTimeout(
                             ()=>{
-                                store.dispatch('LogOut'); //可能是token过期，清除它
-                                router.replace({ //跳转到登录页面
-                                    path: 'login',
-                                    query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                                store.dispatch('LogOut'); 
+                                router.push({ //跳转到登录页面
+                                    path: '/login'
                                 });
                             },2000
                         );
