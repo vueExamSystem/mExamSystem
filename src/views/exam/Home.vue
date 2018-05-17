@@ -8,7 +8,7 @@
 				<p class="main-title">考试列表</p>
 				<div class="content" v-loading="listenLoading">
 					<div class="section-no-item" v-if="!listenLoading && list.length == 0">
-						<img src="/static/images/nolist.png">
+						<img src="/static/images/nodata.png">
 					</div>
 					<mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
 						<ul class="section-list">

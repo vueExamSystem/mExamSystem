@@ -1,12 +1,13 @@
 import axios from 'axios'
 import store from '../vuex/store'
 import router from '../router/routes'
+import Vue from 'vue';
 
 //设置全局axios默认值
 axios.defaults.timeout = 5000; //5000的超时验证
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-// axios.defaults.baseURL='http://localhost:8082/';//dev
-axios.defaults.baseURL='http://121.43.164.178:9090/';//线上
+axios.defaults.baseURL='http://localhost:8082/';//dev
+// axios.defaults.baseURL='http://121.43.164.178:9090/';//线上
 //创建一个axios实例
 const instance = axios.create();
 
@@ -37,11 +38,21 @@ instance.interceptors.response.use(
         if(error.response){
             switch(error.response.status){
                 case 401:
-                    store.dispatch('LogOut'); //可能是token过期，清除它
-                    router.replace({ //跳转到登录页面
-                        path: 'login',
-                        query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-                    });
+                     Vue.prototype.$message({
+                        message: 'token已失效，请重新登录',
+                        type: 'error',
+                        duration:2000
+                        });
+                     setTimeout(
+                            ()=>{
+                                store.dispatch('LogOut'); //可能是token过期，清除它
+                                router.replace({ //跳转到登录页面
+                                    path: 'login',
+                                    query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                                });
+                            },2000
+                        );
+                    
             }
         }
         return Promise.reject(error.response);

@@ -13,9 +13,9 @@
 							</div>
 						</div>
 						<div class="content" v-loading="docListenLoading">
-							<!-- <div class="section-no-item" v-if="!docListenLoading && docList.length == 0">
-								<img src="/static/images/nolist.png">
-							</div> -->
+							<div class="section-no-item" v-if="!docListenLoading && docList.length == 0">
+								<img src="/static/images/nodata.png">
+							</div>
 							<mt-loadmore :bottom-method="loadBottomDoc" :bottom-all-loaded="allLoadedDoc" ref="loadmore">
 								<ul class="section-list">
 									<li v-for="(doc,index) in docList">
@@ -46,7 +46,7 @@
 							</div>
 							<div class="content" v-loading="listenLoading">
 								<div class="section-no-item" v-if="!listenLoading && list.length == 0">
-									<img src="/static/images/nolist.png">
+									<img src="/static/images/nodata.png">
 								</div>
 								<mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
 									<ul class="section-list">

@@ -30,18 +30,13 @@
     },
     methods: {
        initDeviceCode(){
-            // var res=new fingerprintjs().get();
-            //  console.log(res);
             var _this_=this;
-             var fp=new Fingerprint2();
-             fp.get(function(result, components){
-                //console.log('result',result); //a hash, representingyour device fingerprint
-                // console.log(components); // an array of FPcomponents
-                //window.localStorage.setItem('device_code', result);
-                _this_.deviceCode=result;//会报错
-              });
-            // this.deviceCode=window.localStorage.getItem('device_code');
-            // console.log('deviceCode',this.deviceCode);            
+            var fp=new Fingerprint2();
+            fp.get(function(result, components){
+                //存储一下
+                window.localStorage.setItem('device_code', result);
+                _this_.deviceCode=result;
+              });       
       },
       alertError(msg){
         this.$toast({

@@ -411,7 +411,8 @@
                     var params = {
                         examId: this.id,//考试id
                         paperId: this.paperId,    //试卷id
-                        questionId: this.current,//this.problem.id,  //试题id 用序号代替
+                        questionId: this.problem.id,  //试题id 用序号代替
+                        currentId:this.current,
                         answer: this.problem.myAnswer, //学生答案
                         percent: percent
                     };

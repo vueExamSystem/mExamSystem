@@ -146,7 +146,8 @@
                 isLoaded: false,
                 maskLoading: false,
                 isSubmitted: false,
-                isCardVisible: false
+                isCardVisible: false,
+                deviceCode:''
             }
         },
         computed: {
@@ -193,6 +194,7 @@
         },
         methods: {
             init() {
+                this.deviceCode=window.localStorage.getItem('device_code');
                 var item = JSON.parse(window.localStorage.getItem('examItem'));
                 this.fullPath = this.$route.fullPath;
                 this.feedbackOptions.withinPath = this.fullPath;
@@ -211,7 +213,7 @@
                 }
             },
             getProblemList() {
-                //to do
+                //考试试题获取列表时带上deviceCode:this.deviceCode
                 var params = {
                     examId: this.id
                 };
@@ -411,7 +413,8 @@
                     var params = {
                         examId: this.id,//考试id
                         paperId: this.paperId,    //试卷id
-                        questionId: this.current,//this.problem.id,  //试题id 用序号代替
+                        questionId: this.problem.id,  //试题id 用序号代替
+                        currentId:this.current,
                         answer: this.problem.myAnswer, //学生答案
                         percent: percent
                     };

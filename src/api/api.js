@@ -1,8 +1,7 @@
 import instance  from './instance';
 import qs from 'qs'
 let base="aps/api/stu";
-//let base = 'http://127.0.0.1:8081/api/stu';
-//let base = 'http://121.43.164.178:8081/api/stu';//公网线上调试api
+// let base="api/stu";
 //请求登录
 export const requestLogin = params => { return instance.post(`${base}/login`, qs.stringify(params)).then(res => res.data); };
 
