@@ -96,7 +96,7 @@
 <script>
 	// 注意题目需要按“单选”、“多选”、“判断”、“选做”顺序
 	import FeedBack from '../common/FeedBack'
-	import { getTrainProblemList, submitTrainPaper, submitOneTrainProblem } from '../../api/api';
+	import { getTrainProblemList, submitTrainPaper, submitOneTrainProblem,getServerTime } from '../../api/api';
 	import Card from './Card.vue'
 	export default {
         props: {
@@ -193,6 +193,7 @@
         },
         methods: {
             init() {
+                this.initDate();
                 var item = JSON.parse(window.localStorage.getItem('testItem'));
                 this.fullPath = this.$route.fullPath;
                 this.feedbackOptions.withinPath = this.fullPath;
@@ -209,6 +210,19 @@
                 } else {//无效链接
                     this.isValidLink = false;
                 }
+            },
+            initDate(){
+                var begin_time=new Date().getTime(); //获取本地当前时间
+                getServerTime({}).then(
+                    res=>{
+                        var sertime = res.data; 
+                        var nowtime = new Date().getTime(); //再次获取本地当前时间  
+                        //加载时间  
+                        var loadtime = nowtime - begin_time;  
+                        //服务器和本地时间差值  
+                        this.diffTime = sertime - (nowtime + loadtime);
+                        //console.log('diffTime:',this.diffTime); 
+                    });
             },
             getProblemList() {
                 //to do
@@ -515,7 +529,7 @@
                     if (this.$route.fullPath != this.fullPath) {
                         this.clearClock();
                     } else {
-                        this.nowDate = new Date();
+                        this.nowDate =new Date((new Date()).getTime()+this.diffTime);
                     }
                 }, 1000);
             },

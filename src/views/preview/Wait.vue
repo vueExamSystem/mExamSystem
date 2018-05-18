@@ -8,7 +8,7 @@
 				<div class="img-clock-down">
 					<img src="/static/images/wait.png">
 					<div class="time-down">
-						<span>{{remainTime(detail.startTime)}}</span>
+						<span>{{remainTime(detail.beginTime)}}</span>
 					</div>
 				</div>
 				<div class="display-box">
@@ -28,6 +28,7 @@
 </template>
 <script>
 	import FeedBack from '../common/FeedBack'
+	import { getServerTime } from '../../api/api'
 	export default {
 		props:{
 			id:{
@@ -54,7 +55,7 @@
 		},
 		computed:{
 			totalTime(){
-				var sDate = this.dateParse(this.detail.startTime);
+				var sDate = this.dateParse(this.detail.beginTime);
 				var eDate = this.dateParse(this.detail.endTime);
 				var minuteSeconds = 1000 * 60;//一分钟毫秒数
 				var hourSeconds = minuteSeconds * 60;//一小时毫秒数 
@@ -64,13 +65,14 @@
 		},
 		methods:{
 			init(){
-				var item = JSON.parse(window.localStorage.getItem('testItem'));
+				this.initDate();
+				var item = JSON.parse(window.localStorage.getItem('previewItem'));
 				this.fullPath = this.$route.fullPath;
 				if(item && item.id && item.id == this.id){
 					this.$set(this.detail,'name',item.name);
-					this.$set(this.detail,'startTime',item.startTime);
+					this.$set(this.detail,'beginTime',item.beginTime);
 					this.$set(this.detail,'endTime',item.endTime);
-					if(this.getRemainSeconds(this.detail.startTime)>0){//倒计时
+					if(this.getRemainSeconds(this.detail.beginTime)>0){//倒计时
 						this.isValidLink = true;
 						this.timeClockRun();
 					}else{
@@ -87,11 +89,24 @@
 					this.isValidLink = false;
 				}
 			},
+			initDate(){
+                var begin_time=new Date().getTime(); //获取本地当前时间
+                getServerTime({}).then(
+                    res=>{
+                        var sertime = res.data; 
+                        var nowtime = new Date().getTime(); //再次获取本地当前时间  
+                        //加载时间  
+                        var loadtime = nowtime - begin_time;  
+                        //服务器和本地时间差值  
+                        this.diffTime = sertime - (nowtime + loadtime);
+                        //console.log('diffTime:',this.diffTime); 
+                    });
+            },
 			dateParse(dateString){
 				return new Date(dateString);
 			},
 			toExam(){
-				this.$router.push({ path: `/test/testing/${this.id}`});
+				this.$router.push({ path: `/preview/practising/${this.id}`});
 			},
 			getRemainSeconds(dateString){//获取剩余总秒数
 				var thisD = this.dateParse(dateString);
@@ -134,14 +149,14 @@
 			},
 			close(){
 				this.clearClock();//关闭倒计时
-				this.$router.push({ path: '/test'});
+				this.$router.push({ path: '/preview'});
 			},
 			timeClockRun(){
 				this.timeClock = setInterval(()=>{
 					if(this.$route.fullPath != this.fullPath){
 						this.clearClock();
 					}else{
-						this.nowDate = new Date();
+						this.nowDate =new Date((new Date()).getTime()+this.diffTime);
 					}
 					
 				},1000);

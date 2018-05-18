@@ -132,7 +132,7 @@
 	</section>
 </template>
 <script>
-	import { getTrainList, getDocList } from '../../api/api'
+	import { getTrainList, getDocList,getServerTime } from '../../api/api'
 	import TabFilter from '../common/TabFilter.vue'
 	import Doc from './Doc.vue'
 	import Search from '../common/Search.vue'
@@ -176,12 +176,26 @@
 		},
 		methods:{
 			init(){
+				this.initDate();
 				this.fullPath = this.$route.fullPath;
 				this.pageNo=1;
 				this.getTrainListByPageNo();
 				this.timeClockRun();
 				//注意：获取预习资料列表需要先等待筛选条件后再自动执行
 			},
+			initDate(){
+                var begin_time=new Date().getTime(); //获取本地当前时间
+                getServerTime({}).then(
+                    res=>{
+                        var sertime = res.data; 
+                        var nowtime = new Date().getTime(); //再次获取本地当前时间  
+                        //加载时间  
+                        var loadtime = nowtime - begin_time;  
+                        //服务器和本地时间差值  
+                        this.diffTime = sertime - (nowtime + loadtime);
+                        //console.log('diffTime:',this.diffTime); 
+                    });
+            },
 			getTrainListByPageNo(){//获取单页数据
                 var params = {
                     pageNo: this.pageNo,
@@ -331,13 +345,13 @@
 			toWaitExam(id,index){//进入考试页面
 				this.clearClock();
 				var item = this.list[index];
-				window.localStorage.setItem('testItem',JSON.stringify(item));
+				window.localStorage.setItem('previewItem',JSON.stringify(item));
 				this.$router.push({ path: `/preview/wait/${id}`});
 			},
 			toExam(id,index){//直接进入考试页面
 				this.clearClock();
 				var item = this.list[index];
-				window.localStorage.setItem('testItem',JSON.stringify(item));
+				window.localStorage.setItem('previewItem',JSON.stringify(item));
 				this.$router.push({ path: `/preview/practising/${id}`});
 			},
 			isValid(exam,dateString){//是否没有过期
@@ -405,7 +419,7 @@
 					if(this.$route.fullPath != this.fullPath){
 						this.clearClock();
 					}else{
-						this.nowDate = new Date();
+						this.nowDate =new Date((new Date()).getTime()+this.diffTime);
 					}
 					
 				},1000);

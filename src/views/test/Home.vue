@@ -85,7 +85,7 @@
 	</section>
 </template>
 <script>
-	import { getTestList } from '../../api/api'
+	import { getTestList,getServerTime } from '../../api/api'
 	import Search from '../common/Search.vue'
 	export default {
 		components: {
@@ -113,11 +113,25 @@
 		},
 		methods:{
 			init(){
+				this.initDate();
 				this.fullPath = this.$route.fullPath;
 				this.pageNo=1;
 				this.getTestListByPageNo();
 				this.timeClockRun();
 			},
+			initDate(){
+                var begin_time=new Date().getTime(); //获取本地当前时间
+                getServerTime({}).then(
+                    res=>{
+                        var sertime = res.data; 
+                        var nowtime = new Date().getTime(); //再次获取本地当前时间  
+                        //加载时间  
+                        var loadtime = nowtime - begin_time;  
+                        //服务器和本地时间差值  
+                        this.diffTime = sertime - (nowtime + loadtime);
+                        //console.log('diffTime:',this.diffTime); 
+                    });
+            },
 			getTestListByPageNo(){//获取单页数据
                 var params = {
                     pageNo: this.pageNo,
@@ -287,7 +301,7 @@
 					if(this.$route.fullPath != this.fullPath){
 						this.clearClock();
 					}else{
-						this.nowDate = new Date();
+						this.nowDate =new Date((new Date()).getTime()+this.diffTime);
 					}
 					
 				},1000);

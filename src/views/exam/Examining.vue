@@ -96,7 +96,7 @@
 <script>
 	// 注意题目需要按“单选”、“多选”、“判断”、“选做”顺序
 	import FeedBack from '../common/FeedBack'
-	import { getPaperProblemList, submitExamPaper, submitOneProblem } from '../../api/api';
+	import { getPaperProblemList, submitExamPaper, submitOneProblem,getServerTime } from '../../api/api';
 	import Card from './Card.vue'
 	export default {
         props: {
@@ -110,6 +110,7 @@
         },
         data() {
             return {
+                diffTime:'',//时间偏差
                 isValidLink: true,
                 fullPath: '',
                 timeClock: '',
@@ -194,6 +195,7 @@
         },
         methods: {
             init() {
+                this.initDate();
                 this.deviceCode=window.localStorage.getItem('device_code');
                 var item = JSON.parse(window.localStorage.getItem('examItem'));
                 this.fullPath = this.$route.fullPath;
@@ -211,6 +213,19 @@
                 } else {//无效链接
                     this.isValidLink = false;
                 }
+            },
+            initDate(){
+                var begin_time=new Date().getTime(); //获取本地当前时间
+                getServerTime({}).then(
+                    res=>{
+                        var sertime = res.data; 
+                        var nowtime = new Date().getTime(); //再次获取本地当前时间  
+                        //加载时间  
+                        var loadtime = nowtime - begin_time;  
+                        //服务器和本地时间差值  
+                        this.diffTime = sertime - (nowtime + loadtime);
+                        //console.log('diffTime:',this.diffTime); 
+                    });
             },
             getProblemList() {
                 //考试试题获取列表时带上deviceCode:this.deviceCode
@@ -517,7 +532,7 @@
                     if (this.$route.fullPath != this.fullPath) {
                         this.clearClock();
                     } else {
-                        this.nowDate = new Date();
+                        this.nowDate =new Date((new Date()).getTime()+this.diffTime);
                     }
                 }, 1000);
             },

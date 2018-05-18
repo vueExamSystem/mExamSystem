@@ -5,6 +5,7 @@ let base="aps/api/stu";
 //请求登录
 export const requestLogin = params => { return instance.post(`${base}/login`, qs.stringify(params)).then(res => res.data); };
 
+export const getServerTime = params => { return instance.get(`${base}/getServerTime`, {params:params}).then(res => res.data); };
 //用户信息
 export const getUserInfo = params => { return instance.post(`${base}/user/info`, qs.stringify(params)).then(res => res.data); };
 
