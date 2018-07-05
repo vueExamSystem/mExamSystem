@@ -2,7 +2,7 @@
 	<div v-loading="maskLoading">
 		<template v-if="isValidLink && !isSubmitted">
 			<section v-show="!isCardVisible">
-				<mt-header title="考试中" fixed>
+				<mt-header title="预习习题" fixed>
 					<div slot="left"><img src="/static/images/clock.png" width="15"> <span>{{remainTime(endTime)}}</span></div>
 					<span @click="finishedPaper" slot="right" v-if="isLoaded">交卷</span>
 				</mt-header>
@@ -194,7 +194,7 @@
         methods: {
             init() {
                 this.initDate();
-                var item = JSON.parse(window.localStorage.getItem('testItem'));
+                var item = JSON.parse(window.localStorage.getItem('previewItem'));
                 this.fullPath = this.$route.fullPath;
                 this.feedbackOptions.withinPath = this.fullPath;
                 if (item && item.id && item.id == this.id) {
