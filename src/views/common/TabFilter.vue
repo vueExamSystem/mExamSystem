@@ -18,11 +18,11 @@
 						</el-radio-group>
 			    	</div>
 			    </el-tab-pane>
-			    <el-tab-pane label="预习状态">
+			    <!-- <el-tab-pane label="预习状态">
 			    	<el-radio-group class="tab-radio-group" v-model="stateValue">
 						<el-radio v-for="option in stateOption" :label="option.value">{{option.label}}</el-radio>
 					</el-radio-group>
-			    </el-tab-pane>
+			    </el-tab-pane> -->
 			</el-tabs>
 		</div>
 	</section>
@@ -33,41 +33,45 @@
 		data(){
 			//数据后台可相应更改
 			return {
-				timeValue: "7d",//发布时间
+				timeValue: "week",//发布时间
 				timeOption: [
 					{
 					    label: "近一周",
-					    value: "7d"
+					    value: "week"
 					},
 					{
 					    label: "近一个月",
-					    value: "1m"
+					    value: "month"
 				    },
 					{
 					    label: "近半年",
-					    value: "6m"
+					    value: "halfYear"
 					},
 					{
-					    label: "半年以上",
-					    value: ">6m"
+					    label: "近一年",
+					    value: "year"
+					},
+					{
+					    label: "不限",
+					    value: "all"
 					}
 				],
 				courseValue: "",//所属课程
 				courseOption: [],
 				stateValue: "0",//预习状态
-				stateOption: [
-					{
-					    label: "全部",
-					    value: "0,1"
-					},
-					{
-					    label: "已预习",
-					    value: "1"
-					},
-					{
-					    label: "未预习",
-					    value: "0"
-					}],
+				// stateOption: [
+				// 	{
+				// 	    label: "全部",
+				// 	    value: "0,1"
+				// 	},
+				// 	{
+				// 	    label: "已预习",
+				// 	    value: "1"
+				// 	},
+				// 	{
+				// 	    label: "未预习",
+				// 	    value: "0"
+				// 	}],
 				courseLoading: true
 			}
 		},
@@ -92,7 +96,7 @@
 			confirm(){
 				var params = {
 					publishTime: this.timeValue,//发布时间
-					course: this.courseValue,//所属课程
+					courseId: this.courseValue,//所属课程
 					state: this.stateValue//预习状态
 				};
 				this.$emit("confirm", params);

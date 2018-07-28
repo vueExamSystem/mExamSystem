@@ -5,7 +5,7 @@
 				<mt-button @click="showSearch" icon="search" slot="left"></mt-button>
 			</mt-header>
 			<div class="main">
-				<p class="main-title">本周考试</p>
+				<p class="main-title">考试列表</p>
 				<div class="content" v-loading="listenLoading">
 					<div class="section-no-item" v-if="!listenLoading && list.length == 0">
 						<img src="/static/images/nolist.png">
@@ -100,6 +100,7 @@
 				totalCount:0,
                 pageNo: 1,
                 pageSize:10,
+                allLoaded:false,
 				searchkey: '',
 				listenLoading: true,
 				isSearchVisible: false
@@ -113,6 +114,7 @@
 		methods:{
 			init(){
 				this.fullPath = this.$route.fullPath;
+				this.pageNo=1;
 				this.getExamListByPageNo();
                 this.timeClockRun();
             },
@@ -131,6 +133,7 @@
                 });
             },
             loadBottom(){//底部加载更多数据
+            	this.pageNo=this.pageNo+1;
                 this.getExamListByPageNo();
             },
 			loadall(){//重新加载全部
